@@ -24,7 +24,7 @@ export class QueueService {
   }
 
   async deleteCurrentAndGetNewFirst(): Promise<number> {
-    await this.getIdOfFirst(); // if not empty else the error will be thrown
+    await this.getIdOfFirst(); // if not empty, else the error will be thrown
 
     await this.queueRepository.deleteFirst();
     return this.getIdOfFirst();
