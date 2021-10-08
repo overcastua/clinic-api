@@ -1,6 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ModifiedCreateResolutionDto } from 'src/patient/dto/create-resolution.dto';
+import { CreateResolutionDto } from 'src/patient/dto/create-resolution.dto';
+import { PatientEntity } from 'src/patient/patient.entity';
+import { TimeHelper } from 'src/utils/timeHelper';
 import { ResolutionsEntity } from './resolutions.entity';
 import { ResolutionsRepository } from './resolutions.repository';
 
@@ -12,10 +14,22 @@ export class ResolutionsService {
   ) {}
 
   async getAllByName(name: string): Promise<ResolutionsEntity[]> {
-    return this.resolutionsRepository.getAllByName(name);
+    const resolutions: ResolutionsEntity[] =
+      await this.resolutionsRepository.getAllByName(name);
+
+    if (!resolutions) throw new NotFoundException();
+
+    return TimeHelper.filterOutdated(resolutions);
   }
 
-  async createResolution(dto: ModifiedCreateResolutionDto): Promise<void> {
-    return this.resolutionsRepository.createResolution(dto);
+  async createResolution(
+    dto: CreateResolutionDto,
+    patient: PatientEntity,
+  ): Promise<void> {
+    const modDto: CreateResolutionDto = dto;
+
+    modDto.expires_in = TimeHelper.now() + TimeHelper.minToMs(dto.expires_in);
+
+    return this.resolutionsRepository.createResolution(modDto, patient);
   }
 }

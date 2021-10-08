@@ -7,7 +7,7 @@ export class QueueController {
 
   @Get()
   async getIdOfFirst(): Promise<number> {
-    const id = await this.queueService.getIdOfFirst();
+    const id: number = await this.queueService.getIdOfFirst();
 
     if (!id) throw new NotFoundException();
 
@@ -21,7 +21,7 @@ export class QueueController {
 
   @Get('next')
   async deleteCurrentAndGetNewFirst(): Promise<number> {
-    const id = await this.queueService.deleteCurrentAndGetNewFirst();
+    const id: number = await this.queueService.deleteCurrentAndGetNewFirst();
 
     if (!id) throw new NotFoundException();
 

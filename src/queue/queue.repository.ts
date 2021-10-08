@@ -12,12 +12,11 @@ export class QueueRepository extends Repository<QueueEntity> {
   }
 
   async deleteFirst(): Promise<void> {
-    const patient = await this.createQueryBuilder('q')
+    const posInQueue: QueueEntity = await this.createQueryBuilder('q')
       .orderBy('q.created_at', 'ASC')
-      .leftJoinAndSelect('q.patient', 'p')
       .getOne();
 
-    await this.remove(patient);
+    await this.remove(posInQueue);
   }
 
   async add(patient: PatientEntity): Promise<QueueEntity> {

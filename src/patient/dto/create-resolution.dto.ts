@@ -1,14 +1,9 @@
-import { PatientEntity } from '../patient.entity';
+import { IsNotEmpty } from 'class-validator';
 
-export class ReceivedResDto {
+export class CreateResolutionDto {
+  @IsNotEmpty()
   text: string;
-  expires_on: Date;
-}
 
-export class ResDto extends ReceivedResDto {
-  name: string;
-}
-
-export class ModifiedCreateResolutionDto extends ReceivedResDto {
-  patient: PatientEntity;
+  @IsNotEmpty()
+  expires_in: number;
 }

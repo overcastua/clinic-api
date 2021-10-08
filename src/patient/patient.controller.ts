@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ResolutionsEntity } from 'src/resolutions/resolutions.entity';
 import { CreatePatientDto } from './dto/create-patient.dto';
-import { ReceivedResDto, ResDto } from './dto/create-resolution.dto';
+import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { PatientService } from './patient.service';
 
 @Controller('patients')
@@ -15,13 +15,10 @@ export class PatientController {
 
   @Post(':patientName/resolutions')
   async createResolution(
-    @Body() receievedDto: ReceivedResDto,
+    @Body() dto: CreateResolutionDto,
     @Param('patientName') name: string,
   ): Promise<void> {
-    const dto = receievedDto as ResDto;
-    dto.name = name;
-
-    return this.patientService.createResolution(dto);
+    return this.patientService.createResolution(dto, name);
   }
 
   @Get(':patientName/resolutions')
@@ -31,8 +28,8 @@ export class PatientController {
     return this.patientService.getAllResolutionsByName(name);
   }
 
-  @Get(':patientName/resolutions/:resolutionId')
-  async getResutionById(): Promise<string> {
-    return 'a';
-  }
+  // @Get(':patientName/resolutions/:resolutionId')
+  // async getResutionById(): Promise<string> {
+  //   return 'a';
+  // }
 }

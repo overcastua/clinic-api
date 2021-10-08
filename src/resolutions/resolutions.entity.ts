@@ -16,7 +16,7 @@ export class ResolutionsEntity {
   text: string;
 
   @Column()
-  expires_on: Date;
+  expires_in: string;
 
   @ManyToOne(() => PatientEntity, (p) => p.resolutions)
   patient: PatientEntity;
