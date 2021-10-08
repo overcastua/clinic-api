@@ -13,9 +13,9 @@ export class ResolutionsService {
     private readonly resolutionsRepository: ResolutionsRepository,
   ) {}
 
-  async getAllByName(name: string): Promise<ResolutionsEntity[]> {
+  async getAllById(id: number): Promise<ResolutionsEntity[]> {
     const resolutions: ResolutionsEntity[] =
-      await this.resolutionsRepository.getAllByName(name);
+      await this.resolutionsRepository.getAllById(id);
 
     if (!resolutions) throw new NotFoundException();
 

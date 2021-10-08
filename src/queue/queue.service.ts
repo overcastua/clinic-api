@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PatientEntity } from 'src/patient/patient.entity';
 import { PatientService } from 'src/patient/patient.service';
+import { AddToQueueDto } from './dto/add-to-queue.dto';
 import { QueueEntity } from './queue.entity';
 import { QueueRepository } from './queue.repository';
 
@@ -29,8 +30,8 @@ export class QueueService {
     return this.getIdOfFirst();
   }
 
-  async add(name: string): Promise<void> {
-    const patient: PatientEntity = await this.patientService.findByName(name);
+  async add(dto: AddToQueueDto): Promise<void> {
+    const patient: PatientEntity = await this.patientService.findById(dto.id);
     await this.queueRepository.add(patient);
   }
 }

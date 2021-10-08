@@ -1,34 +1,68 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ResolutionsEntity } from 'src/resolutions/resolutions.entity';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { PatientService } from './patient.service';
 
+@ApiTags('patients')
 @Controller('patients')
 export class PatientController {
   constructor(private readonly patientService: PatientService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Create a new patient' })
+  @ApiResponse({
+    status: 201,
+    description: 'Patient was successfully created',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Received data violates predefined DTO schema',
+  })
   async create(@Body() createPatientDto: CreatePatientDto): Promise<void> {
     return this.patientService.create(createPatientDto);
   }
 
-  @Post(':patientName/resolutions')
+  @Post(':id/resolutions')
+  @ApiOperation({ summary: 'Create a new resolution for the patient' })
+  @ApiResponse({
+    status: 201,
+    description: 'Resolution was successfully created',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Received data violates predefined DTO schema',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Patient with the given id was not found',
+  })
   async createResolution(
     @Body() dto: CreateResolutionDto,
-    @Param('patientName') name: string,
+    @Param('id') id: number,
   ): Promise<void> {
-    return this.patientService.createResolution(dto, name);
+    return this.patientService.createResolution(dto, id);
   }
 
-  @Get(':patientName/resolutions')
+  @Get(':id/resolutions')
+  @ApiOperation({ summary: 'Get all the resolutions of a certain patient' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns all the resolutions for the patient',
+    type: Array,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Patient with the given id was not found',
+  })
   async getAllResolutionsByName(
-    @Param('patientName') name: string,
+    @Param('id') id: number,
   ): Promise<ResolutionsEntity[]> {
-    return this.patientService.getAllResolutionsByName(name);
+    return this.patientService.getAllResolutionsById(id);
   }
 
-  // @Get(':patientName/resolutions/:resolutionId')
+  // @Get(':patientId/resolutions/:resolutionId')
   // async getResutionById(): Promise<string> {
   //   return 'a';
   // }

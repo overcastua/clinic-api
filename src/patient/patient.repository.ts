@@ -12,7 +12,7 @@ export class PatientRepository extends Repository<PatientEntity> {
     await this.save(newPatient);
   }
 
-  async findByName(name: string): Promise<PatientEntity> {
-    return this.findOne({ name });
+  async findById(id: number): Promise<PatientEntity> {
+    return this.findOne({ id });
   }
 }

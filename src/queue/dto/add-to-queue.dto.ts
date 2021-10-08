@@ -1,13 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumberString } from 'class-validator';
 
-export class CreateResolutionDto {
-  @IsNotEmpty()
-  @ApiProperty()
-  text: string;
-
+export class AddToQueueDto {
   @IsNotEmpty()
   @ApiProperty()
   @IsNumberString()
-  expires_in: number;
+  id: number;
 }
