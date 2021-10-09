@@ -6,6 +6,8 @@ import { Connection } from 'typeorm';
 import { QueueModule } from './queue/queue.module';
 import { PatientModule } from './patient/patient.module';
 import { ResolutionsModule } from './resolutions/resolutions.module';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { ResolutionsModule } from './resolutions/resolutions.module';
     QueueModule,
     PatientModule,
     ResolutionsModule,
+    UsersModule,
+    AuthModule,
   ],
 })
 export class AppModule {

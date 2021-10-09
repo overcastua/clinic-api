@@ -1,7 +1,13 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ResolutionsEntity } from 'src/resolutions/resolutions.entity';
-import { CreatePatientDto } from './dto/create-patient.dto';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { PatientService } from './patient.service';
 
@@ -10,32 +16,15 @@ import { PatientService } from './patient.service';
 export class PatientController {
   constructor(private readonly patientService: PatientService) {}
 
-  @Post()
-  @ApiOperation({ summary: 'Create a new patient' })
-  @ApiResponse({
-    status: 201,
-    description: 'Patient was successfully created',
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Received data violates predefined DTO schema',
-  })
-  async create(@Body() createPatientDto: CreatePatientDto): Promise<void> {
-    return this.patientService.create(createPatientDto);
-  }
-
   @Post(':id/resolutions')
   @ApiOperation({ summary: 'Create a new resolution for the patient' })
-  @ApiResponse({
-    status: 201,
+  @ApiCreatedResponse({
     description: 'Resolution was successfully created',
   })
-  @ApiResponse({
-    status: 400,
-    description: 'Received data violates predefined DTO schema',
+  @ApiBadRequestResponse({
+    description: 'Received data violates the predefined DTO schema',
   })
-  @ApiResponse({
-    status: 404,
+  @ApiNotFoundResponse({
     description: 'Patient with the given id was not found',
   })
   async createResolution(
@@ -47,13 +36,11 @@ export class PatientController {
 
   @Get(':id/resolutions')
   @ApiOperation({ summary: 'Get all the resolutions of a certain patient' })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'Returns all the resolutions for the patient',
     type: Array,
   })
-  @ApiResponse({
-    status: 404,
+  @ApiNotFoundResponse({
     description: 'Patient with the given id was not found',
   })
   async getAllResolutionsByName(
@@ -61,9 +48,4 @@ export class PatientController {
   ): Promise<ResolutionsEntity[]> {
     return this.patientService.getAllResolutionsById(id);
   }
-
-  // @Get(':patientId/resolutions/:resolutionId')
-  // async getResutionById(): Promise<string> {
-  //   return 'a';
-  // }
 }

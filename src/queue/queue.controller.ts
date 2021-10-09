@@ -1,5 +1,11 @@
 import { Controller, Get, Post, NotFoundException, Body } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { AddToQueueDto } from './dto/add-to-queue.dto';
 import { QueueService } from './queue.service';
 
@@ -10,13 +16,11 @@ export class QueueController {
 
   @Get()
   @ApiOperation({ summary: 'Get the id of the first patient in the queue' })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'Returns the id of the first patient in the queue',
     type: Number,
   })
-  @ApiResponse({
-    status: 404,
+  @ApiNotFoundResponse({
     description: 'The queue is empty',
   })
   async getIdOfFirst(): Promise<number> {
@@ -29,12 +33,10 @@ export class QueueController {
 
   @Post()
   @ApiOperation({ summary: 'Add a patient to the queue' })
-  @ApiResponse({
-    status: 201,
+  @ApiCreatedResponse({
     description: 'Patient was added to the queue',
   })
-  @ApiResponse({
-    status: 404,
+  @ApiNotFoundResponse({
     description: 'Patient with the given id does not exist',
   })
   async add(@Body() dto: AddToQueueDto): Promise<void> {
@@ -43,14 +45,12 @@ export class QueueController {
 
   @Get('next')
   @ApiOperation({ summary: 'Get the id of the next patient in the queue' })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description:
       'Deletes the current patient and returns the id of the next patient in the queue',
     type: Number,
   })
-  @ApiResponse({
-    status: 404,
+  @ApiNotFoundResponse({
     description: 'The queue is empty',
   })
   async deleteCurrentAndGetNewFirst(): Promise<number> {

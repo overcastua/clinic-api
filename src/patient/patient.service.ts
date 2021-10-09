@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ResolutionsEntity } from 'src/resolutions/resolutions.entity';
 import { ResolutionsService } from 'src/resolutions/resolutions.service';
+import { UsersEntity } from 'src/users/users.entity';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { PatientEntity } from './patient.entity';
@@ -21,6 +22,15 @@ export class PatientService {
 
   async findById(id: number): Promise<PatientEntity> {
     const patient: PatientEntity = await this.patientRepository.findById(id);
+
+    if (!patient) throw new NotFoundException();
+
+    return patient;
+  }
+
+  async findPatientByUser(user: UsersEntity): Promise<PatientEntity> {
+    const patient: PatientEntity =
+      await this.patientRepository.findPatientByUser(user);
 
     if (!patient) throw new NotFoundException();
 

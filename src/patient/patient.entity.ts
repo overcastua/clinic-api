@@ -1,11 +1,14 @@
 import { QueueEntity } from 'src/queue/queue.entity';
 import { ResolutionsEntity } from 'src/resolutions/resolutions.entity';
+import { UsersEntity } from 'src/users/users.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   OneToMany,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity('patient')
@@ -21,6 +24,10 @@ export class PatientEntity {
 
   @Column()
   birthDate: Date;
+
+  @OneToOne(() => UsersEntity)
+  @JoinColumn()
+  user: UsersEntity;
 
   @OneToMany(() => QueueEntity, (queue) => queue.patient)
   queues: QueueEntity[];
