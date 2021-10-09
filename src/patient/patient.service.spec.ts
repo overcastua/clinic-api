@@ -16,7 +16,7 @@ const data = {
   name: 'someone',
 };
 
-describe('PatientsService', () => {
+describe('PatientService', () => {
   let service: PatientService;
   let resolutionsService: ResolutionsService;
   let patientRepository: any;
@@ -46,6 +46,7 @@ describe('PatientsService', () => {
 
   describe('testing create()', () => {
     it('should call the underlying repository', async () => {
+      expect.assertions(1);
       jest.spyOn(patientRepository, 'add');
 
       await service.create(null);
@@ -96,6 +97,7 @@ describe('PatientsService', () => {
 
   describe('testing getAllResolutionsById()', () => {
     it('should return an array of resolutions for the given patient', async () => {
+      expect.assertions(1);
       patientRepository.findById.mockResolvedValue(data);
 
       (resolutionsService.getAllById as jest.Mock).mockResolvedValue([

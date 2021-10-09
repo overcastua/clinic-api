@@ -17,7 +17,7 @@ export class ResolutionsService {
     const resolutions: ResolutionsEntity[] =
       await this.resolutionsRepository.getAllById(id);
 
-    if (!resolutions) throw new NotFoundException();
+    if (!resolutions.length) throw new NotFoundException();
 
     return TimeHelper.filterOutdated(resolutions);
   }
