@@ -38,7 +38,7 @@ export class PatientController {
   @ApiOperation({ summary: 'Get all the resolutions of a certain patient' })
   @ApiOkResponse({
     description: 'Returns all the resolutions for the patient',
-    type: Array,
+    type: [ResolutionsEntity],
   })
   @ApiNotFoundResponse({
     description: 'Patient with the given id was not found',

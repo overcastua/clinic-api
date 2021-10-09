@@ -43,8 +43,6 @@ export class UsersService {
     patientDto.user = user;
 
     await this.patientService.create(patientDto);
-
-    return;
   }
 
   async findOne(email: string): Promise<UsersEntity> {
