@@ -3,13 +3,12 @@ import { NotFoundException } from '@nestjs/common';
 import { ResolutionsService } from './resolutions.service';
 import { ResolutionsRepository } from './resolutions.repository';
 import { ResolutionsEntity } from './resolutions.entity';
-import { TimeHelper } from 'src/utils/timeHelper';
 import { CreateResolutionDto } from 'src/patient/dto/create-resolution.dto';
 import { PatientEntity } from 'src/patient/patient.entity';
 
 const reposMock = () => ({
   createResolution: jest.fn(),
-  getAllById: jest.fn(),
+  getAllByPatientId: jest.fn(),
 });
 
 describe('ResolutionsService', () => {
@@ -36,14 +35,9 @@ describe('ResolutionsService', () => {
       expect.assertions(2);
       const arr = [new ResolutionsEntity()];
 
-      resolutionsRepository.getAllById.mockResolvedValue(arr);
-
-      const timeHelper = jest.spyOn(TimeHelper, 'filterOutdated');
-      (TimeHelper.filterOutdated as jest.Mock).mockReturnValue(arr);
+      resolutionsRepository.getAllByPatientId.mockResolvedValue(arr);
 
       const res = await service.getAllById(1);
-
-      expect(timeHelper).toHaveBeenCalledWith(arr);
 
       expect(res).toBe(arr);
     });
@@ -52,7 +46,7 @@ describe('ResolutionsService', () => {
       expect.assertions(1);
       const arr = [];
 
-      resolutionsRepository.getAllById.mockResolvedValue(arr);
+      resolutionsRepository.getAllByPatientId.mockResolvedValue(arr);
 
       expect(service.getAllById(1)).rejects.toThrow(NotFoundException);
     });

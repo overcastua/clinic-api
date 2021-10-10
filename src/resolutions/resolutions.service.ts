@@ -15,20 +15,22 @@ export class ResolutionsService {
 
   async getAllById(id: number): Promise<ResolutionsEntity[]> {
     const resolutions: ResolutionsEntity[] =
-      await this.resolutionsRepository.getAllById(id);
+      await this.resolutionsRepository.getAllByPatientId(id);
 
     if (!resolutions.length) throw new NotFoundException();
 
-    return TimeHelper.filterOutdated(resolutions);
+    return resolutions;
   }
 
   async createResolution(
     dto: CreateResolutionDto,
     patient: PatientEntity,
   ): Promise<void> {
-    const modDto: CreateResolutionDto = dto;
+    const modDto = { ...dto } as any;
 
-    modDto.expires_in = TimeHelper.now() + TimeHelper.minToMs(dto.expires_in);
+    modDto.expires_in = new Date(
+      TimeHelper.now() + TimeHelper.minToMs(dto.expires_in),
+    ).toISOString();
 
     return this.resolutionsRepository.createResolution(modDto, patient);
   }

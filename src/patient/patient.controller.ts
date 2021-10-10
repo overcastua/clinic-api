@@ -43,7 +43,7 @@ export class PatientController {
   @ApiNotFoundResponse({
     description: 'Patient with the given id was not found',
   })
-  async getAllResolutionsByName(
+  async getAllResolutionsById(
     @Param('id') id: number,
   ): Promise<ResolutionsEntity[]> {
     return this.patientService.getAllResolutionsById(id);

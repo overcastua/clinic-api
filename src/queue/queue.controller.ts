@@ -1,4 +1,4 @@
-import { Controller, Get, Post, NotFoundException, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import {
   ApiCreatedResponse,
   ApiNotFoundResponse,
@@ -24,11 +24,7 @@ export class QueueController {
     description: 'The queue is empty',
   })
   async getIdOfFirst(): Promise<number> {
-    const id: number = await this.queueService.getIdOfFirst();
-
-    if (!id) throw new NotFoundException();
-
-    return id;
+    return this.queueService.getIdOfFirst();
   }
 
   @Post()
@@ -54,10 +50,6 @@ export class QueueController {
     description: 'The queue is empty',
   })
   async deleteCurrentAndGetNewFirst(): Promise<number> {
-    const id: number = await this.queueService.deleteCurrentAndGetNewFirst();
-
-    if (!id) throw new NotFoundException();
-
-    return id;
+    return this.queueService.deleteCurrentAndGetNewFirst();
   }
 }
