@@ -32,7 +32,7 @@ describe('ResolutionsService', () => {
 
   describe('testing getAllById()', () => {
     it('should return all the resolutions for the given patient', async () => {
-      expect.assertions(2);
+      expect.assertions(1);
       const arr = [new ResolutionsEntity()];
 
       resolutionsRepository.getAllByPatientId.mockResolvedValue(arr);
@@ -54,17 +54,15 @@ describe('ResolutionsService', () => {
 
   describe('testing createResolution()', () => {
     it('should call the underlying repository', async () => {
-      expect.assertions(1);
-
       const createMethod = jest.spyOn(
         resolutionsRepository,
         'createResolution',
       );
 
-      await service.createResolution(
-        new CreateResolutionDto(),
-        new PatientEntity(),
-      );
+      const dto: CreateResolutionDto = new CreateResolutionDto();
+      dto.expires_in = 1;
+
+      await service.createResolution(dto, new PatientEntity());
 
       expect(createMethod).toHaveBeenCalledTimes(1);
     });
