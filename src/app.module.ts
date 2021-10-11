@@ -6,6 +6,7 @@ import { ResolutionsModule } from './resolutions/resolutions.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigurationModule } from './app-configuration/configuration.module';
+import { MeModule } from './me/me.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ConfigurationModule } from './app-configuration/configuration.module';
     ResolutionsModule,
     UsersModule,
     AuthModule,
+    MeModule,
   ],
 })
 export class AppModule {

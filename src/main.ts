@@ -12,6 +12,10 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('The Medical Service API')
     .setVersion('1.0')
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', in: 'header', bearerFormat: 'JWT' },
+      'JWT',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

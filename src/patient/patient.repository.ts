@@ -21,4 +21,12 @@ export class PatientRepository extends Repository<PatientEntity> {
   async findPatientByUser(user: UsersEntity): Promise<PatientEntity> {
     return this.findOne({ user });
   }
+
+  // async findPatientIdByUserId(userId: number): Promise<PatientEntity> {
+  //   return this.createQueryBuilder('p')
+  //     .leftJoinAndSelect('p.user', 'u')
+  //     .where('u.id :id', { id: userId })
+  //     .select('p.id')
+  //     .getOne();
+  // }
 }

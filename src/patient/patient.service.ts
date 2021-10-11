@@ -37,6 +37,15 @@ export class PatientService {
     return patient;
   }
 
+  // async findPatientIdByUserId(userId: number): Promise<PatientEntity> {
+  //   const patient: PatientEntity =
+  //     await this.patientRepository.findPatientIdByUserId(userId);
+
+  //   if (!patient) throw new NotFoundException();
+
+  //   return patient;
+  // }
+
   async createResolution(dto: CreateResolutionDto, id: number): Promise<void> {
     const patient: PatientEntity = await this.findById(id);
 
