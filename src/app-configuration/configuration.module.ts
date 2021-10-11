@@ -9,11 +9,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({
-        DB_HOSTNAME: Joi.string().required(),
-        DB_PORT: Joi.number().required(),
-        DB_USER: Joi.string().required(),
-        DB_PASSWORD: Joi.string().required(),
+        DB_HOSTNAME: Joi.string().default('localhost'),
+        DB_USER: Joi.string().default('root'),
         DB_NAME: Joi.string().required(),
+        DB_PORT: Joi.number().required(),
+        DB_PASSWORD: Joi.string().required(),
         JWT_SECRET: Joi.string().required(),
         SALT: Joi.number().required(),
         APP_PORT: Joi.number().default(8080),
