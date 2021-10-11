@@ -36,24 +36,11 @@ describe('UsersService', () => {
   });
 
   describe('testing register()', () => {
-    it('should throw 403 if passwords do not match', async () => {
-      expect.assertions(1);
-
-      const payload = new RegisterDto();
-      payload.password = '1234';
-      payload.confirmPassword = '12345';
-
-      jest.spyOn(userRepository, 'register');
-
-      expect(service.register(payload)).rejects.toThrow(ForbiddenException);
-    });
-
     it('should throw 409 if email is already taken', async () => {
       expect.assertions(1);
 
       const payload = new RegisterDto();
       payload.password = '1234';
-      payload.confirmPassword = '1234';
       payload.email = 'test@gmail.com';
 
       userRepository.findUser.mockResolvedValue({
@@ -66,7 +53,6 @@ describe('UsersService', () => {
     it('should return nothing if payload is valid', async () => {
       const payload = new RegisterDto();
       payload.password = '1234';
-      payload.confirmPassword = '1234';
       payload.email = 'test@gmail.com';
 
       userRepository.findUser.mockResolvedValue(undefined);

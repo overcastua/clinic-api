@@ -20,10 +20,6 @@ export class UsersService {
   ) {}
 
   async register(dto: RegisterDto): Promise<void> {
-    if (dto.password !== dto.confirmPassword) {
-      throw new ForbiddenException('Passwords do not match');
-    }
-
     if (await this.findOne(dto.email)) {
       throw new ConflictException('The email address is already in use');
     }

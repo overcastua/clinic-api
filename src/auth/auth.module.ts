@@ -15,7 +15,6 @@ import { AuthController } from './auth.controller';
     PassportModule,
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: String(process.env.JWT_EXPIRES_IN) || '60s' },
     }),
   ],
   providers: [AuthService, LocalStrategy],

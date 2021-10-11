@@ -32,11 +32,4 @@ export class RegisterDto {
     message: 'The password is too short',
   })
   password: string;
-
-  @IsNotEmpty()
-  @ApiProperty()
-  @MinLength(4, {
-    message: 'The password is too short',
-  })
-  confirmPassword: string;
 }
