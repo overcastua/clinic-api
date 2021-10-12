@@ -9,23 +9,17 @@
 
 Rename .example.env into .env and define all the required variables
 
-## Installation
+## Docker
 
 ```bash
-$ npm install
-```
+# start
+$ docker-compose up -d
 
-## Running the app
+# stop
+$ docker-compose down
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+# stop and delete all the volumes (all the db data will be removed)
+$ docker-compose down -v
 ```
 
 ## Test
