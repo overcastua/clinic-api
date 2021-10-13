@@ -35,3 +35,9 @@ $ npm run test:cov
 ## Routes documentation
 
 Go to http://localhost:8080/documentation/
+
+## MYSQL Diagram
+
+![relations](/images/relations.png?raw=true)
+
+[Origin](https://dbdiagram.io/d/61671337940c4c4eec93f8b0)

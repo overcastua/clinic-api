@@ -10,8 +10,6 @@ COPY . .
 
 RUN npm run build
 
-RUN apk update && apk add bash
-
 FROM node:14-alpine as production
 
 WORKDIR /usr/src/app

@@ -1,21 +1,20 @@
-import { QueueEntity } from 'src/modules/queue/queue.entity';
-import { ResolutionsEntity } from 'src/modules/resolutions/resolutions.entity';
 import { UsersEntity } from 'src/modules/users/users.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  OneToMany,
   OneToOne,
   JoinColumn,
-  ManyToMany,
-  JoinTable,
+  ManyToOne,
+  OneToMany,
 } from 'typeorm';
-import { QueuePositionEntity } from '../queue/positions/queuePositions.entity';
+import { QueueEntity } from '../queue/queue.entity';
+import { ResolutionsEntity } from '../resolutions/resolutions.entity';
+import { SpecializationEntity } from '../specializations/specializations.entity';
 
-@Entity('patient')
-export class PatientEntity {
+@Entity('doctor')
+export class DoctorEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -32,10 +31,14 @@ export class PatientEntity {
   @JoinColumn()
   user: UsersEntity;
 
-  @OneToMany(() => QueuePositionEntity, (queue) => queue.patient)
-  positions: QueuePositionEntity[];
+  @ManyToOne(() => SpecializationEntity, (p) => p.doctors)
+  specialization: SpecializationEntity;
 
-  @OneToMany(() => ResolutionsEntity, (resolution) => resolution.patient)
+  @OneToOne(() => QueueEntity)
+  @JoinColumn()
+  queue: QueueEntity;
+
+  @OneToMany(() => ResolutionsEntity, (resolution) => resolution.doctor)
   resolutions: ResolutionsEntity[];
 
   @CreateDateColumn({

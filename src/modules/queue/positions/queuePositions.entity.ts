@@ -2,28 +2,21 @@ import { PatientEntity } from 'src/modules/patient/patient.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
-  Column,
   CreateDateColumn,
   ManyToOne,
 } from 'typeorm';
-import { DoctorEntity } from '../doctors/doctors.entity';
+import { QueueEntity } from '../queue.entity';
 
-@Entity('resolution')
-export class ResolutionsEntity {
+@Entity('position')
+export class QueuePositionEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  text: string;
-
-  @Column()
-  expires_in: Date;
-
-  @ManyToOne(() => PatientEntity, (p) => p.resolutions)
+  @ManyToOne(() => PatientEntity, (patient) => patient.positions)
   patient: PatientEntity;
 
-  @ManyToOne(() => DoctorEntity, (d) => d.resolutions)
-  doctor: DoctorEntity;
+  @ManyToOne(() => QueueEntity, (q) => q.id)
+  queue: QueueEntity;
 
   @CreateDateColumn({
     type: 'timestamp',

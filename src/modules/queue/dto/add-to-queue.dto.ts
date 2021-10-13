@@ -6,4 +6,9 @@ export class AddToQueueDto {
   @ApiProperty()
   @IsNumberString()
   id: number;
+
+  @IsNotEmpty()
+  @ApiProperty()
+  @IsNumberString()
+  queueId: number;
 }

@@ -1,22 +1,21 @@
-import { PatientEntity } from 'src/modules/patient/patient.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  ManyToOne,
+  OneToOne,
+  OneToMany,
 } from 'typeorm';
+import { DoctorEntity } from '../doctors/doctors.entity';
+import { QueuePositionEntity } from './positions/queuePositions.entity';
 
 @Entity('queue')
 export class QueueEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => PatientEntity, (patient) => patient.queues)
-  patient: PatientEntity;
+  @OneToOne(() => DoctorEntity, (doctor) => doctor.queue)
+  doctor: DoctorEntity;
 
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
-  public created_at: Date;
+  @OneToMany(() => QueuePositionEntity, (pos) => pos.queue)
+  positions: QueuePositionEntity[];
 }

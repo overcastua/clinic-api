@@ -24,7 +24,7 @@ export class QueueController {
     description: 'The queue is empty',
   })
   async getIdOfFirst(): Promise<number> {
-    return this.queueService.getIdOfFirst();
+    return this.queueService.getIdOfFirst(1); // FIX HERE
   }
 
   @Post()
@@ -50,6 +50,6 @@ export class QueueController {
     description: 'The queue is empty',
   })
   async deleteCurrentAndGetNewFirst(): Promise<number> {
-    return this.queueService.deleteCurrentAndGetNewFirst();
+    return this.queueService.deleteCurrentAndGetNewFirst(1);
   }
 }
