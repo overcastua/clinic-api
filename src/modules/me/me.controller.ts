@@ -9,15 +9,20 @@ import {
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/modules/auth/jwt.auth.guard';
 import { ResolutionsEntity } from 'src/modules/resolutions/resolutions.entity';
+import { Role } from '../users/dto/login-user.dto';
+import { Roles } from '../users/users.roles.decorator';
+import { RolesGuard } from '../users/users.roles.guard';
 import { MeService } from './me.service';
 
 @ApiTags('me')
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('me')
 export class MeController {
   constructor(private readonly meService: MeService) {}
 
   @UseGuards(JwtAuthGuard)
   @Get('resolutions')
+  @Roles(Role.PATIENT)
   @ApiBearerAuth('JWT')
   @ApiOperation({ summary: 'Get own resolutions' })
   @ApiOkResponse({

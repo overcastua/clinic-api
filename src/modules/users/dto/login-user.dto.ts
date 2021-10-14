@@ -1,5 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, MinLength } from 'class-validator';
+
+export enum Role {
+  DOCTOR = 'doctor',
+  PATIENT = 'patient',
+}
 
 export class LoginDto {
   @IsNotEmpty()
@@ -13,4 +18,8 @@ export class LoginDto {
     message: 'The password is too short',
   })
   password: string;
+
+  @IsEnum(Role)
+  @ApiProperty({ enum: Role })
+  role: Role;
 }

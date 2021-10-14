@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -8,15 +8,21 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ResolutionsEntity } from 'src/modules/resolutions/resolutions.entity';
+import { JwtAuthGuard } from '../auth/jwt.auth.guard';
+import { Role } from '../users/dto/login-user.dto';
+import { Roles } from '../users/users.roles.decorator';
+import { RolesGuard } from '../users/users.roles.guard';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { PatientService } from './patient.service';
 
 @ApiTags('patients')
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('patients')
 export class PatientController {
   constructor(private readonly patientService: PatientService) {}
 
   @Post(':id/resolutions')
+  @Roles(Role.DOCTOR)
   @ApiOperation({ summary: 'Create a new resolution for the patient' })
   @ApiCreatedResponse({
     description: 'Resolution was successfully created',
@@ -35,6 +41,7 @@ export class PatientController {
   }
 
   @Get(':id/resolutions')
+  @Roles(Role.DOCTOR)
   @ApiOperation({ summary: 'Get all the resolutions of a certain patient' })
   @ApiOkResponse({
     description: 'Returns all the resolutions for the patient',

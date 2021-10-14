@@ -9,15 +9,19 @@ export class QueuePositionRepository extends Repository<QueuePositionEntity> {
     return this.createQueryBuilder('pos')
       .leftJoinAndSelect('pos.queue', 'q')
       .where('q.id = :id', { id: queueId })
-      .orderBy('pos.created_at', 'ASC')
       .leftJoinAndSelect('pos.patient', 'p')
+      .orderBy('pos.created_at', 'ASC')
       .getOne();
   }
 
-  async deleteFirst(queueId: number): Promise<void> {
+  async deleteFirst(queueId: number): Promise<QueuePositionEntity> {
     const first: QueuePositionEntity = await this.getFirst(queueId);
 
-    await this.remove(first);
+    if (first) {
+      return this.remove(first);
+    }
+
+    return null;
   }
 
   async add(

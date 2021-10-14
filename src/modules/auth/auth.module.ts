@@ -8,10 +8,12 @@ import { jwtConstants } from './constants';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './jwt.strategy';
+import { DoctorsModule } from '../doctors/doctors.module';
 
 @Module({
   imports: [
     UsersModule,
+    DoctorsModule,
     PatientModule,
     PassportModule,
     JwtModule.register({

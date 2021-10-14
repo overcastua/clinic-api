@@ -8,7 +8,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { LoginDto } from 'src/modules/users/dto/login-user.dto';
+import { LoginDto, Role } from 'src/modules/users/dto/login-user.dto';
 import { RegisterDto } from 'src/modules/users/dto/register-user.dto';
 import { UsersService } from 'src/modules/users/users.service';
 import { AuthService } from './auth.service';
@@ -52,6 +52,6 @@ export class AuthController {
       'User with this email does not exist or the password is incorrect',
   })
   async login(@Body() dto: LoginDto, @Req() req): Promise<IAccessToken> {
-    return this.authService.login(req.user.email);
+    return this.authService.login(req.user.email, <Role>dto.role);
   }
 }

@@ -1,10 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  OneToOne,
-  OneToMany,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, OneToOne, OneToMany } from 'typeorm';
 import { DoctorEntity } from '../doctors/doctors.entity';
 import { QueuePositionEntity } from './positions/queuePositions.entity';
 

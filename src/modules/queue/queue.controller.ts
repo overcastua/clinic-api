@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Param, UseGuards, Req } from '@nestjs/common';
 import {
   ApiCreatedResponse,
   ApiNotFoundResponse,
@@ -6,15 +6,21 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { AddToQueueDto } from './dto/add-to-queue.dto';
+import { JwtAuthGuard } from '../auth/jwt.auth.guard';
+import { Role } from '../users/dto/login-user.dto';
+import { Roles } from '../users/users.roles.decorator';
+import { RolesGuard } from '../users/users.roles.guard';
+import { QueueValidateDto } from './dto/validate-params.dto';
 import { QueueService } from './queue.service';
 
-@ApiTags('queue')
-@Controller('queue')
+@ApiTags('queues')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Controller('queues')
 export class QueueController {
   constructor(private readonly queueService: QueueService) {}
 
-  @Get()
+  @Get(':queueId')
+  @Roles(Role.DOCTOR)
   @ApiOperation({ summary: 'Get the id of the first patient in the queue' })
   @ApiOkResponse({
     description: 'Returns the id of the first patient in the queue',
@@ -23,11 +29,12 @@ export class QueueController {
   @ApiNotFoundResponse({
     description: 'The queue is empty',
   })
-  async getIdOfFirst(): Promise<number> {
-    return this.queueService.getIdOfFirst(1); // FIX HERE
+  async getIdOfFirst(@Param() params: QueueValidateDto): Promise<number> {
+    return this.queueService.getIdOfFirst(params.queueId);
   }
 
-  @Post()
+  @Post(':queueId')
+  @Roles(Role.PATIENT)
   @ApiOperation({ summary: 'Add a patient to the queue' })
   @ApiCreatedResponse({
     description: 'Patient was added to the queue',
@@ -35,11 +42,12 @@ export class QueueController {
   @ApiNotFoundResponse({
     description: 'Patient with the given id does not exist',
   })
-  async add(@Body() dto: AddToQueueDto): Promise<void> {
-    return this.queueService.add(dto);
+  async add(@Param() params: QueueValidateDto, @Req() req): Promise<void> {
+    return this.queueService.add(params.queueId, req.user.patientId);
   }
 
-  @Get('next')
+  @Get(':queueId/next')
+  @Roles(Role.DOCTOR)
   @ApiOperation({ summary: 'Get the id of the next patient in the queue' })
   @ApiOkResponse({
     description:
@@ -49,7 +57,9 @@ export class QueueController {
   @ApiNotFoundResponse({
     description: 'The queue is empty',
   })
-  async deleteCurrentAndGetNewFirst(): Promise<number> {
-    return this.queueService.deleteCurrentAndGetNewFirst(1);
+  async deleteCurrentAndGetNewFirst(
+    @Param() params: QueueValidateDto,
+  ): Promise<number> {
+    return this.queueService.deleteCurrentAndGetNewFirst(params.queueId);
   }
 }

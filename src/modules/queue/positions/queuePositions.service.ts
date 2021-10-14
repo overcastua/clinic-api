@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PatientEntity } from 'src/modules/patient/patient.entity';
 import { PatientService } from 'src/modules/patient/patient.service';
-import { AddToQueueDto } from '../dto/add-to-queue.dto';
 import { QueueEntity } from '../queue.entity';
 import { QueuePositionEntity } from './queuePositions.entity';
 import { QueuePositionRepository } from './queuePositions.repository';
@@ -25,14 +24,19 @@ export class QueuePositionService {
   }
 
   async deleteCurrentAndGetNewFirst(queueId: number): Promise<number> {
-    await this.getIdOfFirst(queueId); // if not empty, else the error will be thrown
+    const deletedPatient = await this.repository.deleteFirst(queueId);
 
-    await this.repository.deleteFirst(queueId);
+    if (!deletedPatient) {
+      throw new NotFoundException();
+    }
+
     return this.getIdOfFirst(queueId);
   }
 
-  async add(queue: QueueEntity, dto: AddToQueueDto): Promise<void> {
-    const patient: PatientEntity = await this.patientService.findById(dto.id);
+  async add(queue: QueueEntity, patientId: number): Promise<void> {
+    const patient: PatientEntity = await this.patientService.findById(
+      patientId,
+    );
     await this.repository.add(queue, patient);
   }
 }

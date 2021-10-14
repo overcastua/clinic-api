@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PatientEntity } from 'src/modules/patient/patient.entity';
 import { PatientService } from 'src/modules/patient/patient.service';
 import { DoctorEntity } from '../doctors/doctors.entity';
-import { AddToQueueDto } from './dto/add-to-queue.dto';
 import { QueuePositionService } from './positions/queuePositions.service';
 import { QueueEntity } from './queue.entity';
 import { QueueRepository } from './queue.repository';
@@ -25,9 +23,9 @@ export class QueueService {
     return this.positionService.deleteCurrentAndGetNewFirst(queueId);
   }
 
-  async add(dto: AddToQueueDto): Promise<void> {
-    const queue = await this.queueRepository.findById(dto.queueId);
-    await this.positionService.add(queue, dto);
+  async add(queueId: number, patientId: number): Promise<void> {
+    const queue = await this.queueRepository.findById(queueId);
+    await this.positionService.add(queue, patientId);
   }
 
   async create(doctor: DoctorEntity): Promise<QueueEntity> {
