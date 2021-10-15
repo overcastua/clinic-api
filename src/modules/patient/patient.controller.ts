@@ -2,6 +2,7 @@ import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -33,6 +34,9 @@ export class PatientController {
   @ApiNotFoundResponse({
     description: 'Patient with the given id was not found',
   })
+  @ApiForbiddenResponse({
+    description: 'You dont have permission to access the route',
+  })
   async createResolution(
     @Body() dto: CreateResolutionDto,
     @Param('id') id: number,
@@ -49,6 +53,9 @@ export class PatientController {
   })
   @ApiNotFoundResponse({
     description: 'Patient with the given id was not found',
+  })
+  @ApiForbiddenResponse({
+    description: 'You dont have permission to access the route',
   })
   async getAllResolutionsById(
     @Param('id') id: number,

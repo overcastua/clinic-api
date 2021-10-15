@@ -4,6 +4,8 @@ import { PatientService } from 'src/modules/patient/patient.service';
 import { UsersService } from 'src/modules/users/users.service';
 import { AuthService } from './auth.service';
 import * as bcrypt from 'bcrypt';
+import { Role } from '../users/dto/login-user.dto';
+import { DoctorsService } from '../doctors/doctors.service';
 
 describe('PatientService', () => {
   let service: AuthService;
@@ -29,6 +31,12 @@ describe('PatientService', () => {
         },
         {
           provide: UsersService,
+          useValue: {
+            findOne: jest.fn(),
+          },
+        },
+        {
+          provide: DoctorsService,
           useValue: {
             findOne: jest.fn(),
           },
@@ -87,7 +95,7 @@ describe('PatientService', () => {
         patient,
       );
 
-      const res = await service.login('a@gmail.com');
+      const res = await service.login('a@gmail.com', Role.PATIENT);
 
       expect(res).toStrictEqual({ access_token: fakeToken });
     });

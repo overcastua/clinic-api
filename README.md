@@ -17,9 +17,18 @@ $ docker-compose up -d
 
 # stop
 $ docker-compose down
+```
 
-# stop and delete all the volumes (all the db data will be removed)
+# In case any MYSQL conflict errors (table already exists, etc):
+
+```bash
 $ docker-compose down -v
+```
+
+Then manualy delete the <b>dist</b> directory and run:
+
+```bash
+$ docker-compose up -d --build
 ```
 
 ## Test

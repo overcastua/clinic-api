@@ -4,23 +4,18 @@ import { QueueService } from './queue.service';
 import { PatientService } from 'src/modules/patient/patient.service';
 import { QueueRepository } from './queue.repository';
 import { QueueEntity } from './queue.entity';
-import { PatientEntity } from 'src/modules/patient/patient.entity';
-import { AddToQueueDto } from './dto/add-to-queue.dto';
+import { QueuePositionService } from './positions/queuePositions.service';
 
 const reposMock = () => ({
+  findById: jest.fn(),
   add: jest.fn(),
-  getFirst: jest.fn(),
-  deleteFirst: jest.fn(),
 });
 
-const data = new QueueEntity();
-data.patient = new PatientEntity();
 const id = 1;
-data.patient.id = id;
 
 describe('PatientsService', () => {
   let service: QueueService;
-  let patientService: PatientService;
+  let positionService: QueuePositionService;
   let queueRepository: any;
 
   beforeEach(async () => {
@@ -37,54 +32,38 @@ describe('PatientsService', () => {
             findById: jest.fn(),
           },
         },
+        {
+          provide: QueuePositionService,
+          useValue: {
+            getIdOfFirst: jest.fn(),
+            deleteCurrentAndGetNewFirst: jest.fn(),
+            add: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
     service = module.get(QueueService);
+    positionService = module.get(QueuePositionService);
     queueRepository = module.get(QueueRepository);
-    patientService = module.get(PatientService);
-  });
-
-  describe('testing getIdOfFirst()', () => {
-    it('should return the id of the first patient in the queue', async () => {
-      expect.assertions(1);
-      queueRepository.getFirst.mockResolvedValue(data);
-
-      const res = await service.getIdOfFirst();
-
-      expect(res).toBe(id);
-    });
-
-    it('should throw a 404 error if the queue is empty', async () => {
-      expect.assertions(1);
-
-      queueRepository.getFirst.mockResolvedValue(undefined);
-
-      expect(service.getIdOfFirst()).rejects.toThrow(NotFoundException);
-    });
-  });
-
-  describe('testing deleteCurrentAndGetNewFirst()', () => {
-    it('should return the id of the next patient in the queue', async () => {
-      expect.assertions(1);
-      queueRepository.getFirst.mockResolvedValue(data);
-
-      const res = await service.getIdOfFirst();
-
-      expect(res).toBe(id);
-    });
   });
 
   describe('testing add()', () => {
     it('should put the given patient to the queue', async () => {
-      const addMethod = jest.spyOn(queueRepository, 'add');
-      const patient = new PatientEntity();
-      (patientService.findById as jest.Mock).mockResolvedValue(patient);
+      const addMethod = jest.spyOn(positionService, 'add');
+      const queue = new QueueEntity();
+      queueRepository.findById.mockResolvedValue(queue);
 
-      await service.add(new AddToQueueDto());
+      await service.add(1, id);
 
       expect(addMethod).toHaveBeenCalledTimes(1);
-      expect(addMethod).toHaveBeenCalledWith(patient);
+      expect(addMethod).toHaveBeenCalledWith(queue, id);
+    });
+
+    it('should throw a 404 error if the queue does not exist', async () => {
+      queueRepository.findById.mockResolvedValue(undefined);
+
+      expect(service.add(1, id)).rejects.toThrow(NotFoundException);
     });
   });
 });

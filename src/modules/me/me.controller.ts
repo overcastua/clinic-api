@@ -1,6 +1,7 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -16,14 +17,13 @@ import { MeService } from './me.service';
 
 @ApiTags('me')
 @UseGuards(JwtAuthGuard, RolesGuard)
+@ApiBearerAuth('JWT')
 @Controller('me')
 export class MeController {
   constructor(private readonly meService: MeService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Get('resolutions')
   @Roles(Role.PATIENT)
-  @ApiBearerAuth('JWT')
   @ApiOperation({ summary: 'Get own resolutions' })
   @ApiOkResponse({
     description:
@@ -36,6 +36,9 @@ export class MeController {
   })
   @ApiUnauthorizedResponse({
     description: 'Patient can not be authenticated',
+  })
+  @ApiForbiddenResponse({
+    description: 'You dont have permission to access the route',
   })
   async getResolutions(@Req() req): Promise<ResolutionsEntity[]> {
     return this.meService.getOwnResolutions(req.user.patientId);

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PatientService } from 'src/modules/patient/patient.service';
 import { DoctorEntity } from '../doctors/doctors.entity';
@@ -25,6 +25,11 @@ export class QueueService {
 
   async add(queueId: number, patientId: number): Promise<void> {
     const queue = await this.queueRepository.findById(queueId);
+
+    if (!queue) {
+      throw new NotFoundException('Queue with the given id does not exist');
+    }
+
     await this.positionService.add(queue, patientId);
   }
 

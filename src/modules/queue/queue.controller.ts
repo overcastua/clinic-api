@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Param, UseGuards, Req } from '@nestjs/common';
 import {
   ApiCreatedResponse,
+  ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -29,6 +30,9 @@ export class QueueController {
   @ApiNotFoundResponse({
     description: 'The queue is empty',
   })
+  @ApiForbiddenResponse({
+    description: 'You dont have permission to access the route',
+  })
   async getIdOfFirst(@Param() params: QueueValidateDto): Promise<number> {
     return this.queueService.getIdOfFirst(params.queueId);
   }
@@ -41,6 +45,9 @@ export class QueueController {
   })
   @ApiNotFoundResponse({
     description: 'Patient with the given id does not exist',
+  })
+  @ApiForbiddenResponse({
+    description: 'You dont have permission to access the route',
   })
   async add(@Param() params: QueueValidateDto, @Req() req): Promise<void> {
     return this.queueService.add(params.queueId, req.user.patientId);
@@ -56,6 +63,9 @@ export class QueueController {
   })
   @ApiNotFoundResponse({
     description: 'The queue is empty',
+  })
+  @ApiForbiddenResponse({
+    description: 'You dont have permission to access the route',
   })
   async deleteCurrentAndGetNewFirst(
     @Param() params: QueueValidateDto,
