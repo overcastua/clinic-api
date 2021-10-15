@@ -10,10 +10,4 @@ export class TimeHelper {
   static now(): number {
     return Date.now();
   }
-
-  // static filterOutdated(array: ResolutionsEntity[]): ResolutionsEntity[] {
-  //   return array.filter(
-  //     (res: ResolutionsEntity) => Number(res.expires_in) > TimeHelper.now(),
-  //   );
-  // }
 }

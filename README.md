@@ -5,27 +5,30 @@
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
-##Before Use
+## Before Use
 
 Rename .example.env into .env and define all the required variables
 
-## Installation
+## Docker
 
 ```bash
-$ npm install
+# start
+$ docker-compose up -d
+
+# stop
+$ docker-compose down
 ```
 
-## Running the app
+# In case any MYSQL conflict errors (table already exists, etc):
 
 ```bash
-# development
-$ npm run start
+$ docker-compose down -v
+```
 
-# watch mode
-$ npm run start:dev
+Then manualy delete the <b>dist</b> directory and run:
 
-# production mode
-$ npm run start:prod
+```bash
+$ docker-compose up -d --build
 ```
 
 ## Test
@@ -41,3 +44,9 @@ $ npm run test:cov
 ## Routes documentation
 
 Go to http://localhost:8080/documentation/
+
+## MYSQL Diagram
+
+![relations](/images/relations.png?raw=true)
+
+[Origin](https://dbdiagram.io/d/61671337940c4c4eec93f8b0)
