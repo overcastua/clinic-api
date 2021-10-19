@@ -10,7 +10,7 @@ export class QueuePositionRepository extends Repository<QueuePositionEntity> {
       .leftJoinAndSelect('pos.queue', 'q')
       .where('q.id = :id', { id: queueId })
       .leftJoinAndSelect('pos.patient', 'p')
-      .orderBy('pos.created_at', 'ASC')
+      .orderBy('pos.createdAt', 'ASC')
       .getOne();
   }
 

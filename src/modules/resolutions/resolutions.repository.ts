@@ -8,7 +8,7 @@ export class ResolutionsRepository extends Repository<ResolutionsEntity> {
     return this.createQueryBuilder('res')
       .leftJoinAndSelect('res.patient', 'p')
       .where('p.id = :id', { id })
-      .andWhere('res.expires_in > :now', { now: new Date() })
+      .andWhere('res.expiresIn > :now', { now: new Date() })
       .getMany();
   }
 
@@ -16,7 +16,7 @@ export class ResolutionsRepository extends Repository<ResolutionsEntity> {
     const newResolution = new ResolutionsEntity();
     newResolution.patient = patient;
     newResolution.text = dto.text;
-    newResolution.expires_in = dto.expires_in;
+    newResolution.expiresIn = dto.expiresIn;
 
     await this.save(newResolution);
   }

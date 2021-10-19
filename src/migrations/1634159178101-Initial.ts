@@ -5,16 +5,16 @@ export class Initial1634159178101 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE \`user\` (\`id\` int NOT NULL AUTO_INCREMENT, \`email\` varchar(255) NOT NULL, \`password\` varchar(255) NOT NULL, \`created_at\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), UNIQUE INDEX \`IDX_e12875dfb3b1d92d7d7c5377e2\` (\`email\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+      `CREATE TABLE \`user\` (\`id\` int NOT NULL AUTO_INCREMENT, \`email\` varchar(255) NOT NULL, \`password\` varchar(255) NOT NULL, \`createdAt\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), UNIQUE INDEX \`IDX_e12875dfb3b1d92d7d7c5377e2\` (\`email\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
     await queryRunner.query(
-      `CREATE TABLE \`resolution\` (\`id\` int NOT NULL AUTO_INCREMENT, \`text\` varchar(255) NOT NULL, \`expires_in\` datetime NOT NULL, \`created_at\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`patientId\` int NULL, \`doctorId\` int NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+      `CREATE TABLE \`resolution\` (\`id\` int NOT NULL AUTO_INCREMENT, \`text\` varchar(255) NOT NULL, \`expiresIn\` datetime NOT NULL, \`createdAt\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`patientId\` int NULL, \`doctorId\` int NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
     await queryRunner.query(
-      `CREATE TABLE \`patient\` (\`id\` int NOT NULL AUTO_INCREMENT, \`name\` varchar(255) NOT NULL, \`gender\` varchar(255) NOT NULL, \`birthDate\` datetime NOT NULL, \`created_at\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`userId\` int NULL, UNIQUE INDEX \`REL_6636aefca0bdad8933c7cc3e39\` (\`userId\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+      `CREATE TABLE \`patient\` (\`id\` int NOT NULL AUTO_INCREMENT, \`name\` varchar(255) NOT NULL, \`gender\` varchar(255) NOT NULL, \`birthDate\` datetime NOT NULL, \`createdAt\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`userId\` int NULL, UNIQUE INDEX \`REL_6636aefca0bdad8933c7cc3e39\` (\`userId\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
     await queryRunner.query(
-      `CREATE TABLE \`position\` (\`id\` int NOT NULL AUTO_INCREMENT, \`created_at\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`patientId\` int NULL, \`queueId\` int NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+      `CREATE TABLE \`position\` (\`id\` int NOT NULL AUTO_INCREMENT, \`createdAt\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`patientId\` int NULL, \`queueId\` int NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
     await queryRunner.query(
       `CREATE TABLE \`queue\` (\`id\` int NOT NULL AUTO_INCREMENT, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
@@ -23,7 +23,7 @@ export class Initial1634159178101 implements MigrationInterface {
       `CREATE TABLE \`specialization\` (\`id\` int NOT NULL AUTO_INCREMENT, \`title\` varchar(255) NOT NULL, PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
     await queryRunner.query(
-      `CREATE TABLE \`doctor\` (\`id\` int NOT NULL AUTO_INCREMENT, \`name\` varchar(255) NOT NULL, \`gender\` varchar(255) NOT NULL, \`birthDate\` datetime NOT NULL, \`created_at\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`userId\` int NULL, \`specializationId\` int NULL, \`queueId\` int NULL, UNIQUE INDEX \`REL_e573a17ab8b6eea2b7fe9905fa\` (\`userId\`), UNIQUE INDEX \`REL_34c18a574a18ce23ceb564a6eb\` (\`queueId\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+      `CREATE TABLE \`doctor\` (\`id\` int NOT NULL AUTO_INCREMENT, \`name\` varchar(255) NOT NULL, \`gender\` varchar(255) NOT NULL, \`birthDate\` datetime NOT NULL, \`createdAt\` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), \`userId\` int NULL, \`specializationId\` int NULL, \`queueId\` int NULL, UNIQUE INDEX \`REL_e573a17ab8b6eea2b7fe9905fa\` (\`userId\`), UNIQUE INDEX \`REL_34c18a574a18ce23ceb564a6eb\` (\`queueId\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
     await queryRunner.query(
       `ALTER TABLE \`resolution\` ADD CONSTRAINT \`FK_2f6d685a47cea653fe441a1a1ee\` FOREIGN KEY (\`patientId\`) REFERENCES \`patient\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,

@@ -1,4 +1,3 @@
-import { QueueEntity } from 'src/modules/queue/queue.entity';
 import { ResolutionsEntity } from 'src/modules/resolutions/resolutions.entity';
 import { UsersEntity } from 'src/modules/users/users.entity';
 import {
@@ -9,8 +8,6 @@ import {
   OneToMany,
   OneToOne,
   JoinColumn,
-  ManyToMany,
-  JoinTable,
 } from 'typeorm';
 import { QueuePositionEntity } from '../queue/positions/queuePositions.entity';
 
@@ -42,5 +39,5 @@ export class PatientEntity {
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
   })
-  public created_at: Date;
+  public createdAt: Date;
 }

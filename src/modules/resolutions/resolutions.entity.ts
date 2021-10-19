@@ -17,7 +17,7 @@ export class ResolutionsEntity {
   text: string;
 
   @Column()
-  expires_in: Date;
+  expiresIn: Date;
 
   @ManyToOne(() => PatientEntity, (p) => p.resolutions)
   patient: PatientEntity;
@@ -29,5 +29,5 @@ export class ResolutionsEntity {
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
   })
-  public created_at: Date;
+  public createdAt: Date;
 }

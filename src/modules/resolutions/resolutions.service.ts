@@ -28,8 +28,8 @@ export class ResolutionsService {
   ): Promise<void> {
     const modDto = { ...dto } as any;
 
-    modDto.expires_in = new Date(
-      TimeHelper.now() + TimeHelper.minToMs(dto.expires_in),
+    modDto.expiresIn = new Date(
+      TimeHelper.now() + TimeHelper.minToMs(dto.expiresIn),
     ).toISOString();
 
     return this.resolutionsRepository.createResolution(modDto, patient);

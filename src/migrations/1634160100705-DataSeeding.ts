@@ -17,18 +17,18 @@ export class DataSeeding1634159178105 implements MigrationInterface {
       `INSERT INTO \`specialization\` (\`id\`, \`title\`) VALUES (4, 'cardiologist');`,
     );
     await queryRunner.query(
-      "INSERT INTO `user` (`id`, `email`, `password`, `created_at`) VALUES (1, 'test@gmail.com', '$2b$10$wNV9I/9FhUu6qLPXEMhIwOvUlCKUxLC0g5rzeMoC.r8klWEBrJ5IO', '2021-10-09 14:55:56.874564');",
+      "INSERT INTO `user` (`id`, `email`, `password`, `createdAt`) VALUES (1, 'test@gmail.com', '$2b$10$wNV9I/9FhUu6qLPXEMhIwOvUlCKUxLC0g5rzeMoC.r8klWEBrJ5IO', '2021-10-09 14:55:56.874564');",
     );
     await queryRunner.query(
-      "INSERT INTO `user` (`id`, `email`, `password`, `created_at`) VALUES (2, 'test2@gmail.com', '$2b$10$wNV9I/9FhUu6qLPXEMhIwOvUlCKUxLC0g5rzeMoC.r8klWEBrJ5IO', '2021-10-09 14:55:56.874564');",
+      "INSERT INTO `user` (`id`, `email`, `password`, `createdAt`) VALUES (2, 'test2@gmail.com', '$2b$10$wNV9I/9FhUu6qLPXEMhIwOvUlCKUxLC0g5rzeMoC.r8klWEBrJ5IO', '2021-10-09 14:55:56.874564');",
     );
     await queryRunner.query(`INSERT INTO \`queue\` (\`id\`) VALUES (1);`);
     await queryRunner.query(
-      `INSERT INTO \`doctor\` (\`id\`, \`name\`, \`gender\`, \`birthDate\`, \`userId\`, \`specializationId\`, \`queueId\`, \`created_at\`) VALUES (1, 'QWERTY', 'male', '1995-12-17 00:00:00', 1, 3, 1, '1995-12-17 00:00:00');`,
+      `INSERT INTO \`doctor\` (\`id\`, \`name\`, \`gender\`, \`birthDate\`, \`userId\`, \`specializationId\`, \`queueId\`, \`createdAt\`) VALUES (1, 'QWERTY', 'male', '1995-12-17 00:00:00', 1, 3, 1, '1995-12-17 00:00:00');`,
     );
     await queryRunner.query(`INSERT INTO \`queue\` (\`id\`) VALUES (2);`);
     await queryRunner.query(
-      `INSERT INTO \`doctor\` (\`id\`, \`name\`, \`gender\`, \`birthDate\`, \`userId\`, \`specializationId\`, \`queueId\`, \`created_at\`) VALUES (2, 'QWERTY2', 'female', '1995-12-17 00:00:00', 2, 1, 2, '1995-12-17 00:00:00');`,
+      `INSERT INTO \`doctor\` (\`id\`, \`name\`, \`gender\`, \`birthDate\`, \`userId\`, \`specializationId\`, \`queueId\`, \`createdAt\`) VALUES (2, 'QWERTY2', 'female', '1995-12-17 00:00:00', 2, 1, 2, '1995-12-17 00:00:00');`,
     );
   }
   public async down(queryRunner: QueryRunner): Promise<void> {

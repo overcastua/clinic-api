@@ -60,7 +60,7 @@ describe('ResolutionsService', () => {
       );
 
       const dto: CreateResolutionDto = new CreateResolutionDto();
-      dto.expires_in = 1;
+      dto.expiresIn = 1;
 
       await service.createResolution(dto, new PatientEntity());
 

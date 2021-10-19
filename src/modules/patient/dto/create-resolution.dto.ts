@@ -9,5 +9,5 @@ export class CreateResolutionDto {
   @IsNotEmpty()
   @ApiProperty()
   @IsNumberString()
-  expires_in: number;
+  expiresIn: number; // minutes
 }
