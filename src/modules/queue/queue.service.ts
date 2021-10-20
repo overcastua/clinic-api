@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PatientService } from 'src/modules/patient/patient.service';
 import { DoctorEntity } from '../doctors/doctors.entity';
 import { QueuePositionService } from './positions/queuePositions.service';
 import { QueueEntity } from './queue.entity';
@@ -12,7 +11,6 @@ export class QueueService {
     @InjectRepository(QueueRepository)
     private readonly queueRepository: QueueRepository,
     private readonly positionService: QueuePositionService,
-    private readonly patientService: PatientService,
   ) {}
 
   async getIdOfFirst(queueId: number): Promise<number> {

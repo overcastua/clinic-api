@@ -21,6 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config src/app-configuration/ormconfig.ts",
     "migration": "npm run typeorm migration:run",
+    "migration:generate": "npm run typeorm -- migration:generate -n",
     "migration:create": "npm run typeorm migration:create -n",
     "migration:revert": "npm run typeorm migration:revert"
   },
@@ -41,6 +42,7 @@
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
+    "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",

@@ -2,7 +2,7 @@ import { join } from 'path';
 import { ConnectionOptions } from 'typeorm';
 
 const connectionOptions: ConnectionOptions = {
-  type: 'mysql',
+  type: 'postgres',
   host: process.env.DB_HOSTNAME,
   port: parseInt(process.env.DB_PORT, 10),
   username: process.env.DB_USER,
@@ -13,9 +13,7 @@ const connectionOptions: ConnectionOptions = {
   cli: {
     migrationsDir: join(__dirname, '../migrations'),
   },
-  // Run migrations automatically,
-  // you can disable this if you prefer running migration manually.
-  migrationsRun: true,
+  migrationsRun: !!process.env.RUN_MIGRATIONS,
   dropSchema: false,
   synchronize: false,
   logging: true,

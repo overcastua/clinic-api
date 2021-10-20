@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, OneToOne, OneToMany } from 'typeorm';
 import { DoctorEntity } from '../doctors/doctors.entity';
 import { QueuePositionEntity } from './positions/queuePositions.entity';
 
-@Entity('queue')
+@Entity('queue', { schema: 'queues' })
 export class QueueEntity {
   @PrimaryGeneratedColumn()
   id: number;

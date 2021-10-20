@@ -5,7 +5,6 @@ import { PatientModule } from './patient/patient.module';
 import { ResolutionsModule } from './resolutions/resolutions.module';
 import { UsersModule } from './users/users.module';
 import { ConfigurationModule } from '../app-configuration/configuration.module';
-import { MeModule } from './me/me.module';
 import { AuthModule } from './auth/auth.module';
 import { SpecializationsModule } from './specializations/specializations.module';
 import { DoctorsModule } from './doctors/doctors.module';
@@ -18,7 +17,6 @@ import { DoctorsModule } from './doctors/doctors.module';
     ResolutionsModule,
     UsersModule,
     AuthModule,
-    MeModule,
     SpecializationsModule,
     DoctorsModule,
   ],

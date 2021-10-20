@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 import { QueuePositionEntity } from '../queue/positions/queuePositions.entity';
 
-@Entity('patient')
+@Entity('patient', { schema: 'patients' })
 export class PatientEntity {
   @PrimaryGeneratedColumn()
   id: number;

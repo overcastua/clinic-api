@@ -13,7 +13,7 @@ import { QueueEntity } from '../queue/queue.entity';
 import { ResolutionsEntity } from '../resolutions/resolutions.entity';
 import { SpecializationEntity } from '../specializations/specializations.entity';
 
-@Entity('doctor')
+@Entity('doctor', { schema: 'doctors' })
 export class DoctorEntity {
   @PrimaryGeneratedColumn()
   id: number;

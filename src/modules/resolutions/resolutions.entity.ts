@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { DoctorEntity } from '../doctors/doctors.entity';
 
-@Entity('resolution')
+@Entity('resolution', { schema: 'doctors' })
 export class ResolutionsEntity {
   @PrimaryGeneratedColumn()
   id: number;
