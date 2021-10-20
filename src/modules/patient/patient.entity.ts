@@ -3,12 +3,12 @@ import { UsersEntity } from 'src/modules/users/users.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
-  Column,
   CreateDateColumn,
   OneToMany,
   OneToOne,
   JoinColumn,
 } from 'typeorm';
+import { ProfileEntity } from '../profile/profile.entity';
 import { QueuePositionEntity } from '../queue/positions/queuePositions.entity';
 
 @Entity('patient', { schema: 'patients' })
@@ -16,18 +16,13 @@ export class PatientEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  name: string;
-
-  @Column()
-  gender: string;
-
-  @Column()
-  birthDate: Date;
-
   @OneToOne(() => UsersEntity)
   @JoinColumn()
   user: UsersEntity;
+
+  @OneToOne(() => ProfileEntity)
+  @JoinColumn()
+  profile: ProfileEntity;
 
   @OneToMany(() => QueuePositionEntity, (queue) => queue.patient)
   positions: QueuePositionEntity[];

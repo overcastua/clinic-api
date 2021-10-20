@@ -1,4 +1,5 @@
 import { UsersEntity } from 'src/modules/users/users.entity';
+import { PatientEntity } from '../patient.entity';
 
 enum Gender {
   MALE = 'male',
@@ -12,4 +13,6 @@ export class CreatePatientDto {
   birthDate: Date;
 
   user: UsersEntity;
+
+  patient?: PatientEntity;
 }

@@ -5,13 +5,10 @@ import { PatientEntity } from './patient.entity';
 
 @EntityRepository(PatientEntity)
 export class PatientRepository extends Repository<PatientEntity> {
-  async add(createPatientDto: CreatePatientDto): Promise<void> {
+  async add(createPatientDto: CreatePatientDto): Promise<PatientEntity> {
     const newPatient = new PatientEntity();
-    newPatient.birthDate = createPatientDto.birthDate;
-    newPatient.gender = createPatientDto.gender;
-    newPatient.name = createPatientDto.name;
     newPatient.user = createPatientDto.user;
-    await this.save(newPatient);
+    return this.save(newPatient);
   }
 
   async findById(id: number): Promise<PatientEntity> {

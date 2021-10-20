@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ResolutionsEntity } from 'src/modules/resolutions/resolutions.entity';
 import { ResolutionsService } from 'src/modules/resolutions/resolutions.service';
 import { UsersEntity } from 'src/modules/users/users.entity';
+import { ProfileService } from '../profile/profile.service';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { PatientEntity } from './patient.entity';
@@ -13,11 +14,15 @@ export class PatientService {
   constructor(
     @InjectRepository(PatientRepository)
     private readonly patientRepository: PatientRepository,
+    private readonly profileService: ProfileService,
     private readonly resolutionsService: ResolutionsService,
   ) {}
 
   async create(createPatientDto: CreatePatientDto): Promise<void> {
-    await this.patientRepository.add(createPatientDto);
+    createPatientDto.patient = await this.patientRepository.add(
+      createPatientDto,
+    );
+    await this.profileService.create(createPatientDto);
   }
 
   async findById(id: number): Promise<PatientEntity> {

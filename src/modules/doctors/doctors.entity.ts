@@ -2,13 +2,13 @@ import { UsersEntity } from 'src/modules/users/users.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
-  Column,
   CreateDateColumn,
   OneToOne,
   JoinColumn,
   ManyToOne,
   OneToMany,
 } from 'typeorm';
+import { ProfileEntity } from '../profile/profile.entity';
 import { QueueEntity } from '../queue/queue.entity';
 import { ResolutionsEntity } from '../resolutions/resolutions.entity';
 import { SpecializationEntity } from '../specializations/specializations.entity';
@@ -18,18 +18,13 @@ export class DoctorEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  name: string;
-
-  @Column()
-  gender: string;
-
-  @Column()
-  birthDate: Date;
-
   @OneToOne(() => UsersEntity)
   @JoinColumn()
   user: UsersEntity;
+
+  @OneToOne(() => ProfileEntity)
+  @JoinColumn()
+  profile: ProfileEntity;
 
   @ManyToOne(() => SpecializationEntity, (p) => p.doctors)
   specialization: SpecializationEntity;

@@ -8,6 +8,7 @@ import { ConfigurationModule } from '../app-configuration/configuration.module';
 import { AuthModule } from './auth/auth.module';
 import { SpecializationsModule } from './specializations/specializations.module';
 import { DoctorsModule } from './doctors/doctors.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { DoctorsModule } from './doctors/doctors.module';
     QueueModule,
     PatientModule,
     ResolutionsModule,
+    ProfileModule,
     UsersModule,
     AuthModule,
     SpecializationsModule,
