@@ -5,10 +5,6 @@
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
-## Before Use
-
-Rename .example.env into .env and define all the required variables
-
 ## Docker
 
 ```bash
@@ -19,17 +15,9 @@ $ docker-compose up -d
 $ docker-compose down
 ```
 
-# In case any MYSQL conflict errors (table already exists, etc):
+## Workspaces
 
-```bash
-$ docker-compose down -v
-```
-
-Then manualy delete the <b>dist</b> directory and run:
-
-```bash
-$ docker-compose up -d --build
-```
+All new workspaces should be created in the <b>services</b> directory. Currently there is one monolith service 'app'.
 
 ## Test
 
@@ -45,8 +33,23 @@ $ npm run test:cov
 
 Go to http://localhost:8080/documentation/
 
-## MYSQL Diagram
+## Migrations
+
+TypeORM runs migrations automatically. To change this, you can set environment variable RUN_MIGRATIONS in docker-compose to 'false'.
+To run migrations manualy, start docker-compose and run:
+
+```bash
+docker exec -it main yarn migration
+```
+
+To revert the last migration use:
+
+```bash
+docker exec -it main yarn migration:revert
+```
+
+## Relations
 
 ![relations](/images/relations.png?raw=true)
 
-[Origin](https://dbdiagram.io/d/61671337940c4c4eec93f8b0)
+[Original diagram](https://dbdiagram.io/d/61671337940c4c4eec93f8b0)
