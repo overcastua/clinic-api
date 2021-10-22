@@ -3,9 +3,9 @@ version: '3.7'
 services:
   global:
     container_name: main
-    build: ./services/app
+    build: ./packages/app
     volumes:
-      - ./services/app:/app
+      - ./packages/app:/app
       - /app/node_modules
     ports:
       - 8080:8080
