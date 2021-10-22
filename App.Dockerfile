@@ -8,14 +8,12 @@ COPY ./packages/common ./packages/common
 
 RUN yarn install --pure-lockfile --non-interactive
 
-WORKDIR /app/packages/app
-
-RUN yarn build
-
 WORKDIR /app/packages/common
 
 RUN yarn build
 
 WORKDIR /app/packages/app
 
-CMD ["yarn", "start:dev"]
+RUN yarn build
+
+CMD yarn start:dev

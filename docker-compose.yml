@@ -9,9 +9,7 @@ services:
     privileged: true
     volumes:
       - ./packages/app:/app/packages/app
-      - /app/packages/app/node_modules
-      - ./packages/common:/app/packages/common
-      - /app/packages/common/node_modules
+      - /app/packages/app/node_modules/
     ports:
       - 8080:8080
     environment:
