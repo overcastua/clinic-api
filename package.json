@@ -1,12 +1,14 @@
 {
-  "name": "nestjs-test-project",
+  "name": "repos",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/oxtaco/nestjs-test-project.git",
   "author": "Dima <tmwrpkv73@gmail.com>",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "private": true,
-  "workspaces": [
-    "services/*"
-  ]
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  }
 }

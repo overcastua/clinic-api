@@ -1,9 +1,9 @@
 {
-  "name": "api",
-  "version": "0.0.1",
+  "name": "@repos/common",
+  "version": "1.0.0",
   "description": "",
   "author": "",
-  "private": true,
+  "main": "index.ts",
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
