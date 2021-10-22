@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "author": "",
-  "main": "index.ts",
+  "main": "dist/index",
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",

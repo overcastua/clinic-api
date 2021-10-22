@@ -17,7 +17,7 @@ $ docker-compose down
 
 ## Workspaces
 
-All new workspaces should be created in the <b>services</b> directory. Currently there is one monolith service 'app'.
+New worktrees should be created in the <b>packages</b> directory. Currently there is one monolith service 'app'.
 
 ## Test
 
@@ -35,7 +35,7 @@ Go to http://localhost:8080/documentation/
 
 ## Migrations
 
-TypeORM runs migrations automatically. To change this, you can set environment variable RUN_MIGRATIONS in docker-compose to 'false'.
+TypeORM runs migrations automatically. To change this, in docker-compose.yml you can set the RUN_MIGRATIONS environment variable to 'false'.
 To run migrations manualy, start docker-compose and run:
 
 ```bash

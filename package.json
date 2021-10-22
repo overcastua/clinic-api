@@ -6,6 +6,14 @@
   "author": "Dima <tmwrpkv73@gmail.com>",
   "license": "UNLICENSED",
   "private": true,
+  "scripts": {
+    "compose:up": "docker-compose up",
+    "compose:det": "docker-compose up -d",
+    "compose:recreate": "docker-compose build --no-cache && docker-compose up",
+    "compose:down": "docker-compose down",
+    "compose:clear": "docker-compose down -v",
+    "compose:rebuild": "docker-compose up --build"
+  },
   "workspaces": {
     "packages": [
       "packages/*"
