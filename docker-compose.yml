@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.8'
 
 services:
   global:
@@ -6,7 +6,6 @@ services:
     build:
       context: .
       dockerfile: ./App.Dockerfile
-    privileged: true
     volumes:
       - ./packages/app:/app/packages/app
       - /app/packages/app/node_modules/
