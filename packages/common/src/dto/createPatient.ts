@@ -1,5 +1,3 @@
-import { PatientEntity } from '../patient.entity';
-
 enum Gender {
   MALE = 'male',
   FEMALE = 'female',
@@ -13,5 +11,5 @@ export class CreatePatientDto {
 
   user: any;
 
-  patient?: PatientEntity;
+  patient?: any;
 }

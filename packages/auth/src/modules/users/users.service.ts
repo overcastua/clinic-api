@@ -1,10 +1,9 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PatientService } from 'src/modules/patient/patient.service';
 import { RegisterDto } from './dto/register-user.dto';
 import { UsersRepository } from './users.repository';
 import * as bcrypt from 'bcrypt';
-import { CreatePatientDto } from 'src/modules/patient/dto/create-patient.dto';
+import { CreatePatientDto } from '@repos/common';
 import { UsersEntity } from './users.entity';
 
 @Injectable()
@@ -12,7 +11,6 @@ export class UsersService {
   constructor(
     @InjectRepository(UsersRepository)
     private readonly usersRepos: UsersRepository,
-    private readonly patientService: PatientService,
   ) {}
 
   async register(dto: RegisterDto): Promise<void> {
@@ -20,7 +18,7 @@ export class UsersService {
       throw new ConflictException('The email address is already in use');
     }
 
-    const saltRounds = Number(process.env.SALT) || 10;
+    const saltRounds = Number(process.env.SALT);
     const hash: string = await bcrypt.hash(dto.password, saltRounds);
 
     const dtoWithHash = { ...dto };
@@ -34,7 +32,7 @@ export class UsersService {
     patientDto.gender = dto.gender;
     patientDto.user = user;
 
-    await this.patientService.create(patientDto);
+    // await this.patientService.create(patientDto);
   }
 
   async findOne(email: string): Promise<UsersEntity> {

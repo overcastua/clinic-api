@@ -1,26 +1,44 @@
 version: '3.8'
 
 services:
-  global:
-    container_name: main
+  #   global:
+  #     container_name: main
+  #     build:
+  #       context: .
+  #       dockerfile: ./App.Dockerfile
+  #     volumes:
+  #       - ./packages/app:/app/packages/app
+  #       - /app/packages/app/node_modules/
+  #     ports:
+  #       - 8080:8080
+  #     environment:
+  #       APP_PORT: '8080'
+  #       DB_HOSTNAME: database
+  #       DB_PORT: '5432'
+  #       POSTGRES_USER: postgres
+  #       POSTGRES_PASSWORD: random
+  #       POSTGRES_DB: med
+  #       SALT: 10
+  #       RUN_MIGRATIONS: 'true'
+  #     depends_on:
+  #       - database
+  #     restart: always
+
+  auth:
+    container_name: auth
     build:
       context: .
-      dockerfile: ./App.Dockerfile
+      dockerfile: ./Auth.Dockerfile
     volumes:
-      - ./packages/app:/app/packages/app
-      - /app/packages/app/node_modules/
+      - ./packages/auth:/app/packages/auth
+      - /app/packages/auth/node_modules
     ports:
-      - 8080:8080
+      - 30021:30021
+    env_file:
+      - config.env
     environment:
-      APP_PORT: '8080'
-      DB_HOSTNAME: database
-      DB_PORT: '5432'
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: random
-      POSTGRES_DB: med
-      JWT_SECRET: sfghgyrv
+      APP_PORT: '30021'
       SALT: 10
-      RUN_MIGRATIONS: 'true'
     depends_on:
       - database
     restart: always
@@ -38,17 +56,17 @@ services:
     volumes:
       - postgresdb:/var/lib/postgres
 
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
-    depends_on:
-      - database
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-      PGADMIN_LISTEN_PORT: 5050
-    ports:
-      - 5050:5050
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   container_name: pgadmin
+  #   depends_on:
+  #     - database
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: admin@admin.com
+  #     PGADMIN_DEFAULT_PASSWORD: admin
+  #     PGADMIN_LISTEN_PORT: 5050
+  #   ports:
+  #     - 5050:5050
 
 volumes:
   postgresdb:
