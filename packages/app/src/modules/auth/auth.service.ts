@@ -5,9 +5,9 @@ import { JwtService } from '@nestjs/jwt';
 import { PatientService } from 'src/modules/patient/patient.service';
 import { IAccessToken } from './interfaces/access-token.interface';
 import { UsersService } from '../users/users.service';
-import { Role } from '../users/dto/login-user.dto';
+import { Role } from '@repos/common';
 import { DoctorsService } from '../doctors/doctors.service';
-import { assertNever } from 'src/utils/enumHelper';
+import { assertNever } from '@repos/common';
 
 @Injectable()
 export class AuthService {

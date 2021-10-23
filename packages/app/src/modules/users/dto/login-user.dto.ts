@@ -1,10 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Role } from '@repos/common';
 import { IsEmail, IsEnum, IsNotEmpty, MinLength } from 'class-validator';
-
-export enum Role {
-  DOCTOR = 'doctor',
-  PATIENT = 'patient',
-}
 
 export class LoginDto {
   @IsNotEmpty()

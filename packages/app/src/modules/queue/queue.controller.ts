@@ -8,7 +8,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt.auth.guard';
-import { Role } from '../users/dto/login-user.dto';
+import { Role } from '@repos/common';
 import { Roles } from '../users/users.roles.decorator';
 import { RolesGuard } from '../users/users.roles.guard';
 import { QueueValidateDto } from './dto/validate-params.dto';

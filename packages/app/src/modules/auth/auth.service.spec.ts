@@ -4,7 +4,7 @@ import { PatientService } from 'src/modules/patient/patient.service';
 import { UsersService } from 'src/modules/users/users.service';
 import { AuthService } from './auth.service';
 import * as bcrypt from 'bcrypt';
-import { Role } from '../users/dto/login-user.dto';
+import { Role } from '@repos/common';
 import { DoctorsService } from '../doctors/doctors.service';
 
 describe('PatientService', () => {

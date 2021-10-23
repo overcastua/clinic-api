@@ -19,7 +19,7 @@ import {
 } from '@nestjs/swagger';
 import { ResolutionsEntity } from 'src/modules/resolutions/resolutions.entity';
 import { JwtAuthGuard } from '../auth/jwt.auth.guard';
-import { Role } from '../users/dto/login-user.dto';
+import { Role } from '@repos/common';
 import { Roles } from '../users/users.roles.decorator';
 import { RolesGuard } from '../users/users.roles.guard';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
