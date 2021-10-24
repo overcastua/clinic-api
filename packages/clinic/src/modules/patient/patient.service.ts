@@ -4,7 +4,7 @@ import { ResolutionsEntity } from 'src/modules/resolutions/resolutions.entity';
 import { ResolutionsService } from 'src/modules/resolutions/resolutions.service';
 import { UsersEntity } from 'src/modules/users/users.entity';
 import { ProfileService } from '../profile/profile.service';
-import { CreatePatientDto } from './dto/create-patient.dto';
+import { CreateProfileDto } from './dto/create-patient.dto';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { PatientEntity } from './patient.entity';
 import { PatientRepository } from './patient.repository';
@@ -18,11 +18,11 @@ export class PatientService {
     private readonly resolutionsService: ResolutionsService,
   ) {}
 
-  async create(createPatientDto: CreatePatientDto): Promise<void> {
-    createPatientDto.patient = await this.patientRepository.add(
-      createPatientDto,
+  async create(createProfileDto: CreateProfileDto): Promise<void> {
+    createProfileDto.patient = await this.patientRepository.add(
+      createProfileDto,
     );
-    await this.profileService.create(createPatientDto);
+    await this.profileService.create(createProfileDto);
   }
 
   async findById(id: number): Promise<PatientEntity> {

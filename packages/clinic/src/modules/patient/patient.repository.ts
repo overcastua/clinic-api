@@ -1,13 +1,13 @@
 import { UsersEntity } from 'src/modules/users/users.entity';
 import { EntityRepository, Repository } from 'typeorm';
-import { CreatePatientDto } from './dto/create-patient.dto';
+import { CreateProfileDto } from './dto/create-patient.dto';
 import { PatientEntity } from './patient.entity';
 
 @EntityRepository(PatientEntity)
 export class PatientRepository extends Repository<PatientEntity> {
-  async add(createPatientDto: CreatePatientDto): Promise<PatientEntity> {
+  async add(createProfileDto: CreateProfileDto): Promise<PatientEntity> {
     const newPatient = new PatientEntity();
-    newPatient.user = createPatientDto.user;
+    newPatient.user = createProfileDto.user;
     return this.save(newPatient);
   }
 

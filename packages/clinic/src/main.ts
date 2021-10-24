@@ -10,7 +10,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()
-    .setTitle('The Medical Service AUTH API')
+    .setTitle('The Medical Service API')
     .setVersion('1.0')
     .addBearerAuth(
       { type: 'http', scheme: 'bearer', in: 'header', bearerFormat: 'JWT' },

@@ -7,6 +7,6 @@ export const envSchema = Joi.object({
   DB_PORT: Joi.number().required(),
   POSTGRES_PASSWORD: Joi.string().required(),
   RUN_MIGRATIONS: Joi.boolean().required(),
-  SALT: Joi.number().required(),
+  API_PREFIX: Joi.string().required(),
   APP_PORT: Joi.number().default(8080),
 });

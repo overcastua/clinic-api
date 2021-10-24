@@ -22,7 +22,7 @@ export class AuthController {
     private readonly userService: UsersService,
     private readonly authService: AuthService,
   ) {}
-  @Post('registration')
+  @Post('sign-up')
   @ApiOperation({ summary: 'Create a new user' })
   @ApiCreatedResponse({
     description: 'User was created successfully',
@@ -38,11 +38,11 @@ export class AuthController {
   }
 
   @UseGuards(AuthGuard('local'))
-  @Post('login')
-  @ApiOperation({ summary: 'Log in as a patient' })
+  @Post('sign-in')
+  @ApiOperation({ summary: 'Sign in as a patient' })
   @ApiCreatedResponse({
     description:
-      'Logined successfully, returns acces_token with encoded userId and patientId',
+      "Logined successfully, returns acces_token with an encoded userId and user's role",
     type: 'json',
   })
   @ApiBadRequestResponse({

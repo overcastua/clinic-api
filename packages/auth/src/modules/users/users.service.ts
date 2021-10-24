@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { RegisterDto } from './dto/register-user.dto';
 import { UsersRepository } from './users.repository';
 import * as bcrypt from 'bcrypt';
-import { CreatePatientDto } from '@repos/common';
+import { CreateProfileDto } from '@repos/common';
 import { UsersEntity } from './users.entity';
 
 @Injectable()
@@ -18,7 +18,7 @@ export class UsersService {
       throw new ConflictException('The email address is already in use');
     }
 
-    const saltRounds = Number(process.env.SALT);
+    const saltRounds = Number.parseInt(process.env.SALT);
     const hash: string = await bcrypt.hash(dto.password, saltRounds);
 
     const dtoWithHash = { ...dto };
@@ -26,11 +26,11 @@ export class UsersService {
 
     const user: UsersEntity = await this.usersRepos.register(dtoWithHash);
 
-    const patientDto = new CreatePatientDto();
+    const patientDto = new CreateProfileDto();
     patientDto.name = dto.name;
     patientDto.birthDate = dto.birthDate;
     patientDto.gender = dto.gender;
-    patientDto.user = user;
+    patientDto.userId = user.id;
 
     // await this.patientService.create(patientDto);
   }

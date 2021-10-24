@@ -6,11 +6,11 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const options = { cors: true };
   const app = await NestFactory.create(AppModule, options);
-  app.setGlobalPrefix('api/v1');
+  app.setGlobalPrefix(process.env.API_PREFIX);
   app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()
-    .setTitle('The Medical Service API')
+    .setTitle('The Medical Service PROFILE API')
     .setVersion('1.0')
     .addBearerAuth(
       { type: 'http', scheme: 'bearer', in: 'header', bearerFormat: 'JWT' },

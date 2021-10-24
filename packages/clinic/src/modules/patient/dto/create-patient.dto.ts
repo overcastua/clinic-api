@@ -4,7 +4,7 @@ enum Gender {
   MALE = 'male',
   FEMALE = 'female',
 }
-export class CreatePatientDto {
+export class CreateProfileDto {
   name: string;
 
   gender: Gender;

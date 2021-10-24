@@ -2,14 +2,12 @@ enum Gender {
   MALE = 'male',
   FEMALE = 'female',
 }
-export class CreatePatientDto {
+export class CreateProfileDto {
   name: string;
 
   gender: Gender;
 
   birthDate: Date;
 
-  user: any;
-
-  patient?: any;
+  userId: number;
 }
