@@ -1,24 +1,25 @@
 version: '3.8'
 
 services:
-  # clinic:
-  #   container_name: clinic
-  #   build:
-  #     context: .
-  #     dockerfile: ./packages/clinic/Dockerfile
-  #   volumes:
-  #     - ./packages/clinic:/app/packages/clinic
-  #     - /app/packages/clinic/node_modules/
-  #   ports:
-  #     - 8080:8080
-  #   env_file:
-  #     - config.env
-  #     - dbconn.env
-  #   environment:
-  #     APP_PORT: '8080'
-  #   depends_on:
-  #     - database
-  #   restart: always
+  clinic:
+    container_name: clinic
+    build:
+      context: .
+      dockerfile: ./packages/clinic/Dockerfile
+    volumes:
+      - ./packages/clinic:/app/packages/clinic
+      - /app/packages/clinic/node_modules
+      - /app/packages/clinic/dist/
+    ports:
+      - $CLINIC_PORT:$CLINIC_PORT
+    env_file:
+      - config.env
+      - dbconn.env
+    environment:
+      APP_PORT: $CLINIC_PORT
+    depends_on:
+      - database
+    restart: 'no'
 
   auth:
     container_name: auth
@@ -30,15 +31,15 @@ services:
       - /app/packages/auth/node_modules
       - /app/packages/auth/dist
     ports:
-      - 30021:30021
+      - $AUTH_PORT:$AUTH_PORT
     env_file:
       - config.env
       - dbconn.env
     environment:
-      APP_PORT: '30021'
+      APP_PORT: $AUTH_PORT
     depends_on:
       - database
-    restart: always
+    restart: 'no'
 
   profile:
     container_name: profile
@@ -50,15 +51,15 @@ services:
       - /app/packages/profile/node_modules
       - /app/packages/profile/dist
     ports:
-      - 30022:30022
+      - $PROFILE_PORT:$PROFILE_PORT
     env_file:
       - config.env
       - dbconn.env
     environment:
-      APP_PORT: '30022'
+      APP_PORT: $PROFILE_PORT
     depends_on:
       - database
-    restart: always
+    restart: 'no'
 
   database:
     container_name: db
@@ -69,14 +70,14 @@ services:
     ports:
       - 5432:5432
 
-  # pgadmin:
-  #   image: dpage/pgadmin4
-  #   container_name: pgadmin
-  #   depends_on:
-  #     - database
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: admin@admin.com
-  #     PGADMIN_DEFAULT_PASSWORD: admin
-  #     PGADMIN_LISTEN_PORT: 5050
-  #   ports:
-  #     - 5050:5050
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    depends_on:
+      - database
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: 5050
+    ports:
+      - 5050:5050

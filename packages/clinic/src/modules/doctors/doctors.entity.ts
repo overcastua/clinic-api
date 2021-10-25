@@ -1,4 +1,3 @@
-import { UsersEntity } from 'src/modules/users/users.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -7,8 +6,8 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  Column,
 } from 'typeorm';
-import { ProfileEntity } from '../profile/profile.entity';
 import { QueueEntity } from '../queue/queue.entity';
 import { ResolutionsEntity } from '../resolutions/resolutions.entity';
 import { SpecializationEntity } from '../specializations/specializations.entity';
@@ -18,13 +17,8 @@ export class DoctorEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => UsersEntity)
-  @JoinColumn()
-  user: UsersEntity;
-
-  @OneToOne(() => ProfileEntity)
-  @JoinColumn()
-  profile: ProfileEntity;
+  @Column({ unique: true })
+  userId: number;
 
   @ManyToOne(() => SpecializationEntity, (p) => p.doctors)
   specialization: SpecializationEntity;

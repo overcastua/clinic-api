@@ -1,10 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CreateProfileDto } from '@repos/common';
 import { ResolutionsEntity } from 'src/modules/resolutions/resolutions.entity';
 import { ResolutionsService } from 'src/modules/resolutions/resolutions.service';
-import { UsersEntity } from 'src/modules/users/users.entity';
-import { ProfileService } from '../profile/profile.service';
-import { CreateProfileDto } from './dto/create-patient.dto';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { PatientEntity } from './patient.entity';
 import { PatientRepository } from './patient.repository';
@@ -14,15 +12,11 @@ export class PatientService {
   constructor(
     @InjectRepository(PatientRepository)
     private readonly patientRepository: PatientRepository,
-    private readonly profileService: ProfileService,
     private readonly resolutionsService: ResolutionsService,
   ) {}
 
   async create(createProfileDto: CreateProfileDto): Promise<void> {
-    createProfileDto.patient = await this.patientRepository.add(
-      createProfileDto,
-    );
-    await this.profileService.create(createProfileDto);
+    await this.patientRepository.add(createProfileDto);
   }
 
   async findById(id: number): Promise<PatientEntity> {
@@ -33,9 +27,9 @@ export class PatientService {
     return patient;
   }
 
-  async findPatientByUser(user: UsersEntity): Promise<PatientEntity> {
+  async findPatientByUser(userId: number): Promise<PatientEntity> {
     const patient: PatientEntity =
-      await this.patientRepository.findPatientByUser(user);
+      await this.patientRepository.findPatientByUser(userId);
 
     if (!patient) throw new NotFoundException();
 

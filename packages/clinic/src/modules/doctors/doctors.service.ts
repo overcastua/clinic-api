@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UsersEntity } from '../users/users.entity';
 import { DoctorEntity } from './doctors.entity';
 import { DoctorsRepository } from './doctors.repository';
 
@@ -37,8 +36,8 @@ export class DoctorsService {
     return doctors;
   }
 
-  async findDoctorByUser(user: UsersEntity): Promise<DoctorEntity> {
-    const doctor: DoctorEntity = await this.repository.findDoctorByUser(user);
+  async findDoctorByUser(userId: number): Promise<DoctorEntity> {
+    const doctor: DoctorEntity = await this.repository.findDoctorByUser(userId);
 
     if (!doctor)
       throw new NotFoundException('Doctor with this email does not exist');

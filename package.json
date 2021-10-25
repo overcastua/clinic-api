@@ -12,7 +12,7 @@
     "compose:recreate": "docker-compose build --no-cache && docker-compose up",
     "compose:down": "docker-compose down",
     "compose:clear": "docker-compose down -v",
-    "compose:rebuild": "docker-compose up --build",
+    "compose:rebuild": "docker-compose down -v && docker-compose up --build",
     "docker:clear": "docker volume prune -f && docker image prune -f && docker container prune -f"
   },
   "workspaces": {

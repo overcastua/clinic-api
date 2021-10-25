@@ -1,6 +1,5 @@
 import { Repository, EntityRepository } from 'typeorm';
 import { DoctorEntity } from './doctors.entity';
-import { UsersEntity } from '../users/users.entity';
 
 @EntityRepository(DoctorEntity)
 export class DoctorsRepository extends Repository<DoctorEntity> {
@@ -18,7 +17,7 @@ export class DoctorsRepository extends Repository<DoctorEntity> {
       .getMany();
   }
 
-  async findDoctorByUser(user: UsersEntity): Promise<DoctorEntity> {
-    return this.findOne({ user });
+  async findDoctorByUser(userId: number): Promise<DoctorEntity> {
+    return this.findOne({ userId });
   }
 }
