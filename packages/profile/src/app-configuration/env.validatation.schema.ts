@@ -9,5 +9,5 @@ export const envSchema = Joi.object({
   JWT_SECRET: Joi.string().required(),
   RUN_MIGRATIONS: Joi.boolean().required(),
   API_PREFIX: Joi.string().required(),
-  APP_PORT: Joi.number().default(8080),
+  APP_PORT: Joi.number().required(),
 });

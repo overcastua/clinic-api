@@ -11,4 +11,6 @@ export const envSchema = Joi.object({
   SALT: Joi.number().required(),
   API_PREFIX: Joi.string().required(),
   APP_PORT: Joi.number().required(),
+  CLINIC_URI: Joi.string().required(),
+  PROFILE_URI: Joi.string().required(),
 });

@@ -18,16 +18,27 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { ResolutionsEntity } from 'src/modules/resolutions/resolutions.entity';
-import { JwtAuthGuard, Role, Roles, RolesGuard } from '@repos/common';
+import {
+  CreateProfileDto,
+  JwtAuthGuard,
+  Role,
+  Roles,
+  RolesGuard,
+} from '@repos/common';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { PatientService } from './patient.service';
 
 @ApiTags('patients')
-@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('patients')
 export class PatientController {
   constructor(private readonly patientService: PatientService) {}
 
+  @Post()
+  async createPatient(@Body() dto: CreateProfileDto): Promise<void> {
+    return this.patientService.create(dto);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('me/resolutions')
   @Roles(Role.PATIENT)
   @ApiOperation({ summary: 'Get own resolutions' })
@@ -50,6 +61,7 @@ export class PatientController {
     return this.patientService.getOwnResolutions(req.user.patientId);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post(':id/resolutions')
   @Roles(Role.DOCTOR)
   @ApiOperation({ summary: 'Create a new resolution for the patient' })
@@ -72,6 +84,7 @@ export class PatientController {
     return this.patientService.createResolution(dto, id);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get(':id/resolutions')
   @Roles(Role.DOCTOR)
   @ApiOperation({ summary: 'Get all the resolutions of a certain patient' })

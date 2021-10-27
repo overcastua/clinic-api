@@ -19,7 +19,7 @@ services:
       APP_PORT: $CLINIC_PORT
     depends_on:
       - database
-    restart: 'no'
+    restart: always
 
   auth:
     container_name: auth
@@ -37,9 +37,11 @@ services:
       - dbconn.env
     environment:
       APP_PORT: $AUTH_PORT
+      PROFILE_URI: profile:$PROFILE_PORT
+      CLINIC_URI: clinic:$CLINIC_PORT
     depends_on:
       - database
-    restart: 'no'
+    restart: always
 
   profile:
     container_name: profile
@@ -59,7 +61,7 @@ services:
       APP_PORT: $PROFILE_PORT
     depends_on:
       - database
-    restart: 'no'
+    restart: always
 
   database:
     container_name: db

@@ -5,12 +5,14 @@ import { UsersRepository } from './users.repository';
 import * as bcrypt from 'bcrypt';
 import { CreateProfileDto } from '@repos/common';
 import { UsersEntity } from './users.entity';
+import { HttpService } from '@nestjs/axios';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UsersRepository)
     private readonly usersRepos: UsersRepository,
+    private axios: HttpService,
   ) {}
 
   async register(dto: RegisterDto): Promise<void> {
@@ -32,7 +34,22 @@ export class UsersService {
     patientDto.gender = dto.gender;
     patientDto.userId = user.id;
 
-    // await this.patientService.create(patientDto);
+    const createPatientURI =
+      'http://' +
+      process.env.CLINIC_URI +
+      '/' +
+      process.env.API_PREFIX +
+      '/patients';
+
+    const createProfileURI =
+      'http://' +
+      process.env.PROFILE_URI +
+      '/' +
+      process.env.API_PREFIX +
+      '/profiles';
+
+    await this.axios.post(createProfileURI, patientDto).subscribe();
+    await this.axios.post(createPatientURI, patientDto).subscribe();
   }
 
   async findOne(email: string): Promise<UsersEntity> {
