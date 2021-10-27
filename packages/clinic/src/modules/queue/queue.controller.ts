@@ -47,7 +47,7 @@ export class QueueController {
     description: 'You dont have permission to access the route',
   })
   async add(@Param() params: QueueValidateDto, @Req() req): Promise<void> {
-    return this.queueService.add(params.queueId, req.user.patientId);
+    return this.queueService.add(params.queueId, req.user.userId);
   }
 
   @Get(':queueId/next')

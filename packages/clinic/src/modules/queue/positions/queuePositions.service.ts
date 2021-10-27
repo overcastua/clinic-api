@@ -33,10 +33,9 @@ export class QueuePositionService {
     return this.getIdOfFirst(queueId);
   }
 
-  async add(queue: QueueEntity, patientId: number): Promise<void> {
-    const patient: PatientEntity = await this.patientService.findById(
-      patientId,
-    );
+  async add(queue: QueueEntity, userId: number): Promise<void> {
+    const patient: PatientEntity =
+      await this.patientService.findPatientByUserId(userId);
     await this.repository.add(queue, patient);
   }
 }

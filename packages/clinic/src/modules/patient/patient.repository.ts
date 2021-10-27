@@ -10,11 +10,7 @@ export class PatientRepository extends Repository<PatientEntity> {
     return this.save(newPatient);
   }
 
-  async findById(id: number): Promise<PatientEntity> {
-    return this.findOne({ id });
-  }
-
-  async findPatientByUser(userId: number): Promise<PatientEntity> {
+  async findPatientByUserId(userId: number): Promise<PatientEntity> {
     return this.findOne({ userId });
   }
 

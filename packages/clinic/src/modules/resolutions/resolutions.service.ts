@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateResolutionDto } from 'src/modules/patient/dto/create-resolution.dto';
 import { PatientEntity } from 'src/modules/patient/patient.entity';
@@ -16,8 +16,6 @@ export class ResolutionsService {
   async getAllById(id: number): Promise<ResolutionsEntity[]> {
     const resolutions: ResolutionsEntity[] =
       await this.resolutionsRepository.getAllByPatientId(id);
-
-    if (!resolutions.length) throw new NotFoundException();
 
     return resolutions;
   }

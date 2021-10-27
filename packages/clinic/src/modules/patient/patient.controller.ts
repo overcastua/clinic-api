@@ -58,7 +58,7 @@ export class PatientController {
     description: 'You dont have permission to access the route',
   })
   async getResolutions(@Req() req): Promise<ResolutionsEntity[]> {
-    return this.patientService.getOwnResolutions(req.user.patientId);
+    return this.patientService.getOwnResolutions(req.user.userId);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

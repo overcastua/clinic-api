@@ -10,8 +10,10 @@ export class DoctorsService {
     private readonly repository: DoctorsRepository,
   ) {}
 
-  async getDoctorsQueueIdByDoctorId(doctorId: number): Promise<number> {
-    const doctor: DoctorEntity = await this.repository.getDoctorById(doctorId);
+  async getDoctorsQueueIdByDoctorId(userId: number): Promise<number> {
+    const doctor: DoctorEntity = await this.repository.getDoctorByUserId(
+      userId,
+    );
     const queueId = doctor?.queue.id;
 
     if (!queueId) {

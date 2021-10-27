@@ -19,36 +19,30 @@ export class PatientService {
     await this.patientRepository.add(createProfileDto);
   }
 
-  async findById(id: number): Promise<PatientEntity> {
-    const patient: PatientEntity = await this.patientRepository.findById(id);
-
-    if (!patient) throw new NotFoundException();
-
-    return patient;
-  }
-
-  async findPatientByUser(userId: number): Promise<PatientEntity> {
+  async findPatientByUserId(userId: number): Promise<PatientEntity> {
     const patient: PatientEntity =
-      await this.patientRepository.findPatientByUser(userId);
+      await this.patientRepository.findPatientByUserId(userId);
 
     if (!patient) throw new NotFoundException();
 
     return patient;
   }
 
-  async getOwnResolutions(patientId: number): Promise<ResolutionsEntity[]> {
-    return this.resolutionsService.getAllById(patientId);
+  async getOwnResolutions(userId: number): Promise<ResolutionsEntity[]> {
+    const patient = await this.patientRepository.findPatientByUserId(userId);
+
+    return this.resolutionsService.getAllById(patient.id);
   }
 
   async createResolution(dto: CreateResolutionDto, id: number): Promise<void> {
-    const patient: PatientEntity = await this.findById(id);
+    const patient: PatientEntity = await this.findPatientByUserId(id);
 
     await this.resolutionsService.createResolution(dto, patient);
   }
 
   async getAllResolutionsById(id: number): Promise<ResolutionsEntity[]> {
-    await this.findById(id);
+    const patient = await this.findPatientByUserId(id);
 
-    return this.resolutionsService.getAllById(id);
+    return this.resolutionsService.getAllById(patient.id);
   }
 }
