@@ -17,7 +17,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { ResolutionsEntity } from 'src/modules/resolutions/resolutions.entity';
+import { ResolutionsEntity } from '../resolutions/resolutions.entity';
 import {
   CreateProfileDto,
   JwtAuthGuard,

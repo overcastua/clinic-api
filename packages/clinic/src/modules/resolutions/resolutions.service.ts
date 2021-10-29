@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateResolutionDto } from 'src/modules/patient/dto/create-resolution.dto';
-import { PatientEntity } from 'src/modules/patient/patient.entity';
+import { CreateResolutionDto } from '../patient/dto/create-resolution.dto';
+import { PatientEntity } from '../patient/patient.entity';
 import { TimeHelper } from '@repos/common';
 import { ResolutionsEntity } from './resolutions.entity';
 import { ResolutionsRepository } from './resolutions.repository';

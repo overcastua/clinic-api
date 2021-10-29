@@ -1,14 +1,14 @@
 import { Test } from '@nestjs/testing';
 import { PatientService } from './patient.service';
 import { PatientRepository } from './patient.repository';
-import { ResolutionsService } from 'src/modules/resolutions/resolutions.service';
+import { ResolutionsService } from '../resolutions/resolutions.service';
 import { NotFoundException } from '@nestjs/common';
+import { ResolutionsEntity } from '../resolutions/resolutions.entity';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
-import { ResolutionsEntity } from 'src/modules/resolutions/resolutions.entity';
 
 const reposMock = () => ({
   add: jest.fn(),
-  findById: jest.fn(),
+  findPatientByUserId: jest.fn(),
 });
 
 const data = {
@@ -58,26 +58,26 @@ describe('PatientService', () => {
   describe('testing findById()', () => {
     it('should return what the underlying repository returns', async () => {
       expect.assertions(1);
-      patientRepository.findById.mockResolvedValue(data);
+      patientRepository.findPatientByUserId.mockResolvedValue(data);
 
-      const result = await service.findById(1);
+      const result = await service.findPatientByUserId(1);
 
       expect(result).toEqual(data);
     });
 
-    it('should throw a 404 error if patient with the given id does not exist', async () => {
+    it('should throw a 404 error if patient with the given user id does not exist', async () => {
       expect.assertions(1);
 
-      patientRepository.findById.mockResolvedValue(undefined);
+      patientRepository.findPatientByUserId.mockResolvedValue(undefined);
 
-      expect(service.findById(1)).rejects.toThrow(NotFoundException);
+      expect(service.findPatientByUserId(1)).rejects.toThrow(NotFoundException);
     });
   });
 
   describe('testing createResolution()', () => {
     it('should call the resolutions service', async () => {
       jest.spyOn(resolutionsService, 'createResolution');
-      patientRepository.findById.mockResolvedValue(data);
+      patientRepository.findPatientByUserId.mockResolvedValue(data);
 
       await service.createResolution(new CreateResolutionDto(), 1);
 
@@ -87,7 +87,7 @@ describe('PatientService', () => {
     it('should throw a 404 error if patient with the given id does not exist', async () => {
       expect.assertions(1);
 
-      patientRepository.findById.mockResolvedValue(undefined);
+      patientRepository.findPatientByUserId.mockResolvedValue(undefined);
 
       expect(
         service.createResolution(new CreateResolutionDto(), 11),
@@ -98,7 +98,7 @@ describe('PatientService', () => {
   describe('testing getAllResolutionsById()', () => {
     it('should return an array of resolutions for the given patient', async () => {
       expect.assertions(1);
-      patientRepository.findById.mockResolvedValue(data);
+      patientRepository.findPatientByUserId.mockResolvedValue(data);
 
       (resolutionsService.getAllById as jest.Mock).mockResolvedValue([
         new ResolutionsEntity(),

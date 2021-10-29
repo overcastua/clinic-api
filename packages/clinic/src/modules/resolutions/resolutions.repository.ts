@@ -1,4 +1,4 @@
-import { PatientEntity } from 'src/modules/patient/patient.entity';
+import { PatientEntity } from '../patient/patient.entity';
 import { Repository, EntityRepository } from 'typeorm';
 import { ResolutionsEntity } from './resolutions.entity';
 

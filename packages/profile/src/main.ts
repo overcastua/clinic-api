@@ -2,11 +2,15 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './modules/app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const options = { cors: true };
   const app = await NestFactory.create(AppModule, options);
-  app.setGlobalPrefix(process.env.API_PREFIX);
+  const configuration = app.get(ConfigService);
+  const port = configuration.get('port');
+
+  app.setGlobalPrefix(configuration.get('prefix'));
   app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()
@@ -21,7 +25,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('documentation', app, document);
 
-  await app.listen(process.env.APP_PORT);
+  await app.listen(port, () => {
+    console.log('Profile service is listening on port ' + port);
+  });
 }
 
 bootstrap();

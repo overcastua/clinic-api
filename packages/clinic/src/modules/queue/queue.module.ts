@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PatientModule } from 'src/modules/patient/patient.module';
+import { PatientModule } from '../patient/patient.module';
 import { QueuePositionRepository } from './positions/queuePositions.repository';
 import { QueuePositionService } from './positions/queuePositions.service';
 import { QueueController } from './queue.controller';

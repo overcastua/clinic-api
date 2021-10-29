@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { ConnectionOptions } from 'typeorm';
 
-export const opts = (dir, env): ConnectionOptions => ({
+export const configureTypeorm = (dir, env): ConnectionOptions => ({
   type: 'postgres',
   host: env.DB_HOSTNAME,
   port: parseInt(env.DB_PORT, 10),

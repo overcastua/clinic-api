@@ -1,4 +1,4 @@
-import { ResolutionsEntity } from 'src/modules/resolutions/resolutions.entity';
+import { ResolutionsEntity } from '../resolutions/resolutions.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,

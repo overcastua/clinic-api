@@ -1,4 +1,4 @@
-import { PatientEntity } from 'src/modules/patient/patient.entity';
+import { PatientEntity } from '../patient/patient.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,

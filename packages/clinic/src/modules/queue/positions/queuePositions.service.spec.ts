@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { NotFoundException } from '@nestjs/common';
-import { PatientService } from 'src/modules/patient/patient.service';
-import { PatientEntity } from 'src/modules/patient/patient.entity';
+import { PatientService } from '../../patient/patient.service';
+import { PatientEntity } from '../../patient/patient.entity';
 import { QueuePositionService } from './queuePositions.service';
 import { QueuePositionRepository } from './queuePositions.repository';
 import { QueuePositionEntity } from './queuePositions.entity';
@@ -36,7 +36,7 @@ describe('PatientsService', () => {
         {
           provide: PatientService,
           useValue: {
-            findById: jest.fn(),
+            findPatientByUserId: jest.fn(),
           },
         },
       ],
@@ -78,11 +78,13 @@ describe('PatientsService', () => {
   });
 
   describe('testing add()', () => {
-    it('should put the given patient to the queue', async () => {
+    it('should put the given patients id to the queue', async () => {
       const addMethod = jest.spyOn(queueRepository, 'add');
       const patient = new PatientEntity();
       const queue = new QueueEntity();
-      (patientService.findById as jest.Mock).mockResolvedValue(patient);
+      (patientService.findPatientByUserId as jest.Mock).mockResolvedValue(
+        patient,
+      );
 
       await service.add(queue, 1);
 

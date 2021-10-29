@@ -5,14 +5,18 @@ import { UsersRepository } from './users.repository';
 import * as bcrypt from 'bcrypt';
 import { CreateProfileDto } from '@repos/common';
 import { UsersEntity } from './users.entity';
-import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
+import { ClinicService } from '../clinic/clinic.service';
+import { ProfileService } from '../profile/profile.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UsersRepository)
     private readonly usersRepos: UsersRepository,
-    private axios: HttpService,
+    private config: ConfigService,
+    private clinic: ClinicService,
+    private profile: ProfileService,
   ) {}
 
   async register(dto: RegisterDto): Promise<void> {
@@ -20,7 +24,7 @@ export class UsersService {
       throw new ConflictException('The email address is already in use');
     }
 
-    const saltRounds = Number.parseInt(process.env.SALT);
+    const saltRounds: number = this.config.get('salt');
     const hash: string = await bcrypt.hash(dto.password, saltRounds);
 
     const dtoWithHash = { ...dto };
@@ -34,22 +38,8 @@ export class UsersService {
     patientDto.gender = dto.gender;
     patientDto.userId = user.id;
 
-    const createPatientURI =
-      'http://' +
-      process.env.CLINIC_URI +
-      '/' +
-      process.env.API_PREFIX +
-      '/patients';
-
-    const createProfileURI =
-      'http://' +
-      process.env.PROFILE_URI +
-      '/' +
-      process.env.API_PREFIX +
-      '/profiles';
-
-    await this.axios.post(createProfileURI, patientDto).subscribe();
-    await this.axios.post(createPatientURI, patientDto).subscribe();
+    await this.clinic.createPatient(patientDto);
+    return this.profile.createProfile(patientDto);
   }
 
   async findOne(email: string): Promise<UsersEntity> {

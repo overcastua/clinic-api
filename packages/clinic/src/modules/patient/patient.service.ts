@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateProfileDto } from '@repos/common';
-import { ResolutionsEntity } from 'src/modules/resolutions/resolutions.entity';
-import { ResolutionsService } from 'src/modules/resolutions/resolutions.service';
+import { ResolutionsEntity } from '../resolutions/resolutions.entity';
+import { ResolutionsService } from '../resolutions/resolutions.service';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { PatientEntity } from './patient.entity';
 import { PatientRepository } from './patient.repository';

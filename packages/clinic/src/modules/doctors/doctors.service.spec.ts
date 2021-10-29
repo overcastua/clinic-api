@@ -8,7 +8,7 @@ import { QueueEntity } from '../queue/queue.entity';
 const reposMock = () => ({
   getDoctorById: jest.fn(),
   getAllBySpecializationId: jest.fn(),
-  findDoctorByUser: jest.fn(),
+  getDoctorByUserId: jest.fn(),
 });
 
 describe('DoctorsService', () => {
@@ -60,7 +60,7 @@ describe('DoctorsService', () => {
       doc.queue = new QueueEntity();
       doc.queue.id = 1;
 
-      repository.getDoctorById.mockResolvedValue(doc);
+      repository.getDoctorByUserId.mockResolvedValue(doc);
 
       expect(await service.getDoctorsQueueIdByDoctorId(1)).toBe(doc.queue.id);
     });
@@ -68,7 +68,7 @@ describe('DoctorsService', () => {
     it('should throw 404 error if queueId was not found', async () => {
       const doc = new DoctorEntity();
 
-      repository.getDoctorById.mockResolvedValue(doc);
+      repository.getDoctorByUserId.mockResolvedValue(doc);
 
       expect(service.getDoctorsQueueIdByDoctorId(1)).rejects.toThrow(
         NotFoundException,

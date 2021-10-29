@@ -14,7 +14,7 @@ export class DoctorsService {
     const doctor: DoctorEntity = await this.repository.getDoctorByUserId(
       userId,
     );
-    const queueId = doctor?.queue.id;
+    const queueId = doctor?.queue?.id;
 
     if (!queueId) {
       throw new NotFoundException('QueueId was not found');

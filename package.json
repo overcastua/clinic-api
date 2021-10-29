@@ -9,11 +9,10 @@
   "scripts": {
     "compose:up": "docker-compose up",
     "compose:det": "docker-compose up -d",
-    "compose:recreate": "docker-compose build --no-cache && docker-compose up",
-    "compose:down": "docker-compose down",
-    "compose:clear": "docker-compose down -v",
+    "compose:down": "docker-compose down -v",
     "compose:rebuild": "docker-compose down -v && docker-compose up --build",
-    "docker:clear": "docker volume prune -f && docker image prune -f && docker container prune -f"
+    "docker:clear": "docker volume prune -f && docker image prune -f && docker container prune -f",
+    "test": "cd packages/auth && yarn test && cd../clinic && yarn test"
   },
   "workspaces": {
     "packages": [

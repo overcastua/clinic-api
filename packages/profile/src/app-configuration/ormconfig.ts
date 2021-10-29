@@ -1,5 +1,5 @@
-import { opts } from '@repos/common';
+import { configureTypeorm } from '@repos/common';
 
-const connectionOptions = opts(__dirname, process.env);
+const connectionOptions = configureTypeorm(__dirname, process.env);
 
 export = connectionOptions;

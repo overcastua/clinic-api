@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PatientEntity } from 'src/modules/patient/patient.entity';
-import { PatientService } from 'src/modules/patient/patient.service';
+import { PatientEntity } from '../../patient/patient.entity';
+import { PatientService } from '../../patient/patient.service';
 import { QueueEntity } from '../queue.entity';
 import { QueuePositionEntity } from './queuePositions.entity';
 import { QueuePositionRepository } from './queuePositions.repository';

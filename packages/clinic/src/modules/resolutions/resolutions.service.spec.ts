@@ -1,10 +1,9 @@
 import { Test } from '@nestjs/testing';
-import { NotFoundException } from '@nestjs/common';
 import { ResolutionsService } from './resolutions.service';
 import { ResolutionsRepository } from './resolutions.repository';
 import { ResolutionsEntity } from './resolutions.entity';
-import { CreateResolutionDto } from 'src/modules/patient/dto/create-resolution.dto';
-import { PatientEntity } from 'src/modules/patient/patient.entity';
+import { CreateResolutionDto } from '../patient/dto/create-resolution.dto';
+import { PatientEntity } from '../patient/patient.entity';
 
 const reposMock = () => ({
   createResolution: jest.fn(),
@@ -42,13 +41,15 @@ describe('ResolutionsService', () => {
       expect(res).toBe(arr);
     });
 
-    it('should throw a 404 error if no resolutions found', async () => {
+    it('should return an empty array if no resolutions were found', async () => {
       expect.assertions(1);
       const arr = [];
 
       resolutionsRepository.getAllByPatientId.mockResolvedValue(arr);
 
-      expect(service.getAllById(1)).rejects.toThrow(NotFoundException);
+      const res = await service.getAllById(1);
+
+      expect(res).toBe(arr);
     });
   });
 

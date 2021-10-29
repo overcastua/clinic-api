@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { NotFoundException } from '@nestjs/common';
 import { QueueService } from './queue.service';
-import { PatientService } from 'src/modules/patient/patient.service';
+import { PatientService } from '../patient/patient.service';
 import { QueueRepository } from './queue.repository';
 import { QueueEntity } from './queue.entity';
 import { QueuePositionService } from './positions/queuePositions.service';
@@ -17,6 +17,7 @@ describe('PatientsService', () => {
   let service: QueueService;
   let positionService: QueuePositionService;
   let queueRepository: any;
+  let patientService: PatientService;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -29,7 +30,7 @@ describe('PatientsService', () => {
         {
           provide: PatientService,
           useValue: {
-            findById: jest.fn(),
+            findPatientByUserId: jest.fn(),
           },
         },
         {
@@ -45,6 +46,7 @@ describe('PatientsService', () => {
 
     service = module.get(QueueService);
     positionService = module.get(QueuePositionService);
+    patientService = module.get(PatientService);
     queueRepository = module.get(QueueRepository);
   });
 
@@ -52,12 +54,18 @@ describe('PatientsService', () => {
     it('should put the given patient to the queue', async () => {
       const addMethod = jest.spyOn(positionService, 'add');
       const queue = new QueueEntity();
+
+      const patient = { id: 5 };
+
       queueRepository.findById.mockResolvedValue(queue);
+      (patientService.findPatientByUserId as jest.Mock).mockResolvedValue(
+        patient,
+      );
 
       await service.add(1, id);
 
       expect(addMethod).toHaveBeenCalledTimes(1);
-      expect(addMethod).toHaveBeenCalledWith(queue, id);
+      expect(addMethod).toHaveBeenCalledWith(queue, patient.id);
     });
 
     it('should throw a 404 error if the queue does not exist', async () => {

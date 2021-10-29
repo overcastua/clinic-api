@@ -17,35 +17,34 @@ $ docker-compose down
 
 ## Workspaces
 
-New worktrees should be created in the <b>packages</b> directory. Currently there is one monolith service 'app'.
+New worktrees should be created in the <b>packages</b> directory.
 
 ## Test
 
 ```bash
 # unit tests
-$ npm run test
-
-# test coverage
-$ npm run test:cov
+$ yarn test
 ```
 
 ## Routes documentation
 
-Go to http://localhost:8080/documentation/
+Go to http://localhost:{service_port}/documentation
+
+Ports can be configured in the <b>.env</b> file of the root directory.
 
 ## Migrations
 
-TypeORM runs migrations automatically. To change this, in docker-compose.yml you can set the RUN_MIGRATIONS environment variable to 'false'.
+TypeORM runs migrations automatically. To change this, in config.env you can set the RUN_MIGRATIONS variable to 'false'.
 To run migrations manualy, start docker-compose and run:
 
 ```bash
-docker exec -it main yarn migration
+docker exec -it {container-name} yarn migration
 ```
 
 To revert the last migration use:
 
 ```bash
-docker exec -it main yarn migration:revert
+docker exec -it {container-name} yarn migration:revert
 ```
 
 ## Relations
