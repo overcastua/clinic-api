@@ -27,4 +27,8 @@ export class PatientEntity {
     default: () => 'CURRENT_TIMESTAMP(6)',
   })
   public createdAt: Date;
+
+  constructor(userId: number) {
+    this.userId = userId;
+  }
 }

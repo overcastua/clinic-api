@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateProfileDto } from '@repos/common';
 import { ResolutionsEntity } from '../resolutions/resolutions.entity';
 import { ResolutionsService } from '../resolutions/resolutions.service';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
@@ -15,8 +14,8 @@ export class PatientService {
     private readonly resolutionsService: ResolutionsService,
   ) {}
 
-  async create(createProfileDto: CreateProfileDto): Promise<void> {
-    await this.patientRepository.add(createProfileDto);
+  async create(userId: number): Promise<void> {
+    await this.patientRepository.add(userId);
   }
 
   async findPatientByUserId(userId: number): Promise<PatientEntity> {

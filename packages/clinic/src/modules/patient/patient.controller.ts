@@ -18,13 +18,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { ResolutionsEntity } from '../resolutions/resolutions.entity';
-import {
-  CreateProfileDto,
-  JwtAuthGuard,
-  Role,
-  Roles,
-  RolesGuard,
-} from '@repos/common';
+import { JwtAuthGuard, Role, Roles, RolesGuard } from '@repos/common';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { PatientService } from './patient.service';
 
@@ -34,8 +28,8 @@ export class PatientController {
   constructor(private readonly patientService: PatientService) {}
 
   @Post()
-  async createPatient(@Body() dto: CreateProfileDto): Promise<void> {
-    return this.patientService.create(dto);
+  async createPatient(@Body() { userId }: { userId: string }): Promise<void> {
+    return this.patientService.create(parseInt(userId));
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

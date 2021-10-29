@@ -30,16 +30,15 @@ export class UsersService {
     const dtoWithHash = { ...dto };
     dtoWithHash.password = hash;
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { email, password, ...rest } = dto;
+
     const user: UsersEntity = await this.usersRepos.register(dtoWithHash);
 
-    const patientDto = new CreateProfileDto();
-    patientDto.name = dto.name;
-    patientDto.birthDate = dto.birthDate;
-    patientDto.gender = dto.gender;
-    patientDto.userId = user.id;
+    const profileDto = new CreateProfileDto(rest, user.id);
 
-    await this.clinic.createPatient(patientDto);
-    return this.profile.createProfile(patientDto);
+    await this.clinic.createPatient(user.id);
+    await this.profile.createProfile(profileDto);
   }
 
   async findOne(email: string): Promise<UsersEntity> {

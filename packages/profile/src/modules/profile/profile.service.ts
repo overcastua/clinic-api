@@ -11,8 +11,8 @@ export class ProfileService {
     private readonly profileRepository: ProfileRepository,
   ) {}
 
-  async create(createProfileDto: CreateProfileDto): Promise<void> {
-    await this.profileRepository.add(createProfileDto);
+  async create(dto: CreateProfileDto): Promise<void> {
+    await this.profileRepository.add(dto);
   }
 
   async getProfileByUserId(userId: number): Promise<ProfileEntity> {

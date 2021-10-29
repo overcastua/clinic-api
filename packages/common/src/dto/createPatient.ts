@@ -10,4 +10,11 @@ export class CreateProfileDto {
   birthDate: Date;
 
   userId: number;
+
+  constructor(dto: any, userId: number) {
+    this.name = dto?.name;
+    this.gender = dto?.gender;
+    this.birthDate = dto?.birthDate;
+    this.userId = userId;
+  }
 }

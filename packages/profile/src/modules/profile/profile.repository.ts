@@ -5,11 +5,7 @@ import { ProfileEntity } from './profile.entity';
 @EntityRepository(ProfileEntity)
 export class ProfileRepository extends Repository<ProfileEntity> {
   async add(createProfileDto: CreateProfileDto): Promise<void> {
-    const profile = new ProfileEntity();
-    profile.birthDate = createProfileDto.birthDate;
-    profile.gender = createProfileDto.gender;
-    profile.name = createProfileDto.name;
-    profile.userId = createProfileDto.userId;
+    const profile = new ProfileEntity(createProfileDto);
 
     await this.save(profile);
   }

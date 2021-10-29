@@ -14,9 +14,9 @@ const reposMock = () => ({
 });
 
 const data = new QueuePositionEntity();
-data.patient = new PatientEntity();
 const id = 1;
-data.patient.id = id;
+data.patient = new PatientEntity(id);
+data.patient.id = 1;
 
 const queueId = 1;
 
@@ -80,7 +80,7 @@ describe('PatientsService', () => {
   describe('testing add()', () => {
     it('should put the given patients id to the queue', async () => {
       const addMethod = jest.spyOn(queueRepository, 'add');
-      const patient = new PatientEntity();
+      const patient = new PatientEntity(1);
       const queue = new QueueEntity();
       (patientService.findPatientByUserId as jest.Mock).mockResolvedValue(
         patient,

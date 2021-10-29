@@ -14,7 +14,6 @@ export class ProfileService {
       '/' +
       this.config.get('prefix') +
       '/profiles';
-    console.log(createProfileURI);
 
     this.axios.post(createProfileURI, profileDto).subscribe();
   }

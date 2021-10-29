@@ -63,7 +63,7 @@ describe('ResolutionsService', () => {
       const dto: CreateResolutionDto = new CreateResolutionDto();
       dto.expiresIn = 1;
 
-      await service.createResolution(dto, new PatientEntity());
+      await service.createResolution(dto, new PatientEntity(1));
 
       expect(createMethod).toHaveBeenCalledTimes(1);
     });
