@@ -14,4 +14,12 @@ export class UsersRepository extends Repository<UsersEntity> {
   async findUser(email: string): Promise<UsersEntity> {
     return this.findOne({ email });
   }
+
+  async findUserById(id: number): Promise<UsersEntity> {
+    return this.findOne({ id });
+  }
+
+  async updateById(user: UsersEntity): Promise<void> {
+    await this.update({ id: user.id }, user);
+  }
 }

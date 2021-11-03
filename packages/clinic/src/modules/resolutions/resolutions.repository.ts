@@ -7,6 +7,7 @@ export class ResolutionsRepository extends Repository<ResolutionsEntity> {
   async getAllByPatientId(id: number): Promise<ResolutionsEntity[]> {
     return this.createQueryBuilder('res')
       .leftJoinAndSelect('res.patient', 'p')
+      .leftJoinAndSelect('res.doctor', 'd')
       .where('p.id = :id', { id })
       .andWhere('res.expiresIn > :now', { now: new Date() })
       .getMany();
@@ -14,9 +15,11 @@ export class ResolutionsRepository extends Repository<ResolutionsEntity> {
 
   async createResolution(dto: any, patient: PatientEntity): Promise<void> {
     const newResolution = new ResolutionsEntity();
+
     newResolution.patient = patient;
     newResolution.text = dto.text;
     newResolution.expiresIn = dto.expiresIn;
+    newResolution.doctor = dto.doctor;
 
     await this.save(newResolution);
   }

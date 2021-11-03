@@ -74,8 +74,9 @@ export class PatientController {
   async createResolution(
     @Body() dto: CreateResolutionDto,
     @Param('id') id: number,
+    @Req() req,
   ): Promise<void> {
-    return this.patientService.createResolution(dto, id);
+    return this.patientService.createResolution(dto, id, req.user.userId);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

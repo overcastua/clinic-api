@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { DoctorEntity } from '../doctors/doctors.entity';
+import { DoctorsService } from '../doctors/doctors.service';
 import { ResolutionsEntity } from '../resolutions/resolutions.entity';
 import { ResolutionsService } from '../resolutions/resolutions.service';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
@@ -12,6 +14,7 @@ export class PatientService {
     @InjectRepository(PatientRepository)
     private readonly patientRepository: PatientRepository,
     private readonly resolutionsService: ResolutionsService,
+    private readonly doctorsService: DoctorsService,
   ) {}
 
   async create(userId: number): Promise<void> {
@@ -22,7 +25,7 @@ export class PatientService {
     const patient: PatientEntity =
       await this.patientRepository.findPatientByUserId(userId);
 
-    if (!patient) throw new NotFoundException();
+    if (!patient) throw new NotFoundException('Patient does not exist');
 
     return patient;
   }
@@ -33,10 +36,18 @@ export class PatientService {
     return this.resolutionsService.getAllById(patient.id);
   }
 
-  async createResolution(dto: CreateResolutionDto, id: number): Promise<void> {
+  async createResolution(
+    dto: CreateResolutionDto,
+    id: number,
+    doctorUserId: number,
+  ): Promise<void> {
     const patient: PatientEntity = await this.findPatientByUserId(id);
 
-    await this.resolutionsService.createResolution(dto, patient);
+    const doctor: DoctorEntity = await this.doctorsService.findDoctorByUser(
+      doctorUserId,
+    );
+
+    await this.resolutionsService.createResolution(dto, patient, doctor);
   }
 
   async getAllResolutionsById(id: number): Promise<ResolutionsEntity[]> {

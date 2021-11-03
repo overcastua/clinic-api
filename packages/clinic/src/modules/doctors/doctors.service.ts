@@ -42,7 +42,7 @@ export class DoctorsService {
     const doctor: DoctorEntity = await this.repository.findDoctorByUser(userId);
 
     if (!doctor)
-      throw new NotFoundException('Doctor with this email does not exist');
+      throw new NotFoundException('Doctor with this userId does not exist');
 
     return doctor;
   }

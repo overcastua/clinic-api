@@ -42,7 +42,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Sign in as a patient' })
   @ApiCreatedResponse({
     description:
-      "Logined successfully, returns acces_token with an encoded userId and user's role",
+      "Logged in successfully, returns access_token with an encoded userId and user's role",
     type: 'json',
   })
   @ApiBadRequestResponse({

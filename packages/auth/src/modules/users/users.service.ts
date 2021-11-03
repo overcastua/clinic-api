@@ -1,4 +1,9 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RegisterDto } from './dto/register-user.dto';
 import { UsersRepository } from './users.repository';
@@ -8,6 +13,7 @@ import { UsersEntity } from './users.entity';
 import { ConfigService } from '@nestjs/config';
 import { ClinicService } from '../clinic/clinic.service';
 import { ProfileService } from '../profile/profile.service';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 @Injectable()
 export class UsersService {
@@ -43,5 +49,29 @@ export class UsersService {
 
   async findOne(email: string): Promise<UsersEntity> {
     return this.usersRepos.findUser(email);
+  }
+
+  async changePassword(dto: ChangePasswordDto, userId: number): Promise<void> {
+    const user: UsersEntity = await this.usersRepos.findUserById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User with the given id not found');
+    }
+
+    if (dto.current === dto.new) {
+      throw new ForbiddenException(
+        'The new password must be different from your current one',
+      );
+    }
+
+    if (!(await bcrypt.compare(dto.current, user.password))) {
+      throw new ForbiddenException('Current password is incorrect');
+    }
+
+    const saltRounds: number = this.config.get('salt');
+    const newHashedPassword: string = await bcrypt.hash(dto.new, saltRounds);
+
+    user.password = newHashedPassword;
+    return this.usersRepos.updateById(user);
   }
 }

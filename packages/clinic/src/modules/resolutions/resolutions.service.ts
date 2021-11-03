@@ -5,6 +5,7 @@ import { PatientEntity } from '../patient/patient.entity';
 import { TimeHelper } from '@repos/common';
 import { ResolutionsEntity } from './resolutions.entity';
 import { ResolutionsRepository } from './resolutions.repository';
+import { DoctorEntity } from '../doctors/doctors.entity';
 
 @Injectable()
 export class ResolutionsService {
@@ -23,12 +24,15 @@ export class ResolutionsService {
   async createResolution(
     dto: CreateResolutionDto,
     patient: PatientEntity,
+    doctor: DoctorEntity,
   ): Promise<void> {
     const modDto = { ...dto } as any;
 
     modDto.expiresIn = new Date(
       TimeHelper.now() + TimeHelper.minToMs(dto.expiresIn),
     ).toISOString();
+
+    modDto.doctor = doctor;
 
     return this.resolutionsRepository.createResolution(modDto, patient);
   }

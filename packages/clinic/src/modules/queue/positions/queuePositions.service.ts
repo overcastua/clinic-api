@@ -16,6 +16,7 @@ export class QueuePositionService {
 
   async getIdOfFirst(queueId: number): Promise<number> {
     const entry: QueuePositionEntity = await this.repository.getFirst(queueId);
+
     const firstId = entry?.patient.id;
 
     if (!firstId) throw new NotFoundException();
@@ -36,6 +37,7 @@ export class QueuePositionService {
   async add(queue: QueueEntity, userId: number): Promise<void> {
     const patient: PatientEntity =
       await this.patientService.findPatientByUserId(userId);
+
     await this.repository.add(queue, patient);
   }
 }

@@ -4,6 +4,7 @@ import { UsersRepository } from './users.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClinicModule } from '../clinic/clinic.module';
 import { ProfileModule } from '../profile/profile.module';
+import { UsersController } from './users.controller';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { ProfileModule } from '../profile/profile.module';
     ClinicModule,
     ProfileModule,
   ],
+  controllers: [UsersController],
   providers: [UsersService],
   exports: [UsersService],
 })

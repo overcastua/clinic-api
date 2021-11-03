@@ -31,6 +31,7 @@ export class QueueController {
     description: 'You dont have permission to access the route',
   })
   async getIdOfFirst(@Param() params: QueueValidateDto): Promise<number> {
+    console.log(params.queueId);
     return this.queueService.getIdOfFirst(params.queueId);
   }
 
