@@ -16,7 +16,9 @@ export class DoctorsSeeding1635163035320 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-    DELETE FROM "doctors"."doctor"
+    DELETE FROM 
+      "doctors"."doctor"
+    WHERE id in (SELECT id FROM "doctors"."doctor" order by id asc limit 5);
     `);
   }
 }

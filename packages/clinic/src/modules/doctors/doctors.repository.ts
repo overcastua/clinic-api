@@ -17,7 +17,7 @@ export class DoctorsRepository extends Repository<DoctorEntity> {
       .getMany();
   }
 
-  async findDoctorByUser(userId: number): Promise<DoctorEntity> {
+  async findDoctorByUserId(userId: number): Promise<DoctorEntity> {
     return this.findOne({ userId });
   }
 }

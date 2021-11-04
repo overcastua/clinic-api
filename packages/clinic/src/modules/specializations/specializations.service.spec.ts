@@ -26,7 +26,7 @@ describe('SpecializationsService', () => {
           useValue: {
             getDoctorsQueueIdByDoctorId: jest.fn(),
             getAllDoctorsOfCertainSpecialization: jest.fn(),
-            findDoctorByUser: jest.fn(),
+            findDoctorByUserId: jest.fn(),
           },
         },
       ],

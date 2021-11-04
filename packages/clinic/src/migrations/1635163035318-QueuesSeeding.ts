@@ -11,7 +11,9 @@ export class QueuesSeeding1635163035318 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-    DELETE FROM "queues"."queue";
+    DELETE FROM 
+      "queues"."queue" 
+    WHERE id in (SELECT id FROM "queues"."queue"  order by id asc limit 5)
     `);
   }
 }

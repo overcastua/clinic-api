@@ -38,8 +38,10 @@ export class DoctorsService {
     return doctors;
   }
 
-  async findDoctorByUser(userId: number): Promise<DoctorEntity> {
-    const doctor: DoctorEntity = await this.repository.findDoctorByUser(userId);
+  async findDoctorByUserId(userId: number): Promise<DoctorEntity> {
+    const doctor: DoctorEntity = await this.repository.findDoctorByUserId(
+      userId,
+    );
 
     if (!doctor)
       throw new NotFoundException('Doctor with this userId does not exist');

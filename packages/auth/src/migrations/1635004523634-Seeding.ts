@@ -16,7 +16,9 @@ export class SEEDING1635004523634 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-    DELETE FROM "identity"."user"
+    DELETE FROM 
+      "identity"."user" 
+    WHERE id in (SELECT id FROM "identity"."user" order by id asc limit 5);
     `);
   }
 }

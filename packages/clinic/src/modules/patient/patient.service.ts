@@ -25,7 +25,9 @@ export class PatientService {
     const patient: PatientEntity =
       await this.patientRepository.findPatientByUserId(userId);
 
-    if (!patient) throw new NotFoundException('Patient does not exist');
+    if (!patient) {
+      throw new NotFoundException('Patient does not exist');
+    }
 
     return patient;
   }
@@ -43,7 +45,7 @@ export class PatientService {
   ): Promise<void> {
     const patient: PatientEntity = await this.findPatientByUserId(id);
 
-    const doctor: DoctorEntity = await this.doctorsService.findDoctorByUser(
+    const doctor: DoctorEntity = await this.doctorsService.findDoctorByUserId(
       doctorUserId,
     );
 
