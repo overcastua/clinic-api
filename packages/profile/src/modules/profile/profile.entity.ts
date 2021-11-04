@@ -1,7 +1,7 @@
 import { CreateProfileDto } from '@repos/common';
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity('profile', { schema: 'profile' })
+@Entity('profile')
 export class ProfileEntity {
   @PrimaryGeneratedColumn()
   id: number;

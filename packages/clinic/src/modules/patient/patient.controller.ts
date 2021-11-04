@@ -55,47 +55,47 @@ export class PatientController {
     return this.patientService.getOwnResolutions(req.user.userId);
   }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Post(':id/resolutions')
-  @Roles(Role.DOCTOR)
-  @ApiOperation({ summary: 'Create a new resolution for the patient' })
-  @ApiCreatedResponse({
-    description: 'Resolution was successfully created',
-  })
-  @ApiBadRequestResponse({
-    description: 'Received data violates the predefined DTO schema',
-  })
-  @ApiNotFoundResponse({
-    description: 'Patient with the given id was not found',
-  })
-  @ApiForbiddenResponse({
-    description: 'You dont have permission to access the route',
-  })
-  async createResolution(
-    @Body() dto: CreateResolutionDto,
-    @Param('id') id: number,
-    @Req() req,
-  ): Promise<void> {
-    return this.patientService.createResolution(dto, id, req.user.userId);
-  }
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Post(':id/resolutions')
+  // @Roles(Role.DOCTOR)
+  // @ApiOperation({ summary: 'Create a new resolution for the patient' })
+  // @ApiCreatedResponse({
+  //   description: 'Resolution was successfully created',
+  // })
+  // @ApiBadRequestResponse({
+  //   description: 'Received data violates the predefined DTO schema',
+  // })
+  // @ApiNotFoundResponse({
+  //   description: 'Patient with the given id was not found',
+  // })
+  // @ApiForbiddenResponse({
+  //   description: 'You dont have permission to access the route',
+  // })
+  // async createResolution(
+  //   @Body() dto: CreateResolutionDto,
+  //   @Param('id') id: number,
+  //   @Req() req,
+  // ): Promise<void> {
+  //   return this.patientService.createResolution(dto, id, req.user.userId);
+  // }
 
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Get(':id/resolutions')
-  @Roles(Role.DOCTOR)
-  @ApiOperation({ summary: 'Get all the resolutions of a certain patient' })
-  @ApiOkResponse({
-    description: 'Returns all the resolutions for the patient',
-    type: [ResolutionsEntity],
-  })
-  @ApiNotFoundResponse({
-    description: 'Patient with the given id was not found',
-  })
-  @ApiForbiddenResponse({
-    description: 'You dont have permission to access the route',
-  })
-  async getAllResolutionsById(
-    @Param('id') id: number,
-  ): Promise<ResolutionsEntity[]> {
-    return this.patientService.getAllResolutionsById(id);
-  }
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Get(':id/resolutions')
+  // @Roles(Role.DOCTOR)
+  // @ApiOperation({ summary: 'Get all the resolutions of a certain patient' })
+  // @ApiOkResponse({
+  //   description: 'Returns all the resolutions for the patient',
+  //   type: [ResolutionsEntity],
+  // })
+  // @ApiNotFoundResponse({
+  //   description: 'Patient with the given id was not found',
+  // })
+  // @ApiForbiddenResponse({
+  //   description: 'You dont have permission to access the route',
+  // })
+  // async getAllResolutionsById(
+  //   @Param('id') id: number,
+  // ): Promise<ResolutionsEntity[]> {
+  //   return this.patientService.getAllResolutionsById(id);
+  // }
 }

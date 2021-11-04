@@ -1,6 +1,6 @@
 import { IsNumberString } from 'class-validator';
 
-export class QueueValidateDto {
+export class DoctorIdDto {
   @IsNumberString()
-  queueId: number;
+  doctorId: string;
 }

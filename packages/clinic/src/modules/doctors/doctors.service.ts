@@ -1,5 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AppointmentsService } from '../appointments/appointments.service';
+import { CreateAppointmentDto } from '../appointments/dto/create-appointment.dto';
+import { SpecializationEntity } from '../specializations/specializations.entity';
+import { SpecializationsService } from '../specializations/specializations.service';
 import { DoctorEntity } from './doctors.entity';
 import { DoctorsRepository } from './doctors.repository';
 
@@ -8,20 +12,9 @@ export class DoctorsService {
   constructor(
     @InjectRepository(DoctorsRepository)
     private readonly repository: DoctorsRepository,
+    private readonly specService: SpecializationsService,
+    private readonly appointmentService: AppointmentsService,
   ) {}
-
-  async getDoctorsQueueIdByDoctorId(userId: number): Promise<number> {
-    const doctor: DoctorEntity = await this.repository.getDoctorByUserId(
-      userId,
-    );
-    const queueId = doctor?.queue?.id;
-
-    if (!queueId) {
-      throw new NotFoundException('QueueId was not found');
-    }
-
-    return queueId;
-  }
 
   async getAllDoctorsOfCertainSpecialization(
     specId: number,
@@ -38,6 +31,24 @@ export class DoctorsService {
     return doctors;
   }
 
+  async createAppointment(
+    dto: CreateAppointmentDto,
+    doctorId: number,
+    userId: number,
+  ): Promise<void> {
+    return this.appointmentService.createAppointment(dto, userId, doctorId);
+  }
+
+  async getClosestAppointment(userId: number) {
+    const doctor = await this.repository.findDoctorByUserId(userId);
+    return this.appointmentService.getClosest(doctor.id);
+  }
+
+  async getNext(userId: number) {
+    const doctor = await this.repository.findDoctorByUserId(userId);
+    return this.appointmentService.getNext(doctor.id);
+  }
+
   async findDoctorByUserId(userId: number): Promise<DoctorEntity> {
     const doctor: DoctorEntity = await this.repository.findDoctorByUserId(
       userId,
@@ -47,5 +58,9 @@ export class DoctorsService {
       throw new NotFoundException('Doctor with this userId does not exist');
 
     return doctor;
+  }
+
+  async getAllSpecializations(): Promise<SpecializationEntity[]> {
+    return this.specService.getAll();
   }
 }

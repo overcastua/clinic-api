@@ -5,12 +5,12 @@ export class DoctorsSeeding1635163035320 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-    INSERT INTO "doctors"."doctor"("userId","specializationId", "queueId") VALUES 
-        (1,1,1),
-        (2,2,2),
-        (3,2,3),
-        (4,3,4),
-        (5,1,5);
+    INSERT INTO "doctors"."doctor"("userId","specializationId") VALUES 
+        (1,1),
+        (2,2),
+        (3,2),
+        (4,3),
+        (5,1);
     `);
   }
 

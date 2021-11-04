@@ -1,10 +1,10 @@
 import { Test } from '@nestjs/testing';
 import { NotFoundException } from '@nestjs/common';
-import { QueueService } from './queue.service';
+import { AppointmentsService } from './appointments.service';
 import { PatientService } from '../patient/patient.service';
-import { QueueRepository } from './queue.repository';
-import { QueueEntity } from './queue.entity';
-import { QueuePositionService } from './positions/queuePositions.service';
+import { WorkdaysEntity } from './workdays.entity';
+import { TimeSlotsService } from './slots/slots.service';
+import { WorkdaysRepository } from './workdays.repository';
 
 const reposMock = () => ({
   findById: jest.fn(),
@@ -14,17 +14,17 @@ const reposMock = () => ({
 const id = 1;
 
 describe('PatientsService', () => {
-  let service: QueueService;
-  let positionService: QueuePositionService;
-  let queueRepository: any;
+  let service: AppointmentsService;
+  let positionService: TimeSlotsService;
+  let appointmentsRepository: any;
   let patientService: PatientService;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [
-        QueueService,
+        AppointmentsService,
         {
-          provide: QueueRepository,
+          provide: WorkdaysRepository,
           useFactory: reposMock,
         },
         {
@@ -34,7 +34,7 @@ describe('PatientsService', () => {
           },
         },
         {
-          provide: QueuePositionService,
+          provide: TimeSlotsService,
           useValue: {
             getIdOfFirst: jest.fn(),
             deleteCurrentAndGetNewFirst: jest.fn(),
@@ -44,20 +44,20 @@ describe('PatientsService', () => {
       ],
     }).compile();
 
-    service = module.get(QueueService);
-    positionService = module.get(QueuePositionService);
+    service = module.get(AppointmentsService);
+    positionService = module.get(TimeSlotsService);
     patientService = module.get(PatientService);
-    queueRepository = module.get(QueueRepository);
+    appointmentsRepository = module.get(WorkdaysRepository);
   });
 
   describe('testing add()', () => {
     it('should put the given patient to the queue', async () => {
       const addMethod = jest.spyOn(positionService, 'add');
-      const queue = new QueueEntity();
+      const queue = new WorkdaysEntity();
 
       const patient = { id: 5 };
 
-      queueRepository.findById.mockResolvedValue(queue);
+      appointmentsRepository.findById.mockResolvedValue(queue);
       (patientService.findPatientByUserId as jest.Mock).mockResolvedValue(
         patient,
       );
@@ -69,7 +69,7 @@ describe('PatientsService', () => {
     });
 
     it('should throw a 404 error if the queue does not exist', async () => {
-      queueRepository.findById.mockResolvedValue(undefined);
+      appointmentsRepository.findById.mockResolvedValue(undefined);
 
       expect(service.add(1, id)).rejects.toThrow(NotFoundException);
     });
