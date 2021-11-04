@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AppointmentsService } from '../appointments/appointments.service';
 import { CreateAppointmentDto } from '../appointments/dto/create-appointment.dto';
+import { TimeSlotsEntity } from '../appointments/slots/slots.entity';
 import { SpecializationEntity } from '../specializations/specializations.entity';
 import { SpecializationsService } from '../specializations/specializations.service';
 import { DoctorEntity } from './doctors.entity';
@@ -29,6 +30,13 @@ export class DoctorsService {
     }
 
     return doctors;
+  }
+
+  async getAllAppointments(
+    doctorId: number,
+    date: Date,
+  ): Promise<TimeSlotsEntity[]> {
+    return this.appointmentService.getAllForDate(doctorId, date);
   }
 
   async createAppointment(

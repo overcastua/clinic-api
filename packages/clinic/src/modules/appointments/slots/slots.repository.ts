@@ -72,4 +72,16 @@ export class TimeSlotsRepository extends Repository<TimeSlotsEntity> {
       .where('id = :id', { id })
       .execute();
   }
+
+  async getAllForDate(
+    doctorId: number,
+    date: Date,
+  ): Promise<TimeSlotsEntity[]> {
+    return this.createQueryBuilder('ts')
+      .leftJoinAndSelect('ts.workday', 'wd')
+      .where('wd.doctorId = :id', { id: doctorId })
+      .andWhere('wd.date = :date', { date: date })
+      .orderBy('ts.time', 'ASC')
+      .getMany();
+  }
 }

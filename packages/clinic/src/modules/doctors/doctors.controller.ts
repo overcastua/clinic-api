@@ -34,6 +34,11 @@ export class DoctorsController {
     return this.service.getNext(1);
   }
 
+  @Get(':doctorId/appointments')
+  async getAllAppointmentSlotsForDate(@Body() { date }, @Param() param) {
+    return this.service.getAllAppointments(param.doctorId, date);
+  }
+
   @Post(':doctorId/appointment')
   async setUpAppointment(
     @Body() dto: CreateAppointmentDto,

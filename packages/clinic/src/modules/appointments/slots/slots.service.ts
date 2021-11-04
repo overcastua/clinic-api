@@ -31,6 +31,13 @@ export class TimeSlotsService {
     return this.getClosest(doctorId);
   }
 
+  async getAllForDate(
+    doctorId: number,
+    date: Date,
+  ): Promise<TimeSlotsEntity[]> {
+    return this.repository.getAllForDate(doctorId, date);
+  }
+
   async add(
     dto: CreateAppointmentDto,
     userId: number,

@@ -15,7 +15,7 @@ const id = 1;
 
 describe('PatientsService', () => {
   let service: AppointmentsService;
-  let positionService: TimeSlotsService;
+  let timeslotsService: TimeSlotsService;
   let appointmentsRepository: any;
   let patientService: PatientService;
 
@@ -45,14 +45,14 @@ describe('PatientsService', () => {
     }).compile();
 
     service = module.get(AppointmentsService);
-    positionService = module.get(TimeSlotsService);
+    timeslotsService = module.get(TimeSlotsService);
     patientService = module.get(PatientService);
     appointmentsRepository = module.get(WorkdaysRepository);
   });
 
   describe('testing add()', () => {
     it('should put the given patient to the queue', async () => {
-      const addMethod = jest.spyOn(positionService, 'add');
+      const addMethod = jest.spyOn(timeslotsService, 'add');
       const queue = new WorkdaysEntity();
 
       const patient = { id: 5 };
