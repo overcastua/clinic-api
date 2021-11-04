@@ -1,55 +1,85 @@
-version: '3.7'
+version: '3.8'
 
 services:
-  main:
-    container_name: main
+  clinic:
+    container_name: clinic
     build:
       context: .
-      target: development
-      dockerfile: ./Dockerfile
+      dockerfile: ./packages/clinic/Dockerfile
     volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+      - ./packages/clinic:/app/packages/clinic
+      - /app/packages/clinic/node_modules
+      - /app/packages/clinic/dist/
     ports:
-      - ${APP_PORT}:${APP_PORT}
-      - 9229:9229
-    expose:
-      - ${APP_PORT}
-    command: npm run start:dev
+      - $CLINIC_PORT:$CLINIC_PORT
     env_file:
-      - .env
+      - config.env
+      - dbconn.env
     environment:
-      DB_HOSTNAME: mysql
-      DB_PORT: '3307'
-      DB_USER: user
-      DB_PASSWORD: user
-      DB_NAME: med
-    networks:
-      - webnet
+      APP_PORT: $CLINIC_PORT
     depends_on:
-      - mysql
-    restart: unless-stopped
-
-  mysql:
-    container_name: db
-    image: mysql:latest
-    command: --default-authentication-plugin=mysql_native_password
-    environment:
-      MYSQL_ROOT_PASSWORD: randompassword
-      MYSQL_USER: user
-      MYSQL_PASSWORD: user
-      MYSQL_DATABASE: med
-      MYSQL_TCP_PORT: 3307
+      - database
     restart: always
-    ports:
-      - 3307:3307
-    expose:
-      - '3307'
+
+  auth:
+    container_name: auth
+    build:
+      context: .
+      dockerfile: ./packages/auth/Dockerfile
     volumes:
-      - mysqldb:/var/lib/mysql
-    networks:
-      - webnet
-volumes:
-  mysqldb:
-networks:
-  webnet:
+      - ./packages/auth:/app/packages/auth
+      - /app/packages/auth/node_modules
+      - /app/packages/auth/dist
+    ports:
+      - $AUTH_PORT:$AUTH_PORT
+    env_file:
+      - config.env
+      - dbconn.env
+    environment:
+      APP_PORT: $AUTH_PORT
+      PROFILE_URI: profile:$PROFILE_PORT
+      CLINIC_URI: clinic:$CLINIC_PORT
+    depends_on:
+      - database
+    restart: always
+
+  profile:
+    container_name: profile
+    build:
+      context: .
+      dockerfile: ./packages/profile/Dockerfile
+    volumes:
+      - ./packages/profile:/app/packages/profile
+      - /app/packages/profile/node_modules
+      - /app/packages/profile/dist
+    ports:
+      - $PROFILE_PORT:$PROFILE_PORT
+    env_file:
+      - config.env
+      - dbconn.env
+    environment:
+      APP_PORT: $PROFILE_PORT
+    depends_on:
+      - database
+    restart: always
+
+  database:
+    container_name: db
+    image: postgres:11.2-alpine
+    restart: always
+    env_file:
+      - dbconn.env
+    ports:
+      - 5432:5432
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    depends_on:
+      - database
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: 5050
+    ports:
+      - 5050:5050
