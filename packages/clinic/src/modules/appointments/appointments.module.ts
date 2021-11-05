@@ -1,17 +1,19 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PatientModule } from '../patient/patient.module';
-import { TimeSlotsRepository } from './slots/slots.repository';
-import { TimeSlotsService } from './slots/slots.service';
 import { WorkdaysRepository } from './workdays.repository';
 import { AppointmentsService } from './appointments.service';
+import { ProfileModule } from '../profile/profile.module';
+import { SlotsModule } from './slots/slots.module';
+import { AppointmentsController } from './appointments.controller';
 
 @Module({
   imports: [
-    forwardRef(() => PatientModule),
-    TypeOrmModule.forFeature([WorkdaysRepository, TimeSlotsRepository]),
+    TypeOrmModule.forFeature([WorkdaysRepository]),
+    SlotsModule,
+    ProfileModule,
   ],
-  providers: [AppointmentsService, TimeSlotsService],
+  providers: [AppointmentsService],
+  controllers: [AppointmentsController],
   exports: [AppointmentsService],
 })
 export class AppointmentsModule {}

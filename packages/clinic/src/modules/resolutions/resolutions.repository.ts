@@ -1,5 +1,5 @@
-import { PatientEntity } from '../patient/patient.entity';
 import { Repository, EntityRepository } from 'typeorm';
+import { UpdateResolutionDto } from '../patient/dto/update-resolution.dto';
 import { ResolutionsEntity } from './resolutions.entity';
 
 @EntityRepository(ResolutionsEntity)
@@ -13,14 +13,22 @@ export class ResolutionsRepository extends Repository<ResolutionsEntity> {
       .getMany();
   }
 
-  async createResolution(dto: any, patient: PatientEntity): Promise<void> {
+  async createResolution(dto: any): Promise<void> {
     const newResolution = new ResolutionsEntity();
 
-    newResolution.patient = patient;
+    newResolution.patientId = dto.patientId;
     newResolution.text = dto.text;
     newResolution.expiresIn = dto.expiresIn;
     newResolution.doctor = dto.doctor;
 
     await this.save(newResolution);
+  }
+
+  async updateResolution(dto: UpdateResolutionDto): Promise<void> {
+    await this.createQueryBuilder()
+      .update()
+      .set({ text: dto.text })
+      .where('id = :id', { id: dto.resolutionId })
+      .execute();
   }
 }

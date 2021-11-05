@@ -22,8 +22,14 @@ export class ResolutionsEntity {
   @ManyToOne(() => PatientEntity, (p) => p.resolutions)
   patient: PatientEntity;
 
+  @Column()
+  patientId: number;
+
   @ManyToOne(() => DoctorEntity, (d) => d.resolutions)
   doctor: DoctorEntity;
+
+  @Column()
+  doctorId: number;
 
   @CreateDateColumn({
     type: 'timestamp',

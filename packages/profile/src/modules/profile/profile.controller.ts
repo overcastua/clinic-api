@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -6,6 +6,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateProfileDto } from '@repos/common';
+import { ProfileEntity } from './profile.entity';
 import { ProfileService } from './profile.service';
 
 @ApiTags('profiles')
@@ -22,5 +23,15 @@ export class ProfileController {
   })
   async create(@Body() dto: CreateProfileDto): Promise<void> {
     return this.profileService.create(dto);
+  }
+
+  @Get('user/:id')
+  async getProfileByUserId(@Param('id') id: string): Promise<ProfileEntity> {
+    return this.profileService.getProfileByUserId(parseInt(id));
+  }
+
+  @Get()
+  async getProfileBatch(@Query('users') users: string) {
+    return this.profileService.getProfileBatch(JSON.parse(users));
   }
 }

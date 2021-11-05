@@ -14,21 +14,42 @@ export class TimeSlotsService {
     private readonly patientService: PatientService,
   ) {}
 
-  async getClosest(doctorId: number): Promise<TimeSlotsEntity> {
-    const entry: TimeSlotsEntity = await this.repository.getClosest(doctorId);
-    if (!entry) throw new NotFoundException('No appointments');
+  async patientGetAllAppointments(userId: number): Promise<TimeSlotsEntity[]> {
+    const patient = await this.patientService.findPatientByUserId(userId);
 
-    return entry;
+    return this.repository.patientGetAllAppointments(patient.id);
   }
 
-  async finishCurrentAndGetClosest(doctorId: number): Promise<TimeSlotsEntity> {
-    const finishedAppointment = await this.repository.finishCurrent(doctorId);
+  async doctorGetClosest(doctorId: number): Promise<TimeSlotsEntity> {
+    const appointment: TimeSlotsEntity = await this.repository.doctorGetClosest(
+      doctorId,
+    );
+    if (!appointment) throw new NotFoundException('No appointments');
+
+    return appointment;
+  }
+
+  async doctorGetAllFuture(doctorId: number): Promise<TimeSlotsEntity[]> {
+    const appointments: TimeSlotsEntity[] =
+      await this.repository.doctorGetAllFuture(doctorId);
+
+    if (!appointments.length) throw new NotFoundException('No appointments');
+
+    return appointments;
+  }
+
+  async doctorFinishCurrentAndGetClosest(
+    doctorId: number,
+  ): Promise<TimeSlotsEntity> {
+    const finishedAppointment = await this.repository.doctorFinishCurrent(
+      doctorId,
+    );
 
     if (!finishedAppointment) {
       throw new NotFoundException('There is no current appointment');
     }
 
-    return this.getClosest(doctorId);
+    return this.doctorGetClosest(doctorId);
   }
 
   async getAllForDate(

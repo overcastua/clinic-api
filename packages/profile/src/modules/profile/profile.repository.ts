@@ -12,4 +12,12 @@ export class ProfileRepository extends Repository<ProfileEntity> {
   async findProfile(userId: number): Promise<ProfileEntity> {
     return this.findOne({ userId });
   }
+
+  async findBatchByUserIds(users: number[]): Promise<ProfileEntity[]> {
+    return this.createQueryBuilder('p')
+      .where('p.userId IN (:...users)', {
+        users,
+      })
+      .getMany();
+  }
 }

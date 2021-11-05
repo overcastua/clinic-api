@@ -18,4 +18,8 @@ export class ProfileService {
   async getProfileByUserId(userId: number): Promise<ProfileEntity> {
     return this.profileRepository.findProfile(userId);
   }
+
+  async getProfileBatch(users: number[]): Promise<ProfileEntity[]> {
+    return this.profileRepository.findBatchByUserIds(users);
+  }
 }

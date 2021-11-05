@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DoctorsService } from '../doctors/doctors.service';
 import { ResolutionsEntity } from '../resolutions/resolutions.entity';
 import { ResolutionsService } from '../resolutions/resolutions.service';
+import { CreateResolutionDto } from './dto/create-resolution.dto';
 
 import { PatientEntity } from './patient.entity';
 import { PatientRepository } from './patient.repository';
@@ -36,23 +36,9 @@ export class PatientService {
     return this.resolutionsService.getAllById(patient.id);
   }
 
-  // async createResolution(
-  //   dto: CreateResolutionDto,
-  //   id: number,
-  //   doctorUserId: number,
-  // ): Promise<void> {
-  //   const patient: PatientEntity = await this.findPatientByUserId(id);
+  async getAllResolutionsById(id: number): Promise<ResolutionsEntity[]> {
+    const patient = await this.findPatientByUserId(id);
 
-  //   const doctor: DoctorEntity = await this.doctorsService.findDoctorByUserId(
-  //     doctorUserId,
-  //   );
-
-  //   await this.resolutionsService.createResolution(dto, patient, doctor);
-  // }
-
-  // async getAllResolutionsById(id: number): Promise<ResolutionsEntity[]> {
-  //   const patient = await this.findPatientByUserId(id);
-
-  //   return this.resolutionsService.getAllById(patient.id);
-  // }
+    return this.resolutionsService.getAllById(patient.id);
+  }
 }

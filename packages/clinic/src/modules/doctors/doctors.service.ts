@@ -3,6 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AppointmentsService } from '../appointments/appointments.service';
 import { CreateAppointmentDto } from '../appointments/dto/create-appointment.dto';
 import { TimeSlotsEntity } from '../appointments/slots/slots.entity';
+import { WorkdaysEntity } from '../appointments/workdays.entity';
+import { CreateResolutionDto } from '../patient/dto/create-resolution.dto';
+import { UpdateResolutionDto } from '../patient/dto/update-resolution.dto';
+import { ResolutionsService } from '../resolutions/resolutions.service';
 import { SpecializationEntity } from '../specializations/specializations.entity';
 import { SpecializationsService } from '../specializations/specializations.service';
 import { DoctorEntity } from './doctors.entity';
@@ -15,7 +19,12 @@ export class DoctorsService {
     private readonly repository: DoctorsRepository,
     private readonly specService: SpecializationsService,
     private readonly appointmentService: AppointmentsService,
+    private readonly resolutionsService: ResolutionsService,
   ) {}
+
+  async getAllWorkdaysNext7days(doctorId: number): Promise<WorkdaysEntity[]> {
+    return this.appointmentService.getAllWorkdaysNext7days(doctorId);
+  }
 
   async getAllDoctorsOfCertainSpecialization(
     specId: number,
@@ -32,7 +41,14 @@ export class DoctorsService {
     return doctors;
   }
 
-  async getAllAppointments(
+  async getAllFutureAppointments(userId: number): Promise<TimeSlotsEntity[]> {
+    const doctor = await this.repository.findDoctorByUserId(userId);
+    return this.appointmentService.doctorGetAllFutureAppointmentsByDoctorId(
+      doctor.id,
+    );
+  }
+
+  async getAllTimeSlots(
     doctorId: number,
     date: Date,
   ): Promise<TimeSlotsEntity[]> {
@@ -49,12 +65,12 @@ export class DoctorsService {
 
   async getClosestAppointment(userId: number) {
     const doctor = await this.repository.findDoctorByUserId(userId);
-    return this.appointmentService.getClosest(doctor.id);
+    return this.appointmentService.doctorGetClosest(doctor.id);
   }
 
   async getNext(userId: number) {
     const doctor = await this.repository.findDoctorByUserId(userId);
-    return this.appointmentService.getNext(doctor.id);
+    return this.appointmentService.doctorGetNext(doctor.id);
   }
 
   async findDoctorByUserId(userId: number): Promise<DoctorEntity> {
@@ -70,5 +86,15 @@ export class DoctorsService {
 
   async getAllSpecializations(): Promise<SpecializationEntity[]> {
     return this.specService.getAll();
+  }
+
+  async createResolution(dto: CreateResolutionDto, id: number): Promise<void> {
+    const doctor: DoctorEntity = await this.findDoctorByUserId(id);
+
+    await this.resolutionsService.createResolution(dto, doctor);
+  }
+
+  async updateResolution(dto: UpdateResolutionDto): Promise<void> {
+    await this.resolutionsService.updateResolution(dto);
   }
 }

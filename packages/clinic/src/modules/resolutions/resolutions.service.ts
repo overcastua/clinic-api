@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateResolutionDto } from '../patient/dto/create-resolution.dto';
-import { PatientEntity } from '../patient/patient.entity';
 import { TimeHelper } from '@repos/common';
 import { ResolutionsEntity } from './resolutions.entity';
 import { ResolutionsRepository } from './resolutions.repository';
 import { DoctorEntity } from '../doctors/doctors.entity';
+import { UpdateResolutionDto } from '../patient/dto/update-resolution.dto';
 
 @Injectable()
 export class ResolutionsService {
@@ -23,7 +23,6 @@ export class ResolutionsService {
 
   async createResolution(
     dto: CreateResolutionDto,
-    patient: PatientEntity,
     doctor: DoctorEntity,
   ): Promise<void> {
     const modDto = { ...dto } as any;
@@ -34,6 +33,10 @@ export class ResolutionsService {
 
     modDto.doctor = doctor;
 
-    return this.resolutionsRepository.createResolution(modDto, patient);
+    return this.resolutionsRepository.createResolution(modDto);
+  }
+
+  async updateResolution(dto: UpdateResolutionDto): Promise<void> {
+    await this.resolutionsRepository.updateResolution(dto);
   }
 }

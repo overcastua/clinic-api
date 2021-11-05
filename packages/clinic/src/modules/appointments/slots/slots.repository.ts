@@ -5,7 +5,20 @@ import { CreateAppointmentDto } from '../dto/create-appointment.dto';
 
 @EntityRepository(TimeSlotsEntity)
 export class TimeSlotsRepository extends Repository<TimeSlotsEntity> {
-  async getClosest(doctorId: number): Promise<TimeSlotsEntity> {
+  async patientGetAllAppointments(
+    patientId: number,
+  ): Promise<TimeSlotsEntity[]> {
+    return await this.createQueryBuilder('ts')
+      .leftJoinAndSelect('ts.workday', 'wd')
+      .leftJoinAndSelect('wd.doctor', 'doc')
+      .where('ts.patientId = :id', {
+        id: patientId,
+      })
+      .andWhere('ts.finished = false')
+      .getMany();
+  }
+
+  async doctorGetClosest(doctorId: number): Promise<TimeSlotsEntity> {
     return this.createQueryBuilder('ts')
       .leftJoinAndSelect('ts.workday', 'wd')
       .leftJoinAndSelect('wd.doctor', 'doc')
@@ -18,7 +31,20 @@ export class TimeSlotsRepository extends Repository<TimeSlotsEntity> {
       .getOne();
   }
 
-  async finishCurrent(doctorId: number): Promise<UpdateResult> {
+  async doctorGetAllFuture(doctorId: number): Promise<TimeSlotsEntity[]> {
+    return this.createQueryBuilder('ts')
+      .leftJoinAndSelect('ts.workday', 'wd')
+      .leftJoinAndSelect('wd.doctor', 'doc')
+      .where('doc.id = :id', { id: doctorId })
+      .andWhere('ts.finished = false')
+      .andWhere('ts.status = false')
+      .leftJoinAndSelect('ts.patient', 'p')
+      .orderBy('wd.date', 'ASC')
+      .addOrderBy('ts.time', 'ASC')
+      .getMany();
+  }
+
+  async doctorFinishCurrent(doctorId: number): Promise<UpdateResult> {
     const id =
       (
         await this.createQueryBuilder('ts')
@@ -60,7 +86,6 @@ export class TimeSlotsRepository extends Repository<TimeSlotsEntity> {
           .andWhere('ts.status = true')
           .getOne()
       )?.id || null;
-    console.log(id);
 
     if (!id) {
       return null;
