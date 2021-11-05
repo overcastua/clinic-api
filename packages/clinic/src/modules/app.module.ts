@@ -3,7 +3,7 @@ import { Connection } from 'typeorm';
 import { ConfigurationModule } from '../app-configuration/configuration.module';
 import { jwtConstants, JwtStrategy } from '@repos/common';
 import { JwtModule } from '@nestjs/jwt';
-import { DoctorsModule } from './doctors/doctors.module';
+import { AppointmentsModule } from './appointments/appointments.module';
 
 @Module({
   imports: [
@@ -11,7 +11,7 @@ import { DoctorsModule } from './doctors/doctors.module';
       secret: jwtConstants.secret,
     }),
     ConfigurationModule,
-    DoctorsModule,
+    AppointmentsModule,
   ],
   providers: [JwtStrategy],
 })

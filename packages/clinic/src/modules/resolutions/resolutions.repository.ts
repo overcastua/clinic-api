@@ -1,4 +1,4 @@
-import { Repository, EntityRepository } from 'typeorm';
+import { Repository, EntityRepository, UpdateResult } from 'typeorm';
 import { UpdateResolutionDto } from '../patient/dto/update-resolution.dto';
 import { ResolutionsEntity } from './resolutions.entity';
 
@@ -24,11 +24,15 @@ export class ResolutionsRepository extends Repository<ResolutionsEntity> {
     await this.save(newResolution);
   }
 
-  async updateResolution(dto: UpdateResolutionDto): Promise<void> {
-    await this.createQueryBuilder()
+  async updateResolution(
+    dto: UpdateResolutionDto,
+    doctorId: number,
+  ): Promise<UpdateResult> {
+    return this.createQueryBuilder()
       .update()
       .set({ text: dto.text })
       .where('id = :id', { id: dto.resolutionId })
+      .andWhere('doctorId = :doc', { doc: doctorId })
       .execute();
   }
 }

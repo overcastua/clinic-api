@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { GoneException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateResolutionDto } from '../patient/dto/create-resolution.dto';
 import { TimeHelper } from '@repos/common';
@@ -36,7 +36,17 @@ export class ResolutionsService {
     return this.resolutionsRepository.createResolution(modDto);
   }
 
-  async updateResolution(dto: UpdateResolutionDto): Promise<void> {
-    await this.resolutionsRepository.updateResolution(dto);
+  async updateResolution(
+    dto: UpdateResolutionDto,
+    doctorId: number,
+  ): Promise<void> {
+    const result = await this.resolutionsRepository.updateResolution(
+      dto,
+      doctorId,
+    );
+
+    if (result.affected === 0) {
+      throw new GoneException('This resolution was previously deleted');
+    }
   }
 }

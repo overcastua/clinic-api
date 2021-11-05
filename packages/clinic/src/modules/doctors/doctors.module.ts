@@ -11,7 +11,6 @@ import { DoctorsService } from './doctors.service';
   imports: [
     TypeOrmModule.forFeature([DoctorsRepository]),
     SpecializationsModule,
-    AppointmentsModule,
     ResolutionsModule,
   ],
   providers: [DoctorsService],

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { DoctorsService } from '../doctors/doctors.service';
 import { ProfileService } from '../profile/profile.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { TimeSlotsEntity } from './slots/slots.entity';
@@ -14,13 +15,18 @@ export class AppointmentsService {
     private readonly repository: WorkdaysRepository,
     private readonly timeslotsService: TimeSlotsService,
     private readonly profileService: ProfileService,
+    private readonly doctorsService: DoctorsService,
   ) {}
 
   async patientGetAllAppointments(userId: number): Promise<TimeSlotsEntity[]> {
     return this.timeslotsService.patientGetAllAppointments(userId);
   }
 
-  async doctorGetClosest(doctorId: number): Promise<TimeSlotsEntity> {
+  async doctorGetClosest(userId: number): Promise<TimeSlotsEntity> {
+    const { id: doctorId } = await this.doctorsService.findDoctorByUserId(
+      userId,
+    );
+
     const closest = await this.timeslotsService.doctorGetClosest(doctorId);
     const patientUserId = closest?.patient.userId;
     if (patientUserId) {
@@ -31,9 +37,13 @@ export class AppointmentsService {
     return closest;
   }
 
-  async doctorGetAllFutureAppointmentsByDoctorId(
-    doctorId: number,
+  async doctorGetAllFutureAppointments(
+    userId: number,
   ): Promise<TimeSlotsEntity[]> {
+    const { id: doctorId } = await this.doctorsService.findDoctorByUserId(
+      userId,
+    );
+
     const all = await this.timeslotsService.doctorGetAllFuture(doctorId);
 
     const userIds = all.map((app: TimeSlotsEntity): number => {
@@ -63,7 +73,11 @@ export class AppointmentsService {
     return this.timeslotsService.add(dto, userId, doctorId);
   }
 
-  async doctorGetNext(doctorId: number): Promise<TimeSlotsEntity> {
+  async doctorGetNext(userId: number): Promise<TimeSlotsEntity> {
+    const { id: doctorId } = await this.doctorsService.findDoctorByUserId(
+      userId,
+    );
+
     return this.timeslotsService.doctorFinishCurrentAndGetClosest(doctorId);
   }
 
