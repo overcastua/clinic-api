@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateProfileDto } from '@repos/common';
+import { CreateProfileDto, UpdateProfileDto } from '@repos/common';
 import { ProfileEntity } from './profile.entity';
 import { ProfileRepository } from './profile.repository';
 
@@ -13,6 +13,10 @@ export class ProfileService {
 
   async create(dto: CreateProfileDto): Promise<void> {
     await this.profileRepository.add(dto);
+  }
+
+  async editOwnProfile(dto: UpdateProfileDto, userId: number): Promise<void> {
+    await this.profileRepository.updateProfile(dto, userId);
   }
 
   async getProfileByUserId(userId: number): Promise<ProfileEntity> {

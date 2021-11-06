@@ -1,11 +1,25 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { CreateProfileDto } from '@repos/common';
+import {
+  CreateProfileDto,
+  JwtAuthGuard,
+  UpdateProfileDto,
+} from '@repos/common';
 import { ProfileEntity } from './profile.entity';
 import { ProfileService } from './profile.service';
 
@@ -28,6 +42,21 @@ export class ProfileController {
   @Get('user/:id')
   async getProfileByUserId(@Param('id') id: string): Promise<ProfileEntity> {
     return this.profileService.getProfileByUserId(parseInt(id));
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  async getOwnProfile(@Req() req) {
+    return this.profileService.getProfileByUserId(req.user.userId);
+  }
+
+  @Put('me')
+  @UseGuards(JwtAuthGuard)
+  async editOwnProfile(
+    @Body() dto: UpdateProfileDto,
+    @Req() req,
+  ): Promise<void> {
+    return this.profileService.editOwnProfile(dto, req.user.userId);
   }
 
   @Get()
