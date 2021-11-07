@@ -4,7 +4,7 @@ import { PatientRepository } from './patient.repository';
 import { ResolutionsService } from '../resolutions/resolutions.service';
 import { NotFoundException } from '@nestjs/common';
 import { ResolutionsEntity } from '../resolutions/resolutions.entity';
-import { CreateResolutionDto } from './dto/create-resolution.dto';
+import { CreateResolutionDto } from '../resolutions/dto/create-resolution.dto';
 
 const reposMock = () => ({
   add: jest.fn(),

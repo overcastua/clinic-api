@@ -3,11 +3,11 @@ enum Gender {
   FEMALE = 'female',
 }
 export class UpdateProfileDto {
-  name: string;
+  readonly name: string;
 
-  gender: Gender;
+  readonly gender: Gender;
 
-  birthDate: Date;
+  readonly birthDate: Date;
 
   constructor(dto: any) {
     this.name = dto?.name;

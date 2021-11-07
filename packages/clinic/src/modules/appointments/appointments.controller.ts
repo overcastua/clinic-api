@@ -3,14 +3,20 @@ import {
   Controller,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard, Role, Roles, RolesGuard } from '@repos/common';
-import { DoctorIdDto } from '../doctors/validators/validate-id';
+import {
+  DateValidationPipe,
+  JwtAuthGuard,
+  Role,
+  Roles,
+  RolesGuard,
+} from '@repos/common';
 import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { TimeSlotsEntity } from './slots/slots.entity';
@@ -47,13 +53,18 @@ export class AppointmentsController {
 
   @Get('doctors/:doctorId/all')
   @Roles(Role.PATIENT)
-  async getAllAppointmentSlotsForDate(@Query() query, @Param() param) {
-    return this.service.getAllForDate(param.doctorId, query.date);
+  async getAllAppointmentSlotsForDate(
+    @Query('date', DateValidationPipe) date: Date,
+    @Param('doctorId', ParseIntPipe) doctorId: number,
+  ) {
+    return this.service.getAllForDate(doctorId, date);
   }
 
   @Get('doctors/:doctorId/days')
-  async getAllWorkdaysNext7days(@Param() param) {
-    return this.service.getAllWorkdaysNext7days(param.doctorId);
+  async getAllWorkdaysNext7days(
+    @Param('doctorId', ParseIntPipe) doctorId: number,
+  ) {
+    return this.service.getAllWorkdaysNext7days(doctorId);
   }
 
   @Post('doctors/:doctorId')
@@ -61,12 +72,8 @@ export class AppointmentsController {
   async setUpAppointment(
     @Body() dto: CreateAppointmentDto,
     @Req() req,
-    @Param() params: DoctorIdDto,
+    @Param('doctorId', ParseIntPipe) doctorId: number,
   ): Promise<void> {
-    return this.service.createAppointment(
-      dto,
-      parseInt(params.doctorId),
-      req.user.userId,
-    );
+    return this.service.createAppointment(dto, doctorId, req.user.userId);
   }
 }

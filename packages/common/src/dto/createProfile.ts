@@ -3,13 +3,13 @@ enum Gender {
   FEMALE = 'female',
 }
 export class CreateProfileDto {
-  name: string;
+  readonly name: string;
 
-  gender: Gender;
+  readonly gender: Gender;
 
-  birthDate: Date;
+  readonly birthDate: Date;
 
-  userId: number;
+  readonly userId: number;
 
   constructor(dto: any, userId: number) {
     this.name = dto?.name;

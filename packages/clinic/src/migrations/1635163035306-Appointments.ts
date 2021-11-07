@@ -9,8 +9,8 @@ export class Appointments1635163035306 implements MigrationInterface {
         (
           "id" SERIAL NOT NULL, 
           "time" character varying NOT NULL, 
-          "status" boolean NOT NULL DEFAULT true, 
-          "finished" boolean NOT NULL DEFAULT false, 
+          "isFree" boolean NOT NULL DEFAULT true, 
+          "isFinished" boolean NOT NULL DEFAULT false, 
           "patientId" integer, 
           "workdayId" integer NOT NULL,
           CONSTRAINT "PK_slots" PRIMARY KEY ("id")

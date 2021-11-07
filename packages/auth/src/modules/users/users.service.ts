@@ -33,13 +33,13 @@ export class UsersService {
     const saltRounds: number = this.config.get('salt');
     const hash: string = await bcrypt.hash(dto.password, saltRounds);
 
-    const dtoWithHash = { ...dto };
-    dtoWithHash.password = hash;
+    const dtoWithHashed = { ...dto };
+    dtoWithHashed.password = hash;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { email, password, ...rest } = dto;
 
-    const user: UsersEntity = await this.usersRepos.register(dtoWithHash);
+    const user: UsersEntity = await this.usersRepos.register(dtoWithHashed);
 
     const profileDto = new CreateProfileDto(rest, user.id);
 

@@ -2,8 +2,8 @@ import { IsDateString, IsNotEmpty } from 'class-validator';
 
 export class CreateAppointmentDto {
   @IsDateString()
-  date: Date;
+  readonly date: Date;
 
   @IsNotEmpty()
-  time: string;
+  readonly time: string;
 }

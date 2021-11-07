@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -18,6 +19,7 @@ import {
 import {
   CreateProfileDto,
   JwtAuthGuard,
+  ParseArrayOfNumbersPipe,
   UpdateProfileDto,
 } from '@repos/common';
 import { ProfileEntity } from './profile.entity';
@@ -40,8 +42,10 @@ export class ProfileController {
   }
 
   @Get('user/:id')
-  async getProfileByUserId(@Param('id') id: string): Promise<ProfileEntity> {
-    return this.profileService.getProfileByUserId(parseInt(id));
+  async getProfileByUserId(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ProfileEntity> {
+    return this.profileService.getProfileByUserId(id);
   }
 
   @Get('me')
@@ -60,7 +64,9 @@ export class ProfileController {
   }
 
   @Get()
-  async getProfileBatch(@Query('users') users: string) {
-    return this.profileService.getProfileBatch(JSON.parse(users));
+  async getProfileBatch(
+    @Query('users', ParseArrayOfNumbersPipe) users: number[],
+  ) {
+    return this.profileService.getProfileBatch(users);
   }
 }

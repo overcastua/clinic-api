@@ -14,7 +14,7 @@ export class TimeSlotsRepository extends Repository<TimeSlotsEntity> {
       .where('ts.patientId = :id', {
         id: patientId,
       })
-      .andWhere('ts.finished = false')
+      .andWhere('ts.isFinished = false')
       .getMany();
   }
 
@@ -23,8 +23,8 @@ export class TimeSlotsRepository extends Repository<TimeSlotsEntity> {
       .leftJoinAndSelect('ts.workday', 'wd')
       .leftJoinAndSelect('wd.doctor', 'doc')
       .where('doc.id = :id', { id: doctorId })
-      .andWhere('ts.finished = false')
-      .andWhere('ts.status = false')
+      .andWhere('ts.isFinished = false')
+      .andWhere('ts.isFree = false')
       .leftJoinAndSelect('ts.patient', 'p')
       .orderBy('wd.date', 'ASC')
       .addOrderBy('ts.time', 'ASC')
@@ -36,8 +36,8 @@ export class TimeSlotsRepository extends Repository<TimeSlotsEntity> {
       .leftJoinAndSelect('ts.workday', 'wd')
       .leftJoinAndSelect('wd.doctor', 'doc')
       .where('doc.id = :id', { id: doctorId })
-      .andWhere('ts.finished = false')
-      .andWhere('ts.status = false')
+      .andWhere('ts.isFinished = false')
+      .andWhere('ts.isFree = false')
       .leftJoinAndSelect('ts.patient', 'p')
       .orderBy('wd.date', 'ASC')
       .addOrderBy('ts.time', 'ASC')
@@ -51,8 +51,8 @@ export class TimeSlotsRepository extends Repository<TimeSlotsEntity> {
           .leftJoinAndSelect('ts.workday', 'wd')
           .leftJoinAndSelect('wd.doctor', 'doc')
           .where('doc.id = :id', { id: doctorId })
-          .andWhere('ts.finished = false')
-          .andWhere('ts.status = false')
+          .andWhere('ts.isFinished = false')
+          .andWhere('ts.isFree = false')
           .leftJoinAndSelect('ts.patient', 'p')
           .orderBy('wd.date', 'ASC')
           .addOrderBy('ts.time', 'ASC')
@@ -65,7 +65,7 @@ export class TimeSlotsRepository extends Repository<TimeSlotsEntity> {
 
     return this.createQueryBuilder()
       .update()
-      .set({ finished: true })
+      .set({ isFinished: true })
       .where('id = :id', { id })
       .execute();
   }
@@ -82,8 +82,8 @@ export class TimeSlotsRepository extends Repository<TimeSlotsEntity> {
           .where('wd.doctorId = :id', { id: doctorId })
           .andWhere('wd.date = :date', { date: dto.date })
           .andWhere('ts.time = :time', { time: dto.time })
-          .andWhere('ts.finished = false')
-          .andWhere('ts.status = true')
+          .andWhere('ts.isFinished = false')
+          .andWhere('ts.isFree = true')
           .getOne()
       )?.id || null;
 
@@ -93,7 +93,7 @@ export class TimeSlotsRepository extends Repository<TimeSlotsEntity> {
 
     return this.createQueryBuilder()
       .update()
-      .set({ patient, status: false })
+      .set({ patient, isFree: false })
       .where('id = :id', { id })
       .execute();
   }

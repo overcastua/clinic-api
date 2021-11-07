@@ -7,6 +7,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { DoctorEntity } from '../doctors/doctors.entity';
+import { CreateResolutionDto } from './dto/create-resolution.dto';
 
 @Entity('resolution', { schema: 'doctors' })
 export class ResolutionsEntity {
@@ -36,4 +37,13 @@ export class ResolutionsEntity {
     default: () => 'CURRENT_TIMESTAMP(6)',
   })
   public createdAt: Date;
+
+  constructor(dto?: CreateResolutionDto, ttl?: Date, doctor?: DoctorEntity) {
+    if (dto) {
+      this.patientId = dto.patientId;
+      this.text = dto.text;
+      this.expiresIn = ttl;
+      this.doctor = doctor;
+    }
+  }
 }

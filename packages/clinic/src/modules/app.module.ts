@@ -4,6 +4,7 @@ import { ConfigurationModule } from '../app-configuration/configuration.module';
 import { jwtConstants, JwtStrategy } from '@repos/common';
 import { JwtModule } from '@nestjs/jwt';
 import { AppointmentsModule } from './appointments/appointments.module';
+import { ResolutionsModule } from './resolutions/resolutions.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { AppointmentsModule } from './appointments/appointments.module';
     }),
     ConfigurationModule,
     AppointmentsModule,
+    ResolutionsModule,
   ],
   providers: [JwtStrategy],
 })

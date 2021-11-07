@@ -1,5 +1,12 @@
-import { Repository, EntityRepository, UpdateResult } from 'typeorm';
-import { UpdateResolutionDto } from '../patient/dto/update-resolution.dto';
+import {
+  Repository,
+  EntityRepository,
+  UpdateResult,
+  DeleteResult,
+} from 'typeorm';
+import { DoctorEntity } from '../doctors/doctors.entity';
+import { CreateResolutionDto } from './dto/create-resolution.dto';
+import { UpdateResolutionDto } from './dto/update-resolution.dto';
 import { ResolutionsEntity } from './resolutions.entity';
 
 @EntityRepository(ResolutionsEntity)
@@ -13,15 +20,14 @@ export class ResolutionsRepository extends Repository<ResolutionsEntity> {
       .getMany();
   }
 
-  async createResolution(dto: any): Promise<void> {
-    const newResolution = new ResolutionsEntity();
+  async createResolution(
+    dto: CreateResolutionDto,
+    ttl: Date,
+    doctor: DoctorEntity,
+  ): Promise<void> {
+    const resolution = new ResolutionsEntity(dto, ttl, doctor);
 
-    newResolution.patientId = dto.patientId;
-    newResolution.text = dto.text;
-    newResolution.expiresIn = dto.expiresIn;
-    newResolution.doctor = dto.doctor;
-
-    await this.save(newResolution);
+    await this.save(resolution);
   }
 
   async updateResolution(
@@ -33,6 +39,13 @@ export class ResolutionsRepository extends Repository<ResolutionsEntity> {
       .set({ text: dto.text })
       .where('id = :id', { id: dto.resolutionId })
       .andWhere('doctorId = :doc', { doc: doctorId })
+      .execute();
+  }
+  async deleteResolution(resId: number, docId: number): Promise<DeleteResult> {
+    return this.createQueryBuilder()
+      .delete()
+      .where('id = :id', { id: resId })
+      .andWhere('doctorId = :doc', { doc: docId })
       .execute();
   }
 }

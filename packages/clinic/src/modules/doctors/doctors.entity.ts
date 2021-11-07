@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { WorkdaysEntity } from '../appointments/workdays.entity';
 import { ResolutionsEntity } from '../resolutions/resolutions.entity';
-import { SpecializationEntity } from '../specializations/specializations.entity';
+import { SpecializationEntity } from './specializations/specializations.entity';
 
 @Entity('doctor', { schema: 'doctors' })
 export class DoctorEntity {

@@ -10,26 +10,26 @@ export class RegisterDto {
   @IsNotEmpty()
   @ApiProperty()
   @MinLength(3)
-  name: string;
+  readonly name: string;
 
   @IsNotEmpty()
   @ApiProperty()
-  birthDate: Date;
+  readonly birthDate: Date;
 
   @IsNotEmpty()
   @IsEnum(Gender)
   @ApiProperty({ enum: Gender })
-  gender: Gender;
+  readonly gender: Gender;
 
   @IsNotEmpty()
   @ApiProperty()
   @IsEmail()
-  email: string;
+  readonly email: string;
 
   @IsNotEmpty()
   @ApiProperty()
   @MinLength(4, {
     message: 'The password is too short',
   })
-  password: string;
+  readonly password: string;
 }

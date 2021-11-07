@@ -4,9 +4,9 @@ import { IsNotEmpty, IsNumberString } from 'class-validator';
 export class UpdateResolutionDto {
   @IsNotEmpty()
   @ApiProperty()
-  text: string;
+  readonly text: string;
 
   @IsNumberString()
   @ApiProperty()
-  resolutionId: number;
+  readonly resolutionId: number;
 }

@@ -6,16 +6,16 @@ export class LoginDto {
   @IsNotEmpty()
   @ApiProperty()
   @IsEmail()
-  email: string;
+  readonly email: string;
 
   @IsNotEmpty()
   @ApiProperty()
   @MinLength(4, {
     message: 'The password is too short',
   })
-  password: string;
+  readonly password: string;
 
   @IsEnum(Role)
   @ApiProperty({ enum: Role })
-  role: Role;
+  readonly role: Role;
 }

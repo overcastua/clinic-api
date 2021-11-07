@@ -17,8 +17,8 @@ export class TimeSlotsEntity {
   time: string;
 
   @Column({ default: true })
-  status: boolean;
+  isFree: boolean;
 
   @Column({ default: false })
-  finished: boolean;
+  isFinished: boolean;
 }

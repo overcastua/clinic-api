@@ -4,14 +4,14 @@ import { IsNotEmpty, IsNumberString } from 'class-validator';
 export class CreateResolutionDto {
   @IsNotEmpty()
   @ApiProperty()
-  text: string;
+  readonly text: string;
 
   @IsNumberString()
   @ApiProperty()
-  patientId: number;
+  readonly patientId: number;
 
   @IsNotEmpty()
   @ApiProperty()
   @IsNumberString()
-  expiresIn: number; // minutes
+  readonly expiresIn: number; // minutes
 }
