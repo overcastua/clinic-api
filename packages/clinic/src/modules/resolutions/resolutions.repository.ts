@@ -13,8 +13,8 @@ import { ResolutionsEntity } from './resolutions.entity';
 export class ResolutionsRepository extends Repository<ResolutionsEntity> {
   async getAllByPatientId(id: number): Promise<ResolutionsEntity[]> {
     return this.createQueryBuilder('res')
-      .leftJoinAndSelect('res.patient', 'p')
-      .leftJoinAndSelect('res.doctor', 'd')
+      .innerJoinAndSelect('res.patient', 'p')
+      .innerJoinAndSelect('res.doctor', 'd')
       .where('p.id = :id', { id })
       .andWhere('res.expiresIn > :now', { now: new Date() })
       .getMany();

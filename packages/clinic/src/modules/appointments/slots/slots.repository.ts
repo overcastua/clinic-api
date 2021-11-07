@@ -9,8 +9,8 @@ export class TimeSlotsRepository extends Repository<TimeSlotsEntity> {
     patientId: number,
   ): Promise<TimeSlotsEntity[]> {
     return await this.createQueryBuilder('ts')
-      .leftJoinAndSelect('ts.workday', 'wd')
-      .leftJoinAndSelect('wd.doctor', 'doc')
+      .innerJoinAndSelect('ts.workday', 'wd')
+      .innerJoinAndSelect('wd.doctor', 'doc')
       .where('ts.patientId = :id', {
         id: patientId,
       })
@@ -20,12 +20,12 @@ export class TimeSlotsRepository extends Repository<TimeSlotsEntity> {
 
   async doctorGetClosest(doctorId: number): Promise<TimeSlotsEntity> {
     return this.createQueryBuilder('ts')
-      .leftJoinAndSelect('ts.workday', 'wd')
-      .leftJoinAndSelect('wd.doctor', 'doc')
+      .innerJoinAndSelect('ts.workday', 'wd')
+      .innerJoinAndSelect('wd.doctor', 'doc')
       .where('doc.id = :id', { id: doctorId })
       .andWhere('ts.isFinished = false')
       .andWhere('ts.isFree = false')
-      .leftJoinAndSelect('ts.patient', 'p')
+      .innerJoinAndSelect('ts.patient', 'p')
       .orderBy('wd.date', 'ASC')
       .addOrderBy('ts.time', 'ASC')
       .getOne();
@@ -33,12 +33,12 @@ export class TimeSlotsRepository extends Repository<TimeSlotsEntity> {
 
   async doctorGetAllFuture(doctorId: number): Promise<TimeSlotsEntity[]> {
     return this.createQueryBuilder('ts')
-      .leftJoinAndSelect('ts.workday', 'wd')
-      .leftJoinAndSelect('wd.doctor', 'doc')
+      .innerJoinAndSelect('ts.workday', 'wd')
+      .innerJoinAndSelect('wd.doctor', 'doc')
       .where('doc.id = :id', { id: doctorId })
       .andWhere('ts.isFinished = false')
       .andWhere('ts.isFree = false')
-      .leftJoinAndSelect('ts.patient', 'p')
+      .innerJoinAndSelect('ts.patient', 'p')
       .orderBy('wd.date', 'ASC')
       .addOrderBy('ts.time', 'ASC')
       .getMany();
@@ -48,12 +48,12 @@ export class TimeSlotsRepository extends Repository<TimeSlotsEntity> {
     const id =
       (
         await this.createQueryBuilder('ts')
-          .leftJoinAndSelect('ts.workday', 'wd')
-          .leftJoinAndSelect('wd.doctor', 'doc')
+          .innerJoinAndSelect('ts.workday', 'wd')
+          .innerJoinAndSelect('wd.doctor', 'doc')
           .where('doc.id = :id', { id: doctorId })
           .andWhere('ts.isFinished = false')
           .andWhere('ts.isFree = false')
-          .leftJoinAndSelect('ts.patient', 'p')
+          .innerJoinAndSelect('ts.patient', 'p')
           .orderBy('wd.date', 'ASC')
           .addOrderBy('ts.time', 'ASC')
           .getOne()
@@ -78,7 +78,7 @@ export class TimeSlotsRepository extends Repository<TimeSlotsEntity> {
     const id =
       (
         await this.createQueryBuilder('ts')
-          .leftJoinAndSelect('ts.workday', 'wd')
+          .innerJoinAndSelect('ts.workday', 'wd')
           .where('wd.doctorId = :id', { id: doctorId })
           .andWhere('wd.date = :date', { date: dto.date })
           .andWhere('ts.time = :time', { time: dto.time })
@@ -103,7 +103,7 @@ export class TimeSlotsRepository extends Repository<TimeSlotsEntity> {
     date: Date,
   ): Promise<TimeSlotsEntity[]> {
     return this.createQueryBuilder('ts')
-      .leftJoinAndSelect('ts.workday', 'wd')
+      .innerJoinAndSelect('ts.workday', 'wd')
       .where('wd.doctorId = :id', { id: doctorId })
       .andWhere('wd.date = :date', { date: date })
       .orderBy('ts.time', 'ASC')

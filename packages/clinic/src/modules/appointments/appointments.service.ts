@@ -67,8 +67,8 @@ export class AppointmentsService {
 
   async createAppointment(
     dto: CreateAppointmentDto,
-    userId: number,
     doctorId: number,
+    userId: number,
   ): Promise<void> {
     return this.timeslotsService.add(dto, userId, doctorId);
   }
