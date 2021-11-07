@@ -1,10 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Gender } from '@repos/common';
 import { IsEmail, IsEnum, IsNotEmpty, MinLength } from 'class-validator';
-
-export enum Gender {
-  MALE = 'male',
-  FEMALE = 'female',
-}
 
 export class RegisterDto {
   @IsNotEmpty()

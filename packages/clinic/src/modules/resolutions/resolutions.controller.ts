@@ -15,6 +15,7 @@ import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiForbiddenResponse,
+  ApiGoneResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -57,6 +58,19 @@ export class ResolutionsController {
 
   @Patch()
   @Roles(Role.DOCTOR)
+  @ApiOperation({ summary: 'Update resolution for the patient' })
+  @ApiOkResponse({
+    description: 'Resolution was successfully updated',
+  })
+  @ApiBadRequestResponse({
+    description: 'Received data violates the predefined DTO schema',
+  })
+  @ApiGoneResponse({
+    description: 'Resolution was previously deleted',
+  })
+  @ApiForbiddenResponse({
+    description: 'You dont have permission to access the route',
+  })
   async updateResolution(
     @Body() dto: UpdateResolutionDto,
     @Req() req,
@@ -107,6 +121,14 @@ export class ResolutionsController {
 
   @Delete(':id')
   @Roles(Role.DOCTOR)
+  @ApiOperation({ summary: 'Delete a certain resolution of a certain patient' })
+  @ApiOkResponse({
+    description: 'The resolution was deleted',
+  })
+  @ApiForbiddenResponse({
+    description:
+      'You do not have permission to access the route or to delete the resolution',
+  })
   async deleteResolution(
     @Param('id', ParseIntPipe) resId: number,
     @Req() req,

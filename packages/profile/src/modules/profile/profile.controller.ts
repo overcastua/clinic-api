@@ -12,7 +12,10 @@ import {
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
@@ -42,6 +45,13 @@ export class ProfileController {
   }
 
   @Get('user/:id')
+  @ApiOperation({ summary: 'Get profile by userId' })
+  @ApiOkResponse({
+    description: 'Returns profile',
+  })
+  @ApiBadRequestResponse({
+    description: 'Received data violates the predefined schema',
+  })
   async getProfileByUserId(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<ProfileEntity> {
@@ -50,20 +60,45 @@ export class ProfileController {
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Get own profile' })
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    description: 'Returns profile',
+  })
+  @ApiBadRequestResponse({
+    description: 'Received data violates the predefined schema',
+  })
   async getOwnProfile(@Req() req) {
     return this.profileService.getProfileByUserId(req.user.userId);
   }
 
   @Put('me')
   @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Edit own profile' })
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    description: 'Profile was edited',
+  })
+  @ApiBadRequestResponse({
+    description: 'Received data violates the predefined schema',
+  })
+  @ApiNotFoundResponse({ description: 'Profile was not found' })
   async editOwnProfile(
     @Body() dto: UpdateProfileDto,
     @Req() req,
-  ): Promise<void> {
+  ): Promise<ProfileEntity> {
     return this.profileService.editOwnProfile(dto, req.user.userId);
   }
 
   @Get()
+  @ApiOperation({ summary: 'Get many profiles by userIds' })
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    description: 'Returns profiles array',
+  })
+  @ApiBadRequestResponse({
+    description: 'Received data violates the predefined schema',
+  })
   async getProfileBatch(
     @Query('users', ParseArrayOfNumbersPipe) users: number[],
   ) {
