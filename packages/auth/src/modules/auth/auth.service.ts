@@ -16,6 +16,8 @@ export class AuthService {
 
   async validateUser(email: string, password: string): Promise<any> {
     const user: UsersEntity = await this.usersService.findOne(email);
+    console.log(user);
+    console.log(password);
     if (user && (await bcrypt.compare(password, user.password))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...rest } = user;
@@ -26,6 +28,7 @@ export class AuthService {
 
   async login(email: string, role: Role): Promise<IAccessToken> {
     const user: UsersEntity = await this.usersService.findOne(email);
+    console.log(user);
     switch (role) {
       case Role.DOCTOR: {
         const payload = {

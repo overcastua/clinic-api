@@ -5,7 +5,10 @@ import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class ProfileService {
-  constructor(private axios: HttpService, private config: ConfigService) {}
+  constructor(
+    private readonly axios: HttpService,
+    private readonly config: ConfigService,
+  ) {}
 
   async getProfile(userId: number) {
     const getProfileURI =

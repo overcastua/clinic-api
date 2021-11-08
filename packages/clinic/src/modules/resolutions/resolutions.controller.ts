@@ -37,7 +37,7 @@ export class ResolutionsController {
 
   @Post()
   @Roles(Role.DOCTOR)
-  @ApiBearerAuth()
+  @ApiBearerAuth('JWT')
   @ApiOperation({ summary: 'Create a new resolution for the patient' })
   @ApiCreatedResponse({
     description: 'Resolution was successfully created',
@@ -60,7 +60,7 @@ export class ResolutionsController {
 
   @Patch(':id')
   @Roles(Role.DOCTOR)
-  @ApiBearerAuth()
+  @ApiBearerAuth('JWT')
   @ApiOperation({ summary: 'Update resolution' })
   @ApiOkResponse({
     description: 'Resolution was successfully updated',
@@ -84,7 +84,7 @@ export class ResolutionsController {
 
   @Get('me')
   @Roles(Role.PATIENT)
-  @ApiBearerAuth()
+  @ApiBearerAuth('JWT')
   @ApiOperation({ summary: 'Get own resolutions' })
   @ApiOkResponse({
     description:
@@ -107,7 +107,7 @@ export class ResolutionsController {
 
   @Get()
   @Roles(Role.DOCTOR)
-  @ApiBearerAuth()
+  @ApiBearerAuth('JWT')
   @ApiOperation({ summary: 'Get all the resolutions of a certain patient' })
   @ApiOkResponse({
     description: 'Returns all the resolutions for the patient',
@@ -127,7 +127,7 @@ export class ResolutionsController {
 
   @Delete(':id')
   @Roles(Role.DOCTOR)
-  @ApiBearerAuth()
+  @ApiBearerAuth('JWT')
   @ApiOperation({ summary: 'Delete a certain resolution of a certain patient' })
   @ApiOkResponse({
     description: 'The resolution was deleted',

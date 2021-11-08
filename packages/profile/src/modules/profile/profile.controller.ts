@@ -45,7 +45,7 @@ export class ProfileController {
   }
 
   @Get('user/:id')
-  @ApiBearerAuth()
+  @ApiBearerAuth('JWT')
   @ApiOperation({ summary: 'Get profile by userId' })
   @ApiOkResponse({
     description: 'Returns profile',
@@ -62,7 +62,7 @@ export class ProfileController {
   @Get('me')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get own profile' })
-  @ApiBearerAuth()
+  @ApiBearerAuth('JWT')
   @ApiOkResponse({
     description: 'Returns profile',
   })
@@ -76,7 +76,7 @@ export class ProfileController {
   @Put('me')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Edit own profile' })
-  @ApiBearerAuth()
+  @ApiBearerAuth('JWT')
   @ApiOkResponse({
     description: 'Profile was edited',
   })
@@ -93,7 +93,7 @@ export class ProfileController {
 
   @Get()
   @ApiOperation({ summary: 'Get many profiles by userIds' })
-  @ApiBearerAuth()
+  @ApiBearerAuth('JWT')
   @ApiOkResponse({
     description: 'Returns profiles array',
   })

@@ -19,7 +19,7 @@ export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
   @Post('password')
-  @ApiBearerAuth()
+  @ApiBearerAuth('JWT')
   @ApiOperation({ summary: "Change account's password" })
   @ApiCreatedResponse({
     description: 'Password was successfully changed',
@@ -39,6 +39,7 @@ export class UsersController {
     @Body() dto: ChangePasswordDto,
     @Req() req,
   ): Promise<void> {
+    console.log('here');
     return this.userService.changePassword(dto, req.user.userId);
   }
 }
