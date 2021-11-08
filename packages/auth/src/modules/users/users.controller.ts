@@ -39,7 +39,6 @@ export class UsersController {
     @Body() dto: ChangePasswordDto,
     @Req() req,
   ): Promise<void> {
-    console.log('here');
     return this.userService.changePassword(dto, req.user.userId);
   }
 }
