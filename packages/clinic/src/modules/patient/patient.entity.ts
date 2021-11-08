@@ -6,7 +6,7 @@ import {
   OneToMany,
   Column,
 } from 'typeorm';
-import { QueuePositionEntity } from '../queue/positions/queuePositions.entity';
+import { TimeSlotsEntity } from '../appointments/slots/slots.entity';
 
 @Entity('patient', { schema: 'patients' })
 export class PatientEntity {
@@ -16,8 +16,8 @@ export class PatientEntity {
   @Column({ unique: true })
   userId: number;
 
-  @OneToMany(() => QueuePositionEntity, (queue) => queue.patient)
-  positions: QueuePositionEntity[];
+  @OneToMany(() => TimeSlotsEntity, (wd) => wd.patient)
+  positions: TimeSlotsEntity[];
 
   @OneToMany(() => ResolutionsEntity, (resolution) => resolution.patient)
   resolutions: ResolutionsEntity[];

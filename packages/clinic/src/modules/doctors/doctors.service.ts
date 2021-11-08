@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { SpecializationEntity } from './specializations/specializations.entity';
+import { SpecializationsService } from './specializations/specializations.service';
 import { DoctorEntity } from './doctors.entity';
 import { DoctorsRepository } from './doctors.repository';
 
@@ -8,35 +10,8 @@ export class DoctorsService {
   constructor(
     @InjectRepository(DoctorsRepository)
     private readonly repository: DoctorsRepository,
+    private readonly specService: SpecializationsService,
   ) {}
-
-  async getDoctorsQueueIdByDoctorId(userId: number): Promise<number> {
-    const doctor: DoctorEntity = await this.repository.getDoctorByUserId(
-      userId,
-    );
-    const queueId = doctor?.queue?.id;
-
-    if (!queueId) {
-      throw new NotFoundException('QueueId was not found');
-    }
-
-    return queueId;
-  }
-
-  async getAllDoctorsOfCertainSpecialization(
-    specId: number,
-  ): Promise<DoctorEntity[]> {
-    const doctors: DoctorEntity[] =
-      await this.repository.getAllBySpecializationId(specId);
-
-    if (!doctors.length) {
-      throw new NotFoundException(
-        'There is no doctors with this specialization',
-      );
-    }
-
-    return doctors;
-  }
 
   async findDoctorByUserId(userId: number): Promise<DoctorEntity> {
     const doctor: DoctorEntity = await this.repository.findDoctorByUserId(
@@ -47,5 +22,9 @@ export class DoctorsService {
       throw new NotFoundException('Doctor with this userId does not exist');
 
     return doctor;
+  }
+
+  async getAllSpecializations(): Promise<SpecializationEntity[]> {
+    return this.specService.getAll();
   }
 }

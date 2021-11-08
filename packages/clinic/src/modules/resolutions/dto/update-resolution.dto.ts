@@ -1,13 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumberString } from 'class-validator';
 
-export class CreateResolutionDto {
+export class UpdateResolutionDto {
   @IsNotEmpty()
   @ApiProperty()
-  text: string;
+  readonly text: string;
 
-  @IsNotEmpty()
-  @ApiProperty()
   @IsNumberString()
-  expiresIn: number; // minutes
+  @ApiProperty()
+  readonly resolutionId: number;
 }

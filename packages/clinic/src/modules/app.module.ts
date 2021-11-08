@@ -1,13 +1,10 @@
 import { Module } from '@nestjs/common';
 import { Connection } from 'typeorm';
-import { QueueModule } from './queue/queue.module';
-import { PatientModule } from './patient/patient.module';
-import { ResolutionsModule } from './resolutions/resolutions.module';
 import { ConfigurationModule } from '../app-configuration/configuration.module';
-import { SpecializationsModule } from './specializations/specializations.module';
-import { DoctorsModule } from './doctors/doctors.module';
 import { jwtConstants, JwtStrategy } from '@repos/common';
 import { JwtModule } from '@nestjs/jwt';
+import { AppointmentsModule } from './appointments/appointments.module';
+import { ResolutionsModule } from './resolutions/resolutions.module';
 
 @Module({
   imports: [
@@ -15,11 +12,8 @@ import { JwtModule } from '@nestjs/jwt';
       secret: jwtConstants.secret,
     }),
     ConfigurationModule,
-    QueueModule,
-    PatientModule,
+    AppointmentsModule,
     ResolutionsModule,
-    SpecializationsModule,
-    DoctorsModule,
   ],
   providers: [JwtStrategy],
 })

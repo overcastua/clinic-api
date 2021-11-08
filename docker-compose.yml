@@ -17,6 +17,7 @@ services:
       - dbconn.env
     environment:
       APP_PORT: $CLINIC_PORT
+      PROFILE_URI: profile:$PROFILE_PORT
     depends_on:
       - database
     restart: always

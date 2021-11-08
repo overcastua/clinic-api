@@ -1,5 +1,5 @@
-import { CreateProfileDto } from '@repos/common';
-import { EntityRepository, Repository } from 'typeorm';
+import { CreateProfileDto, UpdateProfileDto } from '@repos/common';
+import { EntityRepository, Repository, UpdateResult } from 'typeorm';
 import { ProfileEntity } from './profile.entity';
 
 @EntityRepository(ProfileEntity)
@@ -11,5 +11,24 @@ export class ProfileRepository extends Repository<ProfileEntity> {
   }
   async findProfile(userId: number): Promise<ProfileEntity> {
     return this.findOne({ userId });
+  }
+
+  async updateProfile(
+    dto: UpdateProfileDto,
+    userId: number,
+  ): Promise<UpdateResult> {
+    return this.createQueryBuilder()
+      .update()
+      .set({ name: dto.name, gender: dto.gender, birthDate: dto.birthDate })
+      .where('userId = :userId', { userId })
+      .execute();
+  }
+
+  async findBatchByUserIds(users: number[]): Promise<ProfileEntity[]> {
+    return this.createQueryBuilder('p')
+      .where('p.userId IN (:...users)', {
+        users,
+      })
+      .getMany();
   }
 }

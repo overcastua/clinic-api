@@ -2,15 +2,13 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  OneToOne,
-  JoinColumn,
   ManyToOne,
   OneToMany,
   Column,
 } from 'typeorm';
-import { QueueEntity } from '../queue/queue.entity';
+import { WorkdaysEntity } from '../appointments/workdays.entity';
 import { ResolutionsEntity } from '../resolutions/resolutions.entity';
-import { SpecializationEntity } from '../specializations/specializations.entity';
+import { SpecializationEntity } from './specializations/specializations.entity';
 
 @Entity('doctor', { schema: 'doctors' })
 export class DoctorEntity {
@@ -23,9 +21,8 @@ export class DoctorEntity {
   @ManyToOne(() => SpecializationEntity, (p) => p.doctors)
   specialization: SpecializationEntity;
 
-  @OneToOne(() => QueueEntity)
-  @JoinColumn()
-  queue: QueueEntity;
+  @OneToMany(() => WorkdaysEntity, (wd) => wd.doctor)
+  workdays: WorkdaysEntity[];
 
   @OneToMany(() => ResolutionsEntity, (resolution) => resolution.doctor)
   resolutions: ResolutionsEntity[];

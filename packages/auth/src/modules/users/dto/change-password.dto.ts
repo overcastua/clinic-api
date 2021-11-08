@@ -7,12 +7,12 @@ export class ChangePasswordDto {
   @MinLength(4, {
     message: 'The password is too short',
   })
-  current: string;
+  readonly current: string;
 
   @IsNotEmpty()
   @ApiProperty()
   @MinLength(4, {
     message: 'The password is too short',
   })
-  new: string;
+  readonly new: string;
 }
