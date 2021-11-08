@@ -3,15 +3,25 @@ import { IsNotEmpty, IsNumberString } from 'class-validator';
 
 export class CreateResolutionDto {
   @IsNotEmpty()
-  @ApiProperty()
+  @ApiProperty({
+    example: 'Test resolution',
+    description: "Resolution's text",
+  })
   readonly text: string;
 
   @IsNumberString()
-  @ApiProperty()
+  @ApiProperty({
+    example: 1,
+    description: "Patient's id",
+  })
   readonly patientId: number;
 
   @IsNotEmpty()
-  @ApiProperty()
+  @ApiProperty({
+    example: 5,
+    description:
+      "The resolution won't be available after this amount of minutes",
+  })
   @IsNumberString()
-  readonly expiresIn: number; // minutes
+  readonly expiresIn: number;
 }

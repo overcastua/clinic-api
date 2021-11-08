@@ -17,7 +17,7 @@ export class DoctorsController {
   constructor(private readonly service: DoctorsService) {}
 
   @Get('specializations')
-  @ApiBearerAuth()
+  @ApiBearerAuth('JWT')
   @ApiOperation({ summary: 'Get all specializations' })
   @ApiOkResponse({
     description: 'Returns specializations list',

@@ -3,6 +3,9 @@ import { IsNotEmpty } from 'class-validator';
 
 export class UpdateResolutionDto {
   @IsNotEmpty()
-  @ApiProperty()
+  @ApiProperty({
+    example: 'Test resolution',
+    description: "Resolution's text",
+  })
   readonly text: string;
 }

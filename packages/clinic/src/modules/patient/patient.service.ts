@@ -19,8 +19,6 @@ export class PatientService {
     const patient: PatientEntity =
       await this.patientRepository.findPatientByUserId(userId);
 
-    console.log(userId);
-
     if (!patient) {
       throw new NotFoundException('Patient does not exist');
     }

@@ -21,7 +21,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import {
-  DateValidationPipe,
+  ParseDatePipe,
   JwtAuthGuard,
   Role,
   Roles,
@@ -33,7 +33,7 @@ import { TimeSlotsEntity } from './slots/slots.entity';
 
 @ApiTags('appointments')
 @Controller('appointments')
-@ApiBearerAuth()
+@ApiBearerAuth('JWT')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class AppointmentsController {
   constructor(private readonly service: AppointmentsService) {}
@@ -129,7 +129,7 @@ export class AppointmentsController {
     description: 'You dont have permission to access the route',
   })
   async getAllAppointmentSlotsForDate(
-    @Query('date', DateValidationPipe) date: Date,
+    @Query('date', ParseDatePipe) date: Date,
     @Param('doctorId', ParseIntPipe) doctorId: number,
   ) {
     return this.service.getAllForDate(doctorId, date);
