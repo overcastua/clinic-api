@@ -31,14 +31,15 @@ export class ResolutionsRepository extends Repository<ResolutionsEntity> {
   }
 
   async updateResolution(
+    resId: number,
     dto: UpdateResolutionDto,
     doctorId: number,
   ): Promise<UpdateResult> {
     return this.createQueryBuilder()
       .update()
       .set({ text: dto.text })
-      .where('id = :id', { id: dto.resolutionId })
-      .andWhere('doctorId = :doc', { doc: doctorId })
+      .where('id = :resId', { resId })
+      .andWhere('doctorId = :doctorId', { doctorId })
       .execute();
   }
   async deleteResolution(resId: number, docId: number): Promise<DeleteResult> {

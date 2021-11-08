@@ -45,6 +45,7 @@ export class ProfileController {
   }
 
   @Get('user/:id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get profile by userId' })
   @ApiOkResponse({
     description: 'Returns profile',
