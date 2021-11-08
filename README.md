@@ -52,3 +52,11 @@ docker exec -it {container-name} yarn migration:revert
 ![relations](/images/relations.png?raw=true)
 
 [Original diagram](https://dbdiagram.io/d/61671337940c4c4eec93f8b0)
+
+## Routes
+
+![auth](/images/auth.jpg?raw=true)
+
+![profile](/images/profile.jpg?raw=true)
+
+![clinic](/images/clinic.jpg?raw=true)

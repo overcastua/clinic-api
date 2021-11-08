@@ -46,11 +46,13 @@ export class ResolutionsService {
   }
 
   async updateResolution(
+    resId: number,
     dto: UpdateResolutionDto,
     userId: number,
   ): Promise<void> {
     const doctor = await this.doctorsService.findDoctorByUserId(userId);
     const result = await this.resolutionsRepository.updateResolution(
+      resId,
       dto,
       doctor.id,
     );
