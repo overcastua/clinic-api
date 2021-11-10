@@ -15,8 +15,6 @@ export class ClinicService {
   }
 
   async createPatient(userId: number): Promise<void> {
-    console.log({ userId });
     const response = await lastValueFrom(this.clinic.createPatient({ userId }));
-    return;
   }
 }

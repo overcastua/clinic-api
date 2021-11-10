@@ -8,14 +8,18 @@ import { ProfileService } from './profile.service';
 export class ProfileGRPCService {
   constructor(private readonly profileService: ProfileService) {}
   @GrpcMethod()
-  async getProfileByUserId(): Promise<ProfileEntity> {
-    return this.profileService.getProfileByUserId(1);
-  }
-
-  @GrpcMethod()
   async createProfile(dto: CreateProfileDto): Promise<IEmpty> {
     await this.profileService.create(dto);
     return {};
+  }
+
+  @GrpcMethod()
+  async getProfileByUserId({
+    userId,
+  }: {
+    userId: number;
+  }): Promise<ProfileEntity> {
+    return this.profileService.getProfileByUserId(userId);
   }
 
   @GrpcMethod()
@@ -23,7 +27,8 @@ export class ProfileGRPCService {
     users,
   }: {
     users: number[];
-  }): Promise<ProfileEntity[]> {
-    return this.profileService.getProfileBatch(users);
+  }): Promise<{ profiles: ProfileEntity[] }> {
+    const profiles = await this.profileService.getProfileBatch(users);
+    return { profiles };
   }
 }

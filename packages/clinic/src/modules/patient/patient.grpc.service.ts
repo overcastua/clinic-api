@@ -9,7 +9,6 @@ export class ClinicGRPCService {
 
   @GrpcMethod()
   async createPatient({ userId }: { userId: number }): Promise<IEmpty> {
-    console.log(userId);
     await this.patientService.create(userId);
     return {};
   }

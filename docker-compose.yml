@@ -17,7 +17,7 @@ services:
       - dbconn.env
     environment:
       APP_PORT: $CLINIC_PORT
-      PROFILE_GRPC_URL: profile:$PROFILE_PORT
+      PROFILE_GRPC_URL: $PROFILE_GRPC_URL
       CLINIC_GRPC_URL: $CLINIC_GRPC_URL
     depends_on:
       - database

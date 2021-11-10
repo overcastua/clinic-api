@@ -13,6 +13,11 @@ export interface IProfileEntity {
 
 export interface IProfileService {
   createProfile(request: CreateProfileDto): Observable<IEmpty>;
+}
+
+export interface IProfileServiceForClinic {
   getProfileByUserId(userId: { userId: number }): Observable<IProfileEntity>;
-  getProfileBatch(request: { users: number[] }): Observable<IProfileEntity[]>;
+  getProfileBatch(request: {
+    users: number[];
+  }): Observable<{ profiles: IProfileEntity[] }>;
 }
