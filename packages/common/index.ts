@@ -10,3 +10,7 @@ export * from './src/jwt.strategy';
 export * from './src/constants';
 export * from './src/pipes/parse-date.pipe';
 export * from './src/pipes/parse-array-of-numbers.pipe';
+export * from './src/grpc/configure-grpc';
+export * from './src/grpc/interfaces/profile-service';
+export * from './src/grpc/interfaces/clinic-service';
+export * from './src/grpc/interfaces/common';

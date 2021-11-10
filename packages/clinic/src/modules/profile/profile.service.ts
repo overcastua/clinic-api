@@ -1,35 +1,37 @@
-import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Client, ClientGrpc } from '@nestjs/microservices';
+import { configureGRPC, IProfileEntity, IProfileService } from '@repos/common';
 import { lastValueFrom } from 'rxjs';
 
 @Injectable()
-export class ProfileService {
-  constructor(
-    private readonly axios: HttpService,
-    private readonly config: ConfigService,
-  ) {}
+export class ProfileService implements OnModuleInit {
+  @Client(configureGRPC(process.env.PROFILE_GRPC_URL, 'profile'))
+  private readonly client: ClientGrpc;
 
-  async getProfile(userId: number) {
-    const getProfileURI =
-      'http://' +
-      this.config.get('URI.profile') +
-      '/' +
-      this.config.get('prefix') +
-      '/profiles/user/' +
-      userId;
+  private profile: IProfileService;
 
-    return (await lastValueFrom(this.axios.get(getProfileURI))).data;
+  onModuleInit() {
+    this.profile =
+      this.client.getService<IProfileService>('ProfileGRPCService');
   }
 
-  async getManyProfiles(users: number[]) {
-    const getProfilesURI =
-      'http://' +
-      this.config.get('URI.profile') +
-      '/' +
-      this.config.get('prefix') +
-      '/profiles?users=' +
-      JSON.stringify(users);
-    return (await lastValueFrom(this.axios.get(getProfilesURI))).data;
+  async getProfile(userId: number): Promise<IProfileEntity> {
+    try {
+      const res = await lastValueFrom(
+        this.profile.getProfileByUserId({ userId }),
+      );
+      console.log(res);
+
+      return res;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async getManyProfiles(users: number[]): Promise<IProfileEntity[]> {
+    const res = await lastValueFrom(this.profile.getProfileBatch({ users }));
+    console.log(res);
+
+    return res;
   }
 }

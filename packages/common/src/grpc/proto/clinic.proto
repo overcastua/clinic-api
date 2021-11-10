@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package clinic;
+
+message User {
+  int32 userId = 1;
+}
+
+message Empty {}
+
+service ClinicGRPCService {
+  rpc CreatePatient(User) returns (Empty) {}
+}

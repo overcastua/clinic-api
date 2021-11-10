@@ -9,4 +9,6 @@ export const envSchema = Joi.object({
   RUN_MIGRATIONS: Joi.boolean().required(),
   API_PREFIX: Joi.string().required(),
   APP_PORT: Joi.number().required(),
+  PROFILE_GRPC_URL: Joi.string().required(),
+  CLINIC_GRPC_URL: Joi.string().required(),
 });

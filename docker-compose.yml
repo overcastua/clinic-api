@@ -17,7 +17,8 @@ services:
       - dbconn.env
     environment:
       APP_PORT: $CLINIC_PORT
-      PROFILE_URI: profile:$PROFILE_PORT
+      PROFILE_GRPC_URL: profile:$PROFILE_PORT
+      CLINIC_GRPC_URL: $CLINIC_GRPC_URL
     depends_on:
       - database
     restart: always
@@ -38,8 +39,9 @@ services:
       - dbconn.env
     environment:
       APP_PORT: $AUTH_PORT
-      PROFILE_URI: profile:$PROFILE_PORT
-      CLINIC_URI: clinic:$CLINIC_PORT
+      PROFILE_GRPC_URL: $PROFILE_GRPC_URL
+      AUTH_GRPC_URL: $AUTH_GRPC_URL
+      CLINIC_GRPC_URL: $CLINIC_GRPC_URL
     depends_on:
       - database
     restart: always
@@ -60,6 +62,7 @@ services:
       - dbconn.env
     environment:
       APP_PORT: $PROFILE_PORT
+      PROFILE_GRPC_URL: $PROFILE_GRPC_URL
     depends_on:
       - database
     restart: always

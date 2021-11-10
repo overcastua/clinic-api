@@ -1,30 +1,13 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-  Post,
-  Put,
-  Query,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Put, Req, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
-  ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import {
-  CreateProfileDto,
-  JwtAuthGuard,
-  ParseArrayOfNumbersPipe,
-  UpdateProfileDto,
-} from '@repos/common';
+import { JwtAuthGuard, UpdateProfileDto } from '@repos/common';
 import { ProfileEntity } from './profile.entity';
 import { ProfileService } from './profile.service';
 
@@ -32,32 +15,6 @@ import { ProfileService } from './profile.service';
 @Controller('profiles')
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
-  @Post()
-  @ApiOperation({ summary: 'Create a new profile' })
-  @ApiCreatedResponse({
-    description: 'Profile was created successfully',
-  })
-  @ApiBadRequestResponse({
-    description: 'Received data violates the predefined DTO schema',
-  })
-  async create(@Body() dto: CreateProfileDto): Promise<void> {
-    return this.profileService.create(dto);
-  }
-
-  @Get('user/:id')
-  @ApiBearerAuth('JWT')
-  @ApiOperation({ summary: 'Get profile by userId' })
-  @ApiOkResponse({
-    description: 'Returns profile',
-  })
-  @ApiBadRequestResponse({
-    description: 'Received data violates the predefined schema',
-  })
-  async getProfileByUserId(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<ProfileEntity> {
-    return this.profileService.getProfileByUserId(id);
-  }
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
@@ -89,20 +46,5 @@ export class ProfileController {
     @Req() req,
   ): Promise<ProfileEntity> {
     return this.profileService.editOwnProfile(dto, req.user.userId);
-  }
-
-  @Get()
-  @ApiOperation({ summary: 'Get many profiles by userIds' })
-  @ApiBearerAuth('JWT')
-  @ApiOkResponse({
-    description: 'Returns profiles array',
-  })
-  @ApiBadRequestResponse({
-    description: 'Received data violates the predefined schema',
-  })
-  async getProfileBatch(
-    @Query('users', ParseArrayOfNumbersPipe) users: number[],
-  ) {
-    return this.profileService.getProfileBatch(users);
   }
 }
