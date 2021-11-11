@@ -23,6 +23,6 @@ export class ProfileService implements OnModuleInit {
     const response = await lastValueFrom(
       this.profile.createProfile(profileDto),
     );
-    return;
+    console.log(response);
   }
 }
