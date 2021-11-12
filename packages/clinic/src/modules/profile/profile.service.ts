@@ -1,7 +1,10 @@
+import { Metadata } from '@grpc/grpc-js';
 import { Injectable, OnModuleInit } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Client, ClientGrpc } from '@nestjs/microservices';
 import {
   configureGRPC,
+  formMetadata,
   IProfileEntity,
   IProfileServiceForClinic,
 } from '@repos/common';
@@ -9,6 +12,8 @@ import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class ProfileService implements OnModuleInit {
+  constructor(private readonly configService: ConfigService) {}
+
   @Client(configureGRPC(process.env.PROFILE_GRPC_URL, 'profile'))
   private readonly client: ClientGrpc;
 
@@ -20,16 +25,22 @@ export class ProfileService implements OnModuleInit {
   }
 
   async getProfile(userId: number): Promise<IProfileEntity> {
-    const res = await lastValueFrom(
-      this.profile.getProfileByUserId({ userId }),
+    const meta: Metadata = formMetadata.call(this);
+
+    const profile = await lastValueFrom(
+      this.profile.getProfileByUserId({ userId }, meta),
     );
 
-    return res;
+    return profile;
   }
 
   async getManyProfiles(users: number[]): Promise<IProfileEntity[]> {
-    const res = await lastValueFrom(this.profile.getProfileBatch({ users }));
+    const meta: Metadata = formMetadata.call(this);
 
-    return res.profiles;
+    const { profiles } = await lastValueFrom(
+      this.profile.getProfileBatch({ users }, meta),
+    );
+
+    return profiles;
   }
 }

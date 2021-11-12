@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Metadata, status } from '@grpc/grpc-js';
-import { Controller } from '@nestjs/common';
+import { Controller, UseGuards } from '@nestjs/common';
 import { GrpcMethod, RpcException } from '@nestjs/microservices';
-import { CreateProfileDto, IProfilesArray } from '@repos/common';
+import { CreateProfileDto, GrpcGuard, IProfilesArray } from '@repos/common';
 import { ProfileEntity } from './profile.entity';
 import { ProfileService } from './profile.service';
 
 @Controller('profile')
+@UseGuards(GrpcGuard)
 export class ProfileGRPCService {
   constructor(private readonly profileService: ProfileService) {}
   @GrpcMethod()

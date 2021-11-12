@@ -19,17 +19,17 @@ export interface IProfilesArray {
 export interface IProfileService {
   createProfile(
     request: CreateProfileDto,
-    metadata?: Metadata,
+    metadata: Metadata,
   ): Observable<IEmpty>;
 }
 
 export interface IProfileServiceForClinic {
   getProfileByUserId(
     userId: { userId: number },
-    metadata?: Metadata,
+    metadata: Metadata,
   ): Observable<IProfileEntity>;
   getProfileBatch(
     request: { users: number[] },
-    metadata?: Metadata,
+    metadata: Metadata,
   ): Observable<IProfilesArray>;
 }

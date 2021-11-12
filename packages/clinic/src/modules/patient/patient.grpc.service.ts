@@ -1,8 +1,10 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UseGuards } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
+import { GrpcGuard } from '@repos/common';
 import { PatientService } from './patient.service';
 
 @Controller('patient')
+@UseGuards(GrpcGuard)
 export class ClinicGRPCService {
   constructor(private readonly patientService: PatientService) {}
 
