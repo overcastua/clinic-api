@@ -1,14 +1,7 @@
 import { Metadata } from '@grpc/grpc-js';
-import { InternalServerErrorException } from '@nestjs/common';
 
-export function formMetadata(): Metadata {
-  if (!this.configService) {
-    throw new InternalServerErrorException(
-      `${this.constructor.name} class does not have configService provided.`,
-    );
-  }
-
+export function formMetadata(token: string): Metadata {
   const metadata = new Metadata();
-  metadata.set('token', this.configService.get('jwt.secret'));
+  metadata.set('token', token);
   return metadata;
 }

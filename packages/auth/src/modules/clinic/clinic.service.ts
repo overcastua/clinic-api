@@ -19,7 +19,7 @@ export class ClinicService implements OnModuleInit {
   }
 
   async createPatient(userId: number): Promise<void> {
-    const meta: Metadata = formMetadata.call(this);
+    const meta: Metadata = formMetadata(this.configService.get('jwt.secret'));
 
     const response = await lastValueFrom(
       this.clinic.createPatient({ userId }, meta),

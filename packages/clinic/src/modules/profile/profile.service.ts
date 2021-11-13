@@ -25,7 +25,7 @@ export class ProfileService implements OnModuleInit {
   }
 
   async getProfile(userId: number): Promise<IProfileEntity> {
-    const meta: Metadata = formMetadata.call(this);
+    const meta: Metadata = formMetadata(this.configService.get('jwt.secret'));
 
     const profile = await lastValueFrom(
       this.profile.getProfileByUserId({ userId }, meta),
@@ -35,7 +35,7 @@ export class ProfileService implements OnModuleInit {
   }
 
   async getManyProfiles(users: number[]): Promise<IProfileEntity[]> {
-    const meta: Metadata = formMetadata.call(this);
+    const meta: Metadata = formMetadata(this.configService.get('jwt.secret'));
 
     const { profiles } = await lastValueFrom(
       this.profile.getProfileBatch({ users }, meta),

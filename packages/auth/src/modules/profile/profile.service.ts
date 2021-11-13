@@ -25,7 +25,7 @@ export class ProfileService implements OnModuleInit {
   }
 
   async createProfile(profileDto: CreateProfileDto): Promise<void> {
-    const meta: Metadata = formMetadata.call(this);
+    const meta: Metadata = formMetadata(this.configService.get('jwt.secret'));
 
     const response = await lastValueFrom(
       this.profile.createProfile(profileDto, meta),
