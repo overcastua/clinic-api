@@ -12,7 +12,7 @@
     "compose:down": "docker-compose down -v",
     "compose:rebuild": "docker-compose down -v && docker-compose up --build",
     "docker:clear": "docker volume prune -f && docker image prune -f && docker container prune -f",
-    "test": "cd packages/auth && yarn test && cd../clinic && yarn test"
+    "test": "cd packages/auth && yarn test && cd ../clinic && yarn test"
   },
   "workspaces": {
     "packages": [

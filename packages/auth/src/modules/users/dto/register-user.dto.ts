@@ -50,4 +50,13 @@ export class RegisterDto {
     message: 'The password is too short',
   })
   readonly password: string;
+  constructor(readonly dto?) {
+    if (dto) {
+      this.password = dto.password;
+      this.name = dto.name;
+      this.email = dto.email;
+      this.gender = dto.gender;
+      this.birthDate = dto.birthDate;
+    }
+  }
 }

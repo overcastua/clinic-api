@@ -5,17 +5,19 @@ export class PatientsSeeding1635163035321 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-    INSERT INTO "patients"."patient"("userId") VALUES 
-        (1),
-        (5);
-    `);
+    INSERT INTO "patients"."patient"("userId")
+    SELECT 
+        userId
+    FROM 
+        generate_series(1,1000000) AS y(userId)
+  `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
     DELETE FROM 
       "patients"."patient"
-    WHERE id in (SELECT id FROM "patients"."patient" order by id asc limit 2)
+    WHERE id in (SELECT id FROM "patients"."patient" order by id asc limit 1000000)
     `);
   }
 }

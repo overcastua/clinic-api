@@ -54,9 +54,9 @@ export class UsersService {
   async changePassword(dto: ChangePasswordDto, userId: number): Promise<void> {
     const user: UsersEntity = await this.usersRepos.findUserById(userId);
 
-    if (!user) {
-      throw new NotFoundException('User with the given id not found');
-    }
+    // if (!user) {
+    //   throw new NotFoundException('User with the given id not found');
+    // }
 
     if (dto.current === dto.new) {
       throw new ForbiddenException(
