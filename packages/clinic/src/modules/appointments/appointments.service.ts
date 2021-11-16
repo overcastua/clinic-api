@@ -46,9 +46,13 @@ export class AppointmentsService {
 
     const all = await this.timeslotsService.doctorGetAllFuture(doctorId);
 
-    const userIds = all.map((app: TimeSlotsEntity): number => {
-      return app.patient.userId;
-    });
+    const userIds = [
+      ...new Set(
+        all.map((app: TimeSlotsEntity): number => {
+          return app.patient.userId;
+        }),
+      ),
+    ];
 
     const profiles = await this.profileService.getManyProfiles(userIds);
 

@@ -34,18 +34,29 @@ export class AppointmentsSeeding1635163035322 implements MigrationInterface {
       ('16:00', 7),
       ('15:00', 7);
     `);
+    await queryRunner.query(`
+    INSERT INTO 
+      "appointments"."slot"("time","workdayId", "isFree", "patientId")
+    SELECT 
+      '12:00' AS time,
+      1 AS workdayId,
+      false AS isFree,
+      patientId
+    FROM 
+      generate_series(1,1000000) AS y(patientId)
+    `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
     DELETE FROM 
       "appointments"."workday" 
-    WHERE id in (SELECT id FROM "appointments"."workday" order by id asc limit 10)
+    WHERE id in (SELECT id FROM "appointments"."workday" order by id asc limit 1000000)
     `);
     await queryRunner.query(`
     DELETE FROM 
       "appointments"."slot" 
-    WHERE id in (SELECT id FROM "appointments"."slot" order by id asc limit 10)
+    WHERE id in (SELECT id FROM "appointments"."slot" order by id asc limit 1000000)
     `);
   }
 }
