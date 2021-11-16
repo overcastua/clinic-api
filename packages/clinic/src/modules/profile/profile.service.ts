@@ -1,35 +1,46 @@
-import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Metadata } from '@grpc/grpc-js';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Client, ClientGrpc } from '@nestjs/microservices';
+import {
+  configureGRPC,
+  formMetadata,
+  IProfileEntity,
+  IProfileServiceForClinic,
+} from '@repos/common';
 import { lastValueFrom } from 'rxjs';
 
 @Injectable()
-export class ProfileService {
-  constructor(
-    private readonly axios: HttpService,
-    private readonly config: ConfigService,
-  ) {}
+export class ProfileService implements OnModuleInit {
+  constructor(private readonly configService: ConfigService) {}
 
-  async getProfile(userId: number) {
-    const getProfileURI =
-      'http://' +
-      this.config.get('URI.profile') +
-      '/' +
-      this.config.get('prefix') +
-      '/profiles/user/' +
-      userId;
+  @Client(configureGRPC(process.env.PROFILE_GRPC_URL, 'profile'))
+  private readonly client: ClientGrpc;
 
-    return (await lastValueFrom(this.axios.get(getProfileURI))).data;
+  private profile: IProfileServiceForClinic;
+
+  onModuleInit() {
+    this.profile =
+      this.client.getService<IProfileServiceForClinic>('ProfileGRPCService');
   }
 
-  async getManyProfiles(users: number[]) {
-    const getProfilesURI =
-      'http://' +
-      this.config.get('URI.profile') +
-      '/' +
-      this.config.get('prefix') +
-      '/profiles?users=' +
-      JSON.stringify(users);
-    return (await lastValueFrom(this.axios.get(getProfilesURI))).data;
+  async getProfile(userId: number): Promise<IProfileEntity> {
+    const meta: Metadata = formMetadata(this.configService.get('jwt.secret'));
+
+    const profile = await lastValueFrom(
+      this.profile.getProfileByUserId({ userId }, meta),
+    );
+
+    return profile;
+  }
+
+  async getManyProfiles(users: number[]): Promise<IProfileEntity[]> {
+    const meta: Metadata = formMetadata(this.configService.get('jwt.secret'));
+
+    const { profiles } = await lastValueFrom(
+      this.profile.getProfileBatch({ users }, meta),
+    );
+
+    return profiles;
   }
 }

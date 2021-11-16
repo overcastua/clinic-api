@@ -1,9 +1,10 @@
 export default () => ({
   port: parseInt(process.env.APP_PORT),
   prefix: process.env.API_PREFIX,
-  URI: {
-    clinic: process.env.CLINIC_URI,
-    profile: process.env.PROFILE_URI,
+  GRPC: {
+    clinic: process.env.CLINIC_GRPC_URL,
+    auth: process.env.AUTH_GRPC_URL,
+    profile: process.env.PROFILE_GRPC_URL,
   },
   database: {
     hostname: process.env.DB_HOSTNAME,

@@ -3,6 +3,8 @@ import { AppModule } from './modules/app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { configureGRPC } from '@repos/common';
+import { MicroserviceOptions } from '@nestjs/microservices';
 
 async function bootstrap() {
   const options = { cors: true };
@@ -25,6 +27,11 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('documentation', app, document);
+
+  const grpcConfig = configureGRPC(configuration.get('GRPC.clinic'), 'clinic');
+
+  app.connectMicroservice<MicroserviceOptions>(grpcConfig);
+  await app.startAllMicroservices();
 
   await app.listen(port, () => {
     console.log('Clinic service is listening on port ' + port);

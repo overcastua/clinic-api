@@ -1,3 +1,4 @@
+import { Metadata } from '@grpc/grpc-js';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateProfileDto, UpdateProfileDto } from '@repos/common';
@@ -29,6 +30,7 @@ export class ProfileService {
   }
 
   async getProfileByUserId(userId: number): Promise<ProfileEntity> {
+    Metadata;
     return this.profileRepository.findProfile(userId);
   }
 
