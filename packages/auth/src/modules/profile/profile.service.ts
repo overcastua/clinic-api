@@ -1,21 +1,16 @@
 import { Metadata } from '@grpc/grpc-js';
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Client, ClientGrpc } from '@nestjs/microservices';
-import {
-  configureGRPC,
-  CreateProfileDto,
-  formMetadata,
-  IProfileService,
-} from '@repos/common';
+import { ClientGrpc } from '@nestjs/microservices';
+import { CreateProfileDto, formMetadata, IProfileService } from '@repos/common';
 import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class ProfileService implements OnModuleInit {
-  constructor(private readonly configService: ConfigService) {}
-
-  @Client(configureGRPC(process.env.PROFILE_GRPC_URL, 'profile'))
-  private readonly client: ClientGrpc;
+  constructor(
+    private readonly configService: ConfigService,
+    @Inject('PROFILE_PACKAGE') private readonly client: ClientGrpc,
+  ) {}
 
   private profile: IProfileService;
 

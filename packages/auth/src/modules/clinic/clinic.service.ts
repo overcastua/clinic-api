@@ -1,16 +1,16 @@
 import { Metadata } from '@grpc/grpc-js';
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Client, ClientGrpc } from '@nestjs/microservices';
-import { configureGRPC, formMetadata, IClinicService } from '@repos/common';
+import { ClientGrpc } from '@nestjs/microservices';
+import { formMetadata, IClinicService } from '@repos/common';
 import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class ClinicService implements OnModuleInit {
-  constructor(private readonly configService: ConfigService) {}
-
-  @Client(configureGRPC(process.env.CLINIC_GRPC_URL, 'clinic'))
-  private readonly client: ClientGrpc;
+  constructor(
+    private readonly configService: ConfigService,
+    @Inject('CLINIC_PACKAGE') private readonly client: ClientGrpc,
+  ) {}
 
   private clinic: IClinicService;
 
