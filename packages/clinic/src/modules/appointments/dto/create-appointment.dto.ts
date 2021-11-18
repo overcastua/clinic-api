@@ -15,4 +15,10 @@ export class CreateAppointmentDto {
   })
   @IsNotEmpty()
   readonly time: string;
+  constructor(readonly dto?: { date: Date; time: string }) {
+    if (dto) {
+      this.date = dto.date;
+      this.time = dto.time;
+    }
+  }
 }

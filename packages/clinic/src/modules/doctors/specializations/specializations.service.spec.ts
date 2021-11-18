@@ -1,5 +1,4 @@
 import { Test } from '@nestjs/testing';
-import { NotFoundException } from '@nestjs/common';
 import { SpecializationsService } from './specializations.service';
 import { SpecializationsRepository } from './specializations.repository';
 import { DoctorsService } from '../doctors.service';
@@ -36,13 +35,14 @@ describe('SpecializationsService', () => {
     repository = module.get(SpecializationsRepository);
   });
 
-  // describe('testing getAllDoctorsOfCertainSpecialization()', () => {
-  //   it('should throw 404 error if specialization is not valid (does not exist)', async () => {
-  //     expect.assertions(1);
+  describe('testing getAll()', () => {
+    it('should return list of specializations', async () => {
+      expect.assertions(1);
+      const list = ['spec1', 'spec2', 'spec3', 'spec4', 'spec5'];
 
-  //     repository.findById.mockResolvedValue(undefined);
+      repository.findAll.mockResolvedValue(list);
 
-  //     expect(service.getAll()).rejects.toThrow(NotFoundException);
-  //   });
-  // });
+      expect(await service.getAll()).toBe(list);
+    });
+  });
 });

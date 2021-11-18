@@ -9,7 +9,7 @@ export class PatientsSeeding1635163035321 implements MigrationInterface {
     SELECT 
         userId
     FROM 
-        generate_series(1,1000000) AS y(userId)
+        generate_series(1,100) AS y(userId)
   `);
   }
 
@@ -17,7 +17,7 @@ export class PatientsSeeding1635163035321 implements MigrationInterface {
     await queryRunner.query(`
     DELETE FROM 
       "patients"."patient"
-    WHERE id in (SELECT id FROM "patients"."patient" order by id asc limit 1000000)
+    WHERE id in (SELECT id FROM "patients"."patient" order by id asc limit 100)
     `);
   }
 }

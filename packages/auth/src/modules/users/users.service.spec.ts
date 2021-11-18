@@ -8,6 +8,7 @@ import { UsersRepository } from './users.repository';
 import { UsersService } from './users.service';
 import * as bcrypt from 'bcrypt';
 import { ChangePasswordDto } from './dto/change-password.dto';
+import { Gender } from '@repos/common';
 
 const reposMock = () => ({
   findUser: jest.fn(),
@@ -66,7 +67,13 @@ describe('UsersService', () => {
   describe('testing register()', () => {
     it('should throw 409 if email is already taken', async () => {
       expect.assertions(1);
-      const data = { password: '1234', email: 'test@gmail.com' };
+      const data = {
+        password: '1234',
+        email: 'test@gmail.com',
+        name: 'a',
+        gender: Gender.MALE,
+        birthDate: new Date(),
+      };
 
       const payload = new RegisterDto(data);
 
@@ -78,7 +85,13 @@ describe('UsersService', () => {
     });
 
     it('should return nothing if payload is valid', async () => {
-      const data = { password: '1234', email: 'test@gmail.com' };
+      const data = {
+        password: '1234',
+        email: 'test@gmail.com',
+        name: 'a',
+        gender: Gender.MALE,
+        birthDate: new Date(),
+      };
 
       const payload = new RegisterDto(data);
 

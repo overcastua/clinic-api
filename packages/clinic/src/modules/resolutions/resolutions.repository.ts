@@ -17,6 +17,7 @@ export class ResolutionsRepository extends Repository<ResolutionsEntity> {
       .innerJoinAndSelect('res.doctor', 'd')
       .where('p.id = :id', { id })
       .andWhere('res.expiresIn > :now', { now: new Date() })
+      .limit(100)
       .getMany();
   }
 

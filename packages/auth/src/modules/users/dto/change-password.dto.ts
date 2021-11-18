@@ -22,7 +22,7 @@ export class ChangePasswordDto {
   })
   readonly new: string;
 
-  constructor(readonly dto?) {
+  constructor(readonly dto?: { current: string; new: string }) {
     if (dto) {
       this.current = dto.current;
       this.new = dto.new;

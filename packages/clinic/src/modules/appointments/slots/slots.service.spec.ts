@@ -4,6 +4,8 @@ import { PatientEntity } from '../../patient/patient.entity';
 import { TimeSlotsService } from './slots.service';
 import { TimeSlotsRepository } from './slots.repository';
 import { TimeSlotsEntity } from './slots.entity';
+import { NotFoundException } from '@nestjs/common';
+import { CreateAppointmentDto } from '../dto/create-appointment.dto';
 
 const reposMock = () => ({
   doctorGetAllFuture: jest.fn(),
@@ -24,7 +26,7 @@ data.isFinished = false;
 
 describe('PatientsService', () => {
   let service: TimeSlotsService;
-  // let patientService: PatientService;
+  let patientService: PatientService;
   let appointmentsRepository: any;
 
   beforeEach(async () => {
@@ -46,7 +48,7 @@ describe('PatientsService', () => {
 
     service = module.get(TimeSlotsService);
     appointmentsRepository = module.get(TimeSlotsRepository);
-    // patientService = module.get(PatientService);
+    patientService = module.get(PatientService);
   });
 
   describe('testing doctorGetClosest()', () => {
@@ -59,39 +61,56 @@ describe('PatientsService', () => {
       expect(res).toBe(data);
     });
 
-    //   it('should throw a 404 error if the queue is empty', async () => {
-    //     expect.assertions(1);
+    it('should throw a 404 error if there is no future appointments', async () => {
+      expect.assertions(1);
 
-    //     appointmentsRepository.getFirst.mockResolvedValue(undefined);
+      appointmentsRepository.doctorGetClosest.mockResolvedValue(undefined);
 
-    //     expect(service.getIdOfFirst(queueId)).rejects.toThrow(NotFoundException);
-    //   });
-    // });
+      expect(service.doctorGetClosest(1)).rejects.toThrow(NotFoundException);
+    });
+  });
 
-    // describe('testing deleteCurrentAndGetNewFirst()', () => {
-    //   it('should return the id of the next patient in the queue', async () => {
-    //     expect.assertions(1);
-    //     appointmentsRepository.getFirst.mockResolvedValue(data);
+  describe('testing doctorFinishCurrentAndGetClosest()', () => {
+    it('should return the next closest appointment', async () => {
+      expect.assertions(1);
 
-    //     const res = await service.getIdOfFirst(queueId);
+      const newData = data;
+      newData.patient.id = 2;
+      appointmentsRepository.doctorFinishCurrent.mockResolvedValue(data);
+      appointmentsRepository.doctorGetClosest.mockResolvedValue(newData);
 
-    //     expect(res).toBe(id);
-    //   });
-    // });
+      const res = await service.doctorFinishCurrentAndGetClosest(1);
 
-    // describe('testing add()', () => {
-    //   it('should put the given patients id to the queue', async () => {
-    //     const addMethod = jest.spyOn(appointmentsRepository, 'add');
-    //     const patient = new PatientEntity(1);
-    //     const queue = new WorkdaysEntity();
-    //     (patientService.findPatientByUserId as jest.Mock).mockResolvedValue(
-    //       patient,
-    //     );
+      expect(res).toBe(newData);
+    });
+  });
 
-    //     await service.add(queue, 1);
+  describe('testing add()', () => {
+    it('should create an appointment for the given patient with the given doctor', async () => {
+      const patient = new PatientEntity(1);
+      const dto = new CreateAppointmentDto({ date: new Date(), time: '12:00' });
 
-    //     expect(addMethod).toHaveBeenCalledTimes(1);
-    //     expect(addMethod).toHaveBeenCalledWith(queue, patient);
-    //   });
+      const setUpMethod = jest.spyOn(appointmentsRepository, 'setUp');
+      (patientService.findPatientByUserId as jest.Mock).mockResolvedValue(
+        patient,
+      );
+      appointmentsRepository.setUp.mockResolvedValue({ isFree: false });
+
+      await service.add(dto, 1, 1);
+
+      expect(setUpMethod).toHaveBeenCalledTimes(1);
+      expect(setUpMethod).toHaveBeenCalledWith(dto, patient, 1);
+    });
+
+    it('should throw NotFoundException if there is no free slot for this time or date', async () => {
+      const patient = new PatientEntity(1);
+      const dto = new CreateAppointmentDto({ date: new Date(), time: '12:00' });
+
+      (patientService.findPatientByUserId as jest.Mock).mockResolvedValue(
+        patient,
+      );
+
+      expect(service.add(dto, 1, 1)).rejects.toThrow(NotFoundException);
+    });
   });
 });
