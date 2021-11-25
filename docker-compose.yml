@@ -3,7 +3,7 @@ version: '3.8'
 services:
   clinic:
     container_name: clinic
-    profiles: ['clinic']
+    profiles: ['clinic', 'full']
     build:
       context: .
       dockerfile: ./packages/clinic/Dockerfile
@@ -26,7 +26,7 @@ services:
 
   auth:
     container_name: auth
-    profiles: ['auth']
+    profiles: ['auth', 'full']
     build:
       context: .
       dockerfile: ./packages/auth/Dockerfile
@@ -50,7 +50,7 @@ services:
 
   profile:
     container_name: profile
-    profiles: ['profile']
+    profiles: ['profile', 'full']
     build:
       context: .
       dockerfile: ./packages/profile/Dockerfile
@@ -72,7 +72,7 @@ services:
 
   database:
     container_name: db
-    profiles: ['auth', 'profile', 'clinic']
+    profiles: ['auth', 'profile', 'clinic', 'full']
     image: postgres:11.2-alpine
     restart: always
     env_file:

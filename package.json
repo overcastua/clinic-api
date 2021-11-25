@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "compose:up": "docker-compose up",
+    "compose:up": "docker-compose --profile full up",
     "compose:det": "docker-compose up -d",
     "compose:down": "docker-compose down -v",
     "compose:rebuild": "docker-compose down -v && docker-compose up --build",
