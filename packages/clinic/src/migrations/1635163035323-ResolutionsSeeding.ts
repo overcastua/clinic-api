@@ -16,7 +16,7 @@ export class ResolutionsSeeding1635163035323 implements MigrationInterface {
         END patientId,
         2 as doctorId
       FROM 
-        generate_series(1,1000000) AS y(num)
+        generate_series(1,100) AS y(num)
         `,
     );
   }
@@ -25,7 +25,7 @@ export class ResolutionsSeeding1635163035323 implements MigrationInterface {
     await queryRunner.query(`
     DELETE FROM 
       "doctors"."resolution" 
-    WHERE id in (SELECT id FROM "doctors"."resolution" order by id asc limit 1000000)
+    WHERE id in (SELECT id FROM "doctors"."resolution" order by id asc limit 100)
     `);
   }
 }

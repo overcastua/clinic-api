@@ -3,6 +3,7 @@ version: '3.8'
 services:
   clinic:
     container_name: clinic
+    profiles: ['clinic']
     build:
       context: .
       dockerfile: ./packages/clinic/Dockerfile
@@ -25,6 +26,7 @@ services:
 
   auth:
     container_name: auth
+    profiles: ['auth']
     build:
       context: .
       dockerfile: ./packages/auth/Dockerfile
@@ -48,6 +50,7 @@ services:
 
   profile:
     container_name: profile
+    profiles: ['profile']
     build:
       context: .
       dockerfile: ./packages/profile/Dockerfile
@@ -69,6 +72,7 @@ services:
 
   database:
     container_name: db
+    profiles: ['auth', 'profile', 'clinic']
     image: postgres:11.2-alpine
     restart: always
     env_file:
@@ -76,14 +80,14 @@ services:
     ports:
       - 5432:5432
 
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
-    depends_on:
-      - database
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-      PGADMIN_LISTEN_PORT: 5050
-    ports:
-      - 5050:5050
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   container_name: pgadmin
+  #   depends_on:
+  #     - database
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: admin@admin.com
+  #     PGADMIN_DEFAULT_PASSWORD: admin
+  #     PGADMIN_LISTEN_PORT: 5050
+  #   ports:
+  #     - 5050:5050
