@@ -13,6 +13,7 @@ services:
       - /app/packages/clinic/dist/
     ports:
       - $CLINIC_PORT:$CLINIC_PORT
+      - 9090:9090
     env_file:
       - config.env
       - dbconn.env
@@ -36,6 +37,7 @@ services:
       - /app/packages/auth/dist
     ports:
       - $AUTH_PORT:$AUTH_PORT
+      - 9090:9090
     env_file:
       - config.env
       - dbconn.env
@@ -60,6 +62,7 @@ services:
       - /app/packages/profile/dist
     ports:
       - $PROFILE_PORT:$PROFILE_PORT
+      - 9090:9090
     env_file:
       - config.env
       - dbconn.env
