@@ -3,6 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants, JwtStrategy } from '@repos/common';
 import { Connection } from 'typeorm';
 import { ConfigurationModule } from '../app-configuration/configuration.module';
+import { MaintenanceModule } from './maintenance/maintenance.module';
 import { ProfileModule } from './profile/profile.module';
 
 @Module({
@@ -12,6 +13,7 @@ import { ProfileModule } from './profile/profile.module';
     }),
     ConfigurationModule,
     ProfileModule,
+    MaintenanceModule,
   ],
   providers: [JwtStrategy],
 })
