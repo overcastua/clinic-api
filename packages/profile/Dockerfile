@@ -2,7 +2,9 @@ FROM node:16-alpine
 
 WORKDIR /app
 
-COPY ./package.json .
+COPY ./package.json ./
+COPY ./aws.json ./
+
 COPY ./packages/profile ./packages/profile
 COPY ./packages/common ./packages/common
 

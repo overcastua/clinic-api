@@ -16,10 +16,23 @@ export class ProfileRepository extends Repository<ProfileEntity> {
   async updateProfile(
     dto: UpdateProfileDto,
     userId: number,
+    link?: string,
   ): Promise<UpdateResult> {
+    if (link) {
+      return this.createQueryBuilder()
+        .update()
+        .set({
+          name: dto.name,
+          gender: dto.gender,
+          birthDate: dto.birthDate,
+          image: link,
+        })
+        .where('userId = :userId', { userId })
+        .execute();
+    }
     return this.createQueryBuilder()
       .update()
-      .set({ name: dto.name, gender: dto.gender, birthDate: dto.birthDate })
+      .set(dto)
       .where('userId = :userId', { userId })
       .execute();
   }

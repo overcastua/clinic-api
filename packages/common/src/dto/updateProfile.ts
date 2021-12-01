@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, Matches, MinLength } from 'class-validator';
+import {
+  IsDateString,
+  IsEnum,
+  IsOptional,
+  Matches,
+  MinLength,
+} from 'class-validator';
 import { Gender } from '../constants';
 
 export class UpdateProfileDto {
@@ -20,6 +26,13 @@ export class UpdateProfileDto {
   readonly gender: Gender;
 
   @ApiProperty({
+    description: 'Base64 formatted representation of profile picture',
+  })
+  @IsOptional()
+  readonly image: string;
+
+  @IsDateString()
+  @ApiProperty({
     example: 'Sun Feb 01 1998 00:00:00 GMT+0000 (GMT)',
     description: "Person's birth date",
   })
@@ -29,5 +42,8 @@ export class UpdateProfileDto {
     this.name = dto?.name;
     this.gender = dto?.gender;
     this.birthDate = dto?.birthDate;
+    if (dto?.image) {
+      this.image = dto.image;
+    }
   }
 }

@@ -5,6 +5,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { MicroserviceOptions } from '@nestjs/microservices';
 import { configureGRPC } from '@repos/common';
+import { json, urlencoded } from 'express';
 
 async function bootstrap() {
   const options = { cors: true };
@@ -13,6 +14,8 @@ async function bootstrap() {
   const port = configuration.get('port');
 
   app.setGlobalPrefix(configuration.get('prefix'));
+  app.use(json({ limit: '50mb' }));
+  app.use(urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }));
   app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()

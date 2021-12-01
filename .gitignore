@@ -16,7 +16,7 @@ lerna-debug.log*
 .DS_Store
 
 # Sensitive information
-#.env
+aws.json
 
 # Tests
 /coverage

@@ -16,3 +16,4 @@ export * from './src/grpc/interfaces/profile-service';
 export * from './src/grpc/interfaces/clinic-service';
 export * from './src/grpc/interfaces/common';
 export * from './src/grpc/form-meta';
+export * from './src/aws/aws';
