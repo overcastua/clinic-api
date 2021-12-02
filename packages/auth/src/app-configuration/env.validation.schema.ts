@@ -14,4 +14,5 @@ export const envSchema = Joi.object({
   CLINIC_GRPC_URL: Joi.string().required(),
   AUTH_GRPC_URL: Joi.string().required(),
   PROFILE_GRPC_URL: Joi.string().required(),
+  NODE_ENV: Joi.string().required(),
 });

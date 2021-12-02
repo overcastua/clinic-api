@@ -1,5 +1,6 @@
 export default () => ({
   port: parseInt(process.env.APP_PORT),
+  mode: process.env.NODE_ENV,
   prefix: process.env.API_PREFIX,
   GRPC: {
     profile: process.env.PROFILE_GRPC_URL,

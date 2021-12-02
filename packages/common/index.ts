@@ -1,6 +1,7 @@
 export * from './src/db-connection/config';
 export * from './src/utils/enumHelper';
 export * from './src/utils/timeHelper';
+export * from './src/utils/logger';
 export * from './src/dto/createProfile';
 export * from './src/dto/updateProfile';
 export { Roles } from './src/decorators/users.roles.decorator';

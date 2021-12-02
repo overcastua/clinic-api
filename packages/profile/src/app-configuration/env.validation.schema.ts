@@ -11,4 +11,5 @@ export const envSchema = Joi.object({
   API_PREFIX: Joi.string().required(),
   APP_PORT: Joi.number().required(),
   PROFILE_GRPC_URL: Joi.string().required(),
+  NODE_ENV: Joi.string().required(),
 });
