@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { ClientProxyFactory } from '@nestjs/microservices';
-import { configureGRPC } from '@repos/common';
+import { configureGRPC, CustomConfigService } from '@repos/common';
 import { ProfileService } from './profile.service';
 
 @Module({
@@ -9,12 +8,12 @@ import { ProfileService } from './profile.service';
     ProfileService,
     {
       provide: 'PROFILE_PACKAGE',
-      useFactory: (configService: ConfigService) => {
+      useFactory: (configService: CustomConfigService) => {
         return ClientProxyFactory.create(
-          configureGRPC(configService.get('GRPC.profile'), 'profile'),
+          configureGRPC(configService.get<string>('GRPC.profile'), 'profile'),
         );
       },
-      inject: [ConfigService],
+      inject: [CustomConfigService],
     },
   ],
   exports: [ProfileService],

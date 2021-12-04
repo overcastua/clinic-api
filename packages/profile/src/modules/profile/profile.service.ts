@@ -20,10 +20,10 @@ export class ProfileService {
     userId: number,
   ): Promise<ProfileEntity> {
     if (dto.image) {
-      const aws = AWSClient.getInstance();
+      const bucket = AWSClient.getS3Instance();
 
       const { id } = await this.getProfileByUserId(userId);
-      const link = await aws.putBase64AndGetURL(dto.image, id);
+      const link = await bucket.putBase64AndGetURL(dto.image, id);
 
       await this.profileRepository.updateProfile(dto, userId, link);
     } else {

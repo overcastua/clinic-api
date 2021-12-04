@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { ClientProxyFactory } from '@nestjs/microservices';
-import { configureGRPC } from '@repos/common';
+import { configureGRPC, CustomConfigService } from '@repos/common';
 import { ClinicService } from './clinic.service';
 
 @Module({
@@ -9,12 +8,12 @@ import { ClinicService } from './clinic.service';
     ClinicService,
     {
       provide: 'CLINIC_PACKAGE',
-      useFactory: (configService: ConfigService) => {
+      useFactory: (configService: CustomConfigService) => {
         return ClientProxyFactory.create(
-          configureGRPC(configService.get('GRPC.clinic'), 'clinic'),
+          configureGRPC(configService.get<string>('GRPC.clinic'), 'clinic'),
         );
       },
-      inject: [ConfigService],
+      inject: [CustomConfigService],
     },
   ],
   exports: [ClinicService],

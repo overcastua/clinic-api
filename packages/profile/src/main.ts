@@ -21,9 +21,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, options);
   const configuration = app.get(CustomConfigService);
   const port = configuration.get<number>('port');
-  const mode = configuration.get<string>('mode');
 
-  await logger.init(mode, 'profile');
+  await logger.init('dev', 'profile');
 
   app.setGlobalPrefix(configuration.get<string>('prefix'));
   app.use(json({ limit: '50mb' }));

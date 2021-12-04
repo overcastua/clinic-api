@@ -35,6 +35,11 @@ export class CustomConfigService {
       } else if (typeof copy[key] === 'string') {
         const getFromAndName = copy[key].split('->');
         if (getFromAndName[0] === 'ssm') {
+          if (objectIsEmpty(this._paramStoreParameters)) {
+            throw new Error(
+              'Error: No ssm data was fetched, nothing to assign',
+            );
+          }
           copy[key] = this._paramStoreParameters[getFromAndName[1]];
         } else if (getFromAndName[0] === 'env') {
           copy[key] = process.env[getFromAndName[1]];
@@ -54,6 +59,17 @@ export class CustomConfigService {
       .split('.')
       .reduce((o, i) => o[i], this._paramStoreParameters);
 
+    if (!value) {
+      throw new Error(
+        `Error: Unknown config parameter location '${key}', the value is undefined`,
+      );
+    }
+
     return isNaN(value) ? value : +value;
   }
+}
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+function objectIsEmpty(obj: object): boolean {
+  return Object.keys(obj).length === 0;
 }

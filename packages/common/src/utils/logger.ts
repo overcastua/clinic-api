@@ -1,12 +1,13 @@
 import { ConsoleLogger } from '@nestjs/common';
 import { CloudWatchLogs } from 'aws-sdk';
+import { CloudWatchLogsService } from 'src/aws/services/cloudWatch';
 import { AWSClient } from '../aws/aws';
 
 export class CloudWatchLogger extends ConsoleLogger {
   private nextSequenceToken: string;
   private service: string;
   private mode: string;
-  private aws: AWSClient;
+  private cwl: CloudWatchLogsService;
 
   constructor() {
     super();
@@ -14,11 +15,11 @@ export class CloudWatchLogger extends ConsoleLogger {
   }
 
   async init(mode: string, service: string) {
-    this.aws = AWSClient.getInstance();
+    this.cwl = AWSClient.getCloudWatchLogsInstance();
     this.mode = mode;
     this.service = service;
 
-    const res = await this.aws.cloudWatchDescribeLogStreams(this.service);
+    const res = await this.cwl.cloudWatchDescribeLogStreams(this.service);
     this.nextSequenceToken = res.logStreams[0]?.uploadSequenceToken;
   }
 
@@ -28,7 +29,7 @@ export class CloudWatchLogger extends ConsoleLogger {
       timestamp: new Date().getTime(),
     };
 
-    const res = await this.aws.cloudWatchPutLogEvents(
+    const res = await this.cwl.cloudWatchPutLogEvents(
       [event],
       this.service,
       this.mode,

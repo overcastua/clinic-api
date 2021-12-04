@@ -8,8 +8,8 @@ import config from './config';
 
 @Module({
   imports: [
-    CustomConfigModule.register({
-      awsParamStorePath: '/dev/',
+    CustomConfigModule.forRoot({
+      awsParamStorePaths: ['/dev/', '/profile/'],
       load: config,
     }),
     ConfigModule.forRoot({

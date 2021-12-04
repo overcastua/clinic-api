@@ -16,6 +16,7 @@ services:
     env_file:
       - config.env
       - dbconn.env
+      - local.env
     environment:
       APP_PORT: $CLINIC_PORT
     depends_on:
@@ -36,6 +37,7 @@ services:
       - $AUTH_PORT:$AUTH_PORT
     env_file:
       - config.env
+      - local.env
       - dbconn.env
     environment:
       APP_PORT: $AUTH_PORT
@@ -59,6 +61,7 @@ services:
     env_file:
       - config.env
       - dbconn.env
+      - local.env
     environment:
       APP_PORT: $PROFILE_PORT
     depends_on:

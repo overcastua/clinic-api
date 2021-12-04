@@ -10,7 +10,7 @@ import { ProfileService } from './profile.service';
       provide: 'PROFILE_PACKAGE',
       useFactory: (configService: CustomConfigService) => {
         return ClientProxyFactory.create(
-          configureGRPC(configService.get('GRPC.profile'), 'profile'),
+          configureGRPC(configService.get<string>('GRPC.profile'), 'profile'),
         );
       },
       inject: [CustomConfigService],

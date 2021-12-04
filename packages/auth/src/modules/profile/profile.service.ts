@@ -1,14 +1,18 @@
 import { Metadata } from '@grpc/grpc-js';
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { ClientGrpc } from '@nestjs/microservices';
-import { CreateProfileDto, formMetadata, IProfileService } from '@repos/common';
+import {
+  CreateProfileDto,
+  CustomConfigService,
+  formMetadata,
+  IProfileService,
+} from '@repos/common';
 import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class ProfileService implements OnModuleInit {
   constructor(
-    private readonly configService: ConfigService,
+    private readonly configService: CustomConfigService,
     @Inject('PROFILE_PACKAGE') private readonly client: ClientGrpc,
   ) {}
 
@@ -20,7 +24,9 @@ export class ProfileService implements OnModuleInit {
   }
 
   async createProfile(profileDto: CreateProfileDto): Promise<void> {
-    const meta: Metadata = formMetadata(this.configService.get('jwt.secret'));
+    const meta: Metadata = formMetadata(
+      this.configService.get<string>('jwt.secret'),
+    );
 
     const response = await lastValueFrom(
       this.profile.createProfile(profileDto, meta),

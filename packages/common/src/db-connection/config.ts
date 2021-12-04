@@ -1,6 +1,6 @@
 import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
-import { CustomConfigService } from '../aws/config/params.service';
-import { CustomConfigModule } from '../aws/config/params.module';
+import { CustomConfigService } from '../config/params.service';
+import { CustomConfigModule } from '../config/params.module';
 import { join } from 'path';
 
 export const TypeormAsyncConfiguration = (

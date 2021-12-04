@@ -2,23 +2,27 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './modules/app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { MicroserviceOptions } from '@nestjs/microservices';
-import { CloudWatchLogger, configureGRPC, AWSClient } from '@repos/common';
+import {
+  CloudWatchLogger,
+  configureGRPC,
+  AWSClient,
+  CustomConfigService,
+} from '@repos/common';
 
 async function bootstrap() {
+  AWSClient.instantiate();
+
   const logger = new CloudWatchLogger();
   const options = { cors: true, logger };
 
   const app = await NestFactory.create(AppModule, options);
-  const configuration = app.get(ConfigService);
-  const port = configuration.get('port');
-  const mode = configuration.get('mode');
+  const configuration = app.get(CustomConfigService);
+  const port = configuration.get<number>('port');
 
-  AWSClient.instantiate(mode);
-  await logger.init(mode, 'auth');
+  await logger.init('dev', 'auth');
 
-  app.setGlobalPrefix(configuration.get('prefix'));
+  app.setGlobalPrefix(configuration.get<string>('prefix'));
   app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()

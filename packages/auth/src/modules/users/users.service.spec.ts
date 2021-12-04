@@ -1,5 +1,4 @@
 import { ConflictException, ForbiddenException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import { ClinicService } from '../clinic/clinic.service';
 import { ProfileService } from '../profile/profile.service';
@@ -8,7 +7,7 @@ import { UsersRepository } from './users.repository';
 import { UsersService } from './users.service';
 import * as bcrypt from 'bcrypt';
 import { ChangePasswordDto } from './dto/change-password.dto';
-import { Gender } from '@repos/common';
+import { CustomConfigService, Gender } from '@repos/common';
 
 const reposMock = () => ({
   findUser: jest.fn(),
@@ -20,14 +19,14 @@ const reposMock = () => ({
 describe('UsersService', () => {
   let service: UsersService;
   let userRepository: any;
-  let config: ConfigService;
+  let config: CustomConfigService;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [
         UsersService,
         {
-          provide: ConfigService,
+          provide: CustomConfigService,
           useValue: {
             get: jest.fn(),
           },
@@ -53,7 +52,7 @@ describe('UsersService', () => {
 
     service = module.get(UsersService);
     userRepository = module.get(UsersRepository);
-    config = module.get(ConfigService);
+    config = module.get(CustomConfigService);
 
     (config.get as jest.Mock).mockImplementation((variable: 'salt'): number => {
       const env = {

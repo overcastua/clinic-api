@@ -3,7 +3,6 @@ FROM node:16-alpine
 WORKDIR /app
 
 COPY ./package.json ./
-COPY ./aws.json ./
 
 COPY ./packages/clinic ./packages/clinic
 COPY ./packages/common ./packages/common

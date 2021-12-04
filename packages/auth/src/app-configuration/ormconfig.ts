@@ -1,5 +1,5 @@
-import { configureTypeorm } from '@repos/common';
+import { TypeormAsyncConfiguration } from '@repos/common';
 
-const connectionOptions = configureTypeorm(__dirname, process.env);
+const connectionOptions = TypeormAsyncConfiguration(__dirname);
 
 export = connectionOptions;

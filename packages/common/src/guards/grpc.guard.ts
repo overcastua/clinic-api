@@ -1,5 +1,5 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { CustomConfigService } from '../aws/config/params.service';
+import { CustomConfigService } from '../config/params.service';
 
 @Injectable()
 export class GrpcGuard implements CanActivate {
