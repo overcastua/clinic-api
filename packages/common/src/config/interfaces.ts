@@ -6,7 +6,7 @@ export interface ModuleOptions {
 }
 
 export interface ServiceOptions {
-  params?: ParameterList;
+  params: ParameterList;
   load?: () => Record<string, any>;
 }
 
