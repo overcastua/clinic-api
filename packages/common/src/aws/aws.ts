@@ -8,14 +8,8 @@ export class AWSClient {
   private static SSM: SSMService;
   private static instance: AWSClient;
 
-  private constructor(mode: string) {
-    if (mode === 'dev') {
-      config.loadFromPath(join(__dirname, '/../../../../../aws.json'));
-    } else if (mode !== 'prod') {
-      throw new Error(
-        `AWSClient ERROR: Wrong mode ${mode} declared; 'dev' or 'prod' expected.`,
-      );
-    }
+  private constructor() {
+    config.loadFromPath(join(__dirname, '/../../../../../aws.json'));
 
     this.S3 = new S3();
     this.CloudWatchLogs = new CloudWatchLogs();
@@ -40,9 +34,9 @@ export class AWSClient {
     return this.SSM;
   }
 
-  static instantiate(mode: string): void {
+  static instantiate(): void {
     if (!this.instance) {
-      this.instance = new AWSClient(mode);
+      this.instance = new AWSClient();
     } else {
       throw new Error('AWSClient ERROR: Service has already been instantiated');
     }

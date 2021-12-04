@@ -12,7 +12,7 @@ import {
 import { json, urlencoded } from 'express';
 
 async function bootstrap() {
-  AWSClient.instantiate('dev');
+  AWSClient.instantiate();
 
   const logger = new CloudWatchLogger();
 
