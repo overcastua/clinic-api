@@ -18,3 +18,6 @@ export * from './src/grpc/interfaces/clinic-service';
 export * from './src/grpc/interfaces/common';
 export * from './src/grpc/form-meta';
 export * from './src/aws/aws';
+export * from './src/aws/config/params.service';
+export * from './src/aws/config/params.module';
+export { AWS_PARAM_STORE_PROVIDER } from './src/aws/config/constants';

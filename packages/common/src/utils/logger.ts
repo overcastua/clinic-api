@@ -1,12 +1,12 @@
 import { ConsoleLogger } from '@nestjs/common';
 import { CloudWatchLogs } from 'aws-sdk';
-import { AWS } from '../aws/aws';
+import { AWSClient } from '../aws/aws';
 
 export class CloudWatchLogger extends ConsoleLogger {
   private nextSequenceToken: string;
   private service: string;
   private mode: string;
-  private aws: AWS;
+  private aws: AWSClient;
 
   constructor() {
     super();
@@ -14,7 +14,7 @@ export class CloudWatchLogger extends ConsoleLogger {
   }
 
   async init(mode: string, service: string) {
-    this.aws = AWS.getInstance();
+    this.aws = AWSClient.getInstance();
     this.mode = mode;
     this.service = service;
 

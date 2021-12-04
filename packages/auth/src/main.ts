@@ -4,7 +4,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { MicroserviceOptions } from '@nestjs/microservices';
-import { CloudWatchLogger, configureGRPC, AWS } from '@repos/common';
+import { CloudWatchLogger, configureGRPC, AWSClient } from '@repos/common';
 
 async function bootstrap() {
   const logger = new CloudWatchLogger();
@@ -15,7 +15,7 @@ async function bootstrap() {
   const port = configuration.get('port');
   const mode = configuration.get('mode');
 
-  AWS.instantiate(mode);
+  AWSClient.instantiate(mode);
   await logger.init(mode, 'auth');
 
   app.setGlobalPrefix(configuration.get('prefix'));

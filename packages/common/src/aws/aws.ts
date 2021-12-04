@@ -1,38 +1,50 @@
-import { config, S3, CloudWatchLogs } from 'aws-sdk';
+import { config, S3, CloudWatchLogs, SSM } from 'aws-sdk';
 import { join } from 'path';
+import { SSMService } from './services/ssm';
 
-export class AWS {
+export class AWSClient {
   private readonly S3: S3;
   private readonly CloudWatchLogs: CloudWatchLogs;
-  private static instance: AWS;
+  private static SSM: SSMService;
+  private static instance: AWSClient;
 
   private constructor(mode: string) {
     if (mode === 'dev') {
       config.loadFromPath(join(__dirname, '/../../../../../aws.json'));
     } else if (mode !== 'prod') {
       throw new Error(
-        `AWS ERROR: Wrong mode ${mode} declared; 'dev' or 'prod' expected.`,
+        `AWSClient ERROR: Wrong mode ${mode} declared; 'dev' or 'prod' expected.`,
       );
     }
 
     this.S3 = new S3();
     this.CloudWatchLogs = new CloudWatchLogs();
+    AWSClient.SSM = new SSMService(new SSM());
   }
 
-  static getInstance(): AWS {
+  static getInstance(): AWSClient {
     if (!this.instance) {
       throw new Error(
-        'AWS ERROR: Service must be instantiated before accessing the instance',
+        'AWSClient ERROR: Service must be instantiated before accessing the instance',
       );
     }
     return this.instance;
   }
 
+  static getSSMInstance(): SSMService {
+    if (!this.instance) {
+      throw new Error(
+        'AWSClient ERROR: AWSClient must be instantiated before accessing any service instances',
+      );
+    }
+    return this.SSM;
+  }
+
   static instantiate(mode: string): void {
     if (!this.instance) {
-      this.instance = new AWS(mode);
+      this.instance = new AWSClient(mode);
     } else {
-      throw new Error('AWS ERROR: Service has already been instantiated');
+      throw new Error('AWSClient ERROR: Service has already been instantiated');
     }
   }
 
@@ -43,7 +55,7 @@ export class AWS {
     );
     const fileName = profileId.toString();
 
-    const params: S3.PutObjectRequest = {
+    const options: S3.PutObjectRequest = {
       Key: fileName,
       Body: buffer,
       ContentEncoding: 'base64',
@@ -51,7 +63,7 @@ export class AWS {
       Bucket: 'clinic-profile-pictures',
     };
 
-    await this.S3.putObject(params).promise();
+    await this.S3.putObject(options).promise();
 
     return `https://clinic-profile-pictures.s3.amazonaws.com/${fileName}.jpg`;
   }
@@ -62,14 +74,14 @@ export class AWS {
     stream: string,
     sequenceToken: string,
   ) {
-    const params: CloudWatchLogs.PutLogEventsRequest = {
+    const options: CloudWatchLogs.PutLogEventsRequest = {
       logEvents: events,
       logGroupName: group,
       logStreamName: stream,
       sequenceToken: sequenceToken,
     };
 
-    return this.CloudWatchLogs.putLogEvents(params).promise();
+    return this.CloudWatchLogs.putLogEvents(options).promise();
   }
 
   async cloudWatchDescribeLogStreams(group: string) {

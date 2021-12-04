@@ -2,17 +2,20 @@ import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { envSchema } from './env.validation.schema';
-import * as connectionOptions from './ormconfig';
+import * as TypeormAsyncConfiguration from './ormconfig';
+import { CustomConfigModule } from '@repos/common';
 import config from './config';
 
 @Module({
   imports: [
+    CustomConfigModule.register({
+      awsParamStorePath: '/dev/',
+      load: config,
+    }),
     ConfigModule.forRoot({
-      load: [config],
-      isGlobal: true,
       validationSchema: envSchema,
     }),
-    TypeOrmModule.forRoot(connectionOptions),
+    TypeOrmModule.forRootAsync(TypeormAsyncConfiguration),
   ],
 })
 export class ConfigurationModule {}

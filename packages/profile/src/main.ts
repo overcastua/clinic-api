@@ -2,25 +2,30 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './modules/app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { MicroserviceOptions } from '@nestjs/microservices';
-import { CloudWatchLogger, configureGRPC, AWS } from '@repos/common';
+import {
+  CloudWatchLogger,
+  configureGRPC,
+  AWSClient,
+  CustomConfigService,
+} from '@repos/common';
 import { json, urlencoded } from 'express';
 
 async function bootstrap() {
+  AWSClient.instantiate('dev');
+
   const logger = new CloudWatchLogger();
 
   const options = { cors: true, logger };
 
   const app = await NestFactory.create(AppModule, options);
-  const configuration = app.get(ConfigService);
-  const port = configuration.get('port');
-  const mode = configuration.get('mode');
+  const configuration = app.get(CustomConfigService);
+  const port = configuration.get<number>('port');
+  const mode = configuration.get<string>('mode');
 
-  AWS.instantiate(mode);
   await logger.init(mode, 'profile');
 
-  app.setGlobalPrefix(configuration.get('prefix'));
+  app.setGlobalPrefix(configuration.get<string>('prefix'));
   app.use(json({ limit: '50mb' }));
   app.use(urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }));
   app.useGlobalPipes(new ValidationPipe());
@@ -38,7 +43,7 @@ async function bootstrap() {
   SwaggerModule.setup('documentation', app, document);
 
   const grpcConfig = configureGRPC(
-    configuration.get('GRPC.profile'),
+    configuration.get<string>('GRPC.profile'),
     'profile',
   );
 

@@ -3,7 +3,7 @@ import { AppModule } from './modules/app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { CloudWatchLogger, configureGRPC, AWS } from '@repos/common';
+import { CloudWatchLogger, configureGRPC, AWSClient } from '@repos/common';
 import { MicroserviceOptions } from '@nestjs/microservices';
 
 async function bootstrap() {
@@ -15,7 +15,7 @@ async function bootstrap() {
   const port = configuration.get('port');
   const mode = configuration.get('mode');
 
-  AWS.instantiate(mode);
+  AWSClient.instantiate(mode);
   await logger.init(mode, 'clinic');
 
   app.setGlobalPrefix(configuration.get('prefix'));

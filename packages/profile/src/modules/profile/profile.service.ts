@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateProfileDto, AWS, UpdateProfileDto } from '@repos/common';
+import { CreateProfileDto, AWSClient, UpdateProfileDto } from '@repos/common';
 import { ProfileEntity } from './profile.entity';
 import { ProfileRepository } from './profile.repository';
 
@@ -20,7 +20,7 @@ export class ProfileService {
     userId: number,
   ): Promise<ProfileEntity> {
     if (dto.image) {
-      const aws = AWS.getInstance();
+      const aws = AWSClient.getInstance();
 
       const { id } = await this.getProfileByUserId(userId);
       const link = await aws.putBase64AndGetURL(dto.image, id);
