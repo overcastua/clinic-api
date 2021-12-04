@@ -1,75 +1,82 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Parameter } from 'aws-sdk/clients/ssm';
+import { ServiceOptions, Source } from './interfaces';
 import { AWS_PARAM_STORE_PROVIDER } from './constants';
 
 @Injectable()
 export class CustomConfigService {
-  private readonly _paramStoreParameters;
+  private readonly _paramStoreParameters: Record<string, any>;
 
   constructor(
     @Inject(AWS_PARAM_STORE_PROVIDER)
-    data: {
-      params: Parameter[];
-      load: () => unknown;
-    },
+    data: ServiceOptions,
   ) {
     this._paramStoreParameters = {};
-    data.params.forEach((parameter) => {
-      const parameterPathTokens = parameter.Name.split('/');
-      this._paramStoreParameters[
-        parameterPathTokens[parameterPathTokens.length - 1]
-      ] = parameter.Value;
-    });
+
+    if (data.params.length > 0) {
+      data.params.forEach((parameter) => {
+        const parameterPathTokens = parameter.Name.split('/');
+        this._paramStoreParameters[
+          parameterPathTokens[parameterPathTokens.length - 1]
+        ] = parameter.Value;
+      });
+    }
 
     if (data.load) {
       this._paramStoreParameters = this.substitute(data.load());
     }
   }
 
-  private substitute(schema: unknown) {
-    const copy = schema;
+  private substitute(schema: Record<string, any>) {
+    const loadedSchema = schema;
 
-    Object.keys(copy).forEach((key) => {
-      if (typeof copy[key] === 'object') {
-        this.substitute(copy[key]);
-      } else if (typeof copy[key] === 'string') {
-        const getFromAndName = copy[key].split('->');
-        if (getFromAndName[0] === 'ssm') {
-          if (objectIsEmpty(this._paramStoreParameters)) {
-            throw new Error(
-              'Error: No ssm data was fetched, nothing to assign',
+    Object.keys(loadedSchema).forEach((key) => {
+      if (typeof loadedSchema[key] === 'object') {
+        this.substitute(loadedSchema[key]);
+      } else if (typeof loadedSchema[key] === 'string') {
+        const [source, value]: [Source, string] = loadedSchema[key].split('->');
+
+        if (source === Source.SSM) {
+          if (!this._paramStoreParameters[value]) {
+            console.warn(
+              `Warning: No ${source} parameter '${value}' was found, unable to assign`,
             );
+
+            delete loadedSchema[key];
+          } else {
+            loadedSchema[key] = this._paramStoreParameters[value];
           }
-          copy[key] = this._paramStoreParameters[getFromAndName[1]];
-        } else if (getFromAndName[0] === 'env') {
-          copy[key] = process.env[getFromAndName[1]];
+        } else if (source === Source.ENV) {
+          if (!process.env[value]) {
+            console.warn(
+              `Warning: No ${source} parameter '${value}' was found, unable to assign`,
+            );
+
+            delete loadedSchema[key];
+          } else {
+            loadedSchema[key] = process.env[value];
+          }
         } else {
-          throw new Error(
-            `Error: Unknown config location ${getFromAndName[0]}`,
+          console.warn(
+            `Warning: Unknown configuration source '${source}' specified, the parameter was ignored`,
           );
+
+          delete loadedSchema[key];
         }
       }
     });
 
-    return copy;
+    return loadedSchema;
   }
 
   get<T extends number | string>(key: string): T {
     const value = key
       .split('.')
-      .reduce((o, i) => o[i], this._paramStoreParameters);
+      .reduce((object, i) => object[i], this._paramStoreParameters);
 
     if (!value) {
-      throw new Error(
-        `Error: Unknown config parameter location '${key}', the value is undefined`,
-      );
+      throw new Error(`Error: Wrong config parameter location '${key}' given`);
     }
 
     return isNaN(value) ? value : +value;
   }
-}
-
-// eslint-disable-next-line @typescript-eslint/ban-types
-function objectIsEmpty(obj: object): boolean {
-  return Object.keys(obj).length === 0;
 }

@@ -1,13 +1,15 @@
 import { DynamicModule, Global, Module, Provider } from '@nestjs/common';
 import { SSM } from 'aws-sdk';
+import { ParameterList } from 'aws-sdk/clients/ssm';
 import { AWSClient } from 'index';
 import { AWS_PARAM_STORE_PROVIDER } from './constants';
+import { FetchResult, ModuleOptions, ServiceOptions } from './interfaces';
 import { CustomConfigService } from './params.service';
 
 @Global()
 @Module({})
 export class CustomConfigModule {
-  public static forRoot(moduleOptions): DynamicModule {
+  public static forRoot(moduleOptions: ModuleOptions): DynamicModule {
     return {
       module: CustomConfigModule,
       providers: [CustomConfigService, ...this.createProviders(moduleOptions)],
@@ -15,14 +17,14 @@ export class CustomConfigModule {
     };
   }
 
-  private static createProviders(moduleOptions): Provider[] {
+  private static createProviders(moduleOptions: ModuleOptions): Provider[] {
     return [
       {
         provide: AWS_PARAM_STORE_PROVIDER,
         useFactory: async () => {
           const ssmClient = AWSClient.getSSMInstance().service;
           const requestsArray: Promise<SSM.GetParametersByPathResult>[] = [];
-          const result: { Parameters: SSM.ParameterList } = {
+          const result: FetchResult = {
             Parameters: [],
           };
 
@@ -41,18 +43,25 @@ export class CustomConfigModule {
                   .promise(),
               );
             });
+
             const fetchedParameters: SSM.GetParametersByPathResult[] =
               await Promise.all(requestsArray);
 
             result.Parameters = fetchedParameters
-              .map((data): SSM.ParameterList => {
+              .map((data): ParameterList => {
                 return data.Parameters;
               })
               .flat();
+
+            if (result.Parameters.length === 0) {
+              console.warn(
+                'Warning: No parameters were fetched from AWS SSM. Was the given path correct?',
+              );
+            }
           }
 
-          const data = {
-            params: result?.Parameters,
+          const data: ServiceOptions = {
+            params: result.Parameters,
             load: moduleOptions.load,
           };
 
