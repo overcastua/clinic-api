@@ -21,9 +21,7 @@ export class CustomConfigService {
       });
     }
 
-    if (data.load) {
-      this._paramStoreParameters = this.substitute(data.load());
-    }
+    this._paramStoreParameters = this.substitute(data.load());
   }
 
   private substitute(schema: Record<string, any>) {
@@ -31,9 +29,12 @@ export class CustomConfigService {
 
     Object.keys(loadedSchema).forEach((key) => {
       if (typeof loadedSchema[key] === 'object') {
-        this.substitute(loadedSchema[key]);
+        this.substitute(loadedSchema[key] as Record<string, any>);
       } else if (typeof loadedSchema[key] === 'string') {
-        const [source, value]: [Source, string] = loadedSchema[key].split('->');
+        const [source, value] = (loadedSchema[key] as string).split('->') as [
+          Source,
+          string,
+        ];
 
         if (source === Source.SSM) {
           if (!this._paramStoreParameters[value]) {
@@ -71,7 +72,10 @@ export class CustomConfigService {
   get<T extends number | string>(key: string): T {
     const value = key
       .split('.')
-      .reduce((object, i) => object[i], this._paramStoreParameters);
+      .reduce(
+        (object: Record<string, any>, i: string) => object[i],
+        this._paramStoreParameters,
+      );
 
     if (!value) {
       throw new Error(`Error: Wrong config parameter location '${key}' given`);

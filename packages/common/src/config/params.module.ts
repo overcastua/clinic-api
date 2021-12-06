@@ -1,6 +1,5 @@
 import { DynamicModule, Global, Module, Provider } from '@nestjs/common';
-import { SSM } from 'aws-sdk';
-import { ParameterList } from 'aws-sdk/clients/ssm';
+import { GetParametersByPathResult, ParameterList } from 'aws-sdk/clients/ssm';
 import { AWSClient } from 'index';
 import { AWS_PARAM_STORE_PROVIDER } from './constants';
 import { FetchResult, ModuleOptions, ServiceOptions } from './interfaces';
@@ -23,7 +22,7 @@ export class CustomConfigModule {
         provide: AWS_PARAM_STORE_PROVIDER,
         useFactory: async () => {
           const ssmClient = AWSClient.getSSMInstance().service;
-          const requestsArray: Promise<SSM.GetParametersByPathResult>[] = [];
+          const requestsArray: Promise<GetParametersByPathResult>[] = [];
           const result: FetchResult = {
             Parameters: [],
           };
@@ -44,12 +43,11 @@ export class CustomConfigModule {
               );
             });
 
-            const fetchedParameters: SSM.GetParametersByPathResult[] =
-              await Promise.all(requestsArray);
+            const fetchedParameters = await Promise.all(requestsArray);
 
             result.Parameters = fetchedParameters
-              .map((data): ParameterList => {
-                return data.Parameters;
+              .map((resp): ParameterList => {
+                return resp.Parameters;
               })
               .flat();
 

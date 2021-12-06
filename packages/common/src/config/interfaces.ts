@@ -2,12 +2,12 @@ import { ParameterList } from 'aws-sdk/clients/ssm';
 
 export interface ModuleOptions {
   awsParamStorePaths?: string[];
-  load?: () => Record<string, any>;
+  load: () => Record<string, any>;
 }
 
 export interface ServiceOptions {
   params: ParameterList;
-  load?: () => Record<string, any>;
+  load: () => Record<string, any>;
 }
 
 export interface FetchResult {
