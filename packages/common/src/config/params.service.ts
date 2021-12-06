@@ -24,7 +24,7 @@ export class CustomConfigService {
     this._paramStoreParameters = this.substitute(data.load());
   }
 
-  private substitute(schema: Record<string, any>) {
+  private substitute(schema: Record<string, any>): Record<string, any> {
     const loadedSchema = schema;
 
     Object.keys(loadedSchema).forEach((key) => {
