@@ -1,9 +1,8 @@
-import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { envSchema } from './env.validation.schema';
 import * as TypeormAsyncConfiguration from './ormconfig';
-import { CustomConfigModule } from '@repos/common';
+import { CloudWatchLogger, CustomConfigModule } from '@repos/common';
 import config from './config';
 
 @Module({
@@ -11,11 +10,16 @@ import config from './config';
     CustomConfigModule.forRoot({
       awsParamStorePaths: ['/dev/', '/profile/'],
       load: config,
-    }),
-    ConfigModule.forRoot({
       validationSchema: envSchema,
     }),
     TypeOrmModule.forRootAsync(TypeormAsyncConfiguration),
   ],
+  providers: [
+    {
+      provide: CloudWatchLogger,
+      useValue: new CloudWatchLogger('dev', 'profile'),
+    },
+  ],
+  exports: [CloudWatchLogger],
 })
 export class ConfigurationModule {}

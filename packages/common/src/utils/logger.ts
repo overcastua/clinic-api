@@ -9,15 +9,19 @@ export class CloudWatchLogger extends ConsoleLogger {
   private mode: string;
   private cwl: CloudWatchLogsService;
 
-  constructor() {
+  constructor(mode: string, service: string) {
     super();
-    this.nextSequenceToken = null;
-  }
+    AWSClient.instantiate();
 
-  async init(mode: string, service: string) {
-    this.cwl = AWSClient.getCloudWatchLogsInstance();
     this.mode = mode;
     this.service = service;
+
+    this.nextSequenceToken = null;
+    this.init();
+  }
+
+  async init() {
+    this.cwl = AWSClient.getCloudWatchLogsInstance();
 
     const res = await this.cwl.cloudWatchDescribeLogStreams(this.service);
     this.nextSequenceToken = res.logStreams[0]?.uploadSequenceToken;

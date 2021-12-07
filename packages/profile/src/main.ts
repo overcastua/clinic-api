@@ -1,30 +1,25 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './modules/app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
+import { NestApplicationOptions, ValidationPipe } from '@nestjs/common';
 import { MicroserviceOptions } from '@nestjs/microservices';
 import {
   CloudWatchLogger,
   configureGRPC,
-  AWSClient,
   CustomConfigService,
 } from '@repos/common';
 
 async function bootstrap() {
-  AWSClient.instantiate();
-
-  const logger = new CloudWatchLogger();
-
-  const options = { cors: true, logger };
+  const options: NestApplicationOptions = { cors: true, bufferLogs: true };
 
   const app = await NestFactory.create(AppModule, options);
+  app.useLogger(app.get(CloudWatchLogger));
+
   const configuration = app.get(CustomConfigService);
   const port = configuration.get<number>('port');
 
-  await logger.init('dev', 'profile');
-
   app.setGlobalPrefix(configuration.get<string>('prefix'));
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   const config = new DocumentBuilder()
     .setTitle('The Medical Service PROFILE API')
@@ -34,7 +29,6 @@ async function bootstrap() {
       'JWT',
     )
     .build();
-
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('documentation', app, document);
 

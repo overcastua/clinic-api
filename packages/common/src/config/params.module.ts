@@ -52,8 +52,8 @@ export class CustomConfigModule {
               .flat();
 
             if (result.Parameters.length === 0) {
-              console.warn(
-                'Warning: No parameters were fetched from AWS SSM. Was the given path correct?',
+              throw new Error(
+                'Error: No parameters were fetched from AWS SSM. Was the given path correct?',
               );
             }
           }
@@ -61,6 +61,7 @@ export class CustomConfigModule {
           const data: ServiceOptions = {
             params: result.Parameters,
             load: moduleOptions.load,
+            validationSchema: moduleOptions.validationSchema,
           };
 
           return data;

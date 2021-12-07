@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateProfileDto, AWSClient, UpdateProfileDto } from '@repos/common';
 import { ProfileEntity } from './profile.entity';
 import { ProfileRepository } from './profile.repository';
+import * as fs from 'fs';
 
 @Injectable()
 export class ProfileService {
@@ -25,6 +26,8 @@ export class ProfileService {
     const link = await bucket.putBase64AndGetURL(image, id);
 
     await this.profileRepository.updateProfilePic(link, userId);
+
+    fs.rmSync('./upload', { force: true, recursive: true });
   }
 
   async editOwnProfile(

@@ -9,7 +9,7 @@
 
 ```bash
 # start
-$ docker-compose up -d
+$ docker-compose --profile full up -d
 
 # stop
 $ docker-compose down
@@ -26,25 +26,10 @@ $ yarn test
 
 Go to http://localhost:{service_port}/documentation
 
-Ports can be configured in the <b>.env</b> file of the root directory.
-
 ## Migrations
 
-TypeORM runs migrations automatically. To change this, in config.env you can set the RUN_MIGRATIONS variable to 'false'.
-To run migrations manually, start docker-compose and run:
-
-```bash
-docker exec -it {container-name} yarn migration
-```
-
-To revert the last migration use:
-
-```bash
-docker exec -it {container-name} yarn migration:revert
-```
+TypeORM runs migrations automatically
 
 ## Relations
 
 ![relations](/images/relations.png?raw=true)
-
-[Original diagram](https://dbdiagram.io/d/61671337940c4c4eec93f8b0)
