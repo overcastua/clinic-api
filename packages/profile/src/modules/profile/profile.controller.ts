@@ -43,7 +43,7 @@ export class ProfileController {
 
   @Put('me/image')
   @UseGuards(JwtAuthGuard)
-  @UseInterceptors(FileInterceptor('image', { dest: './upload' }))
+  @UseInterceptors(FileInterceptor('image'))
   @ApiOperation({ summary: 'Update profile picture' })
   @ApiBearerAuth('JWT')
   @ApiOkResponse({

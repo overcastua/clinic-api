@@ -19,6 +19,8 @@ services:
       - local.env
     environment:
       APP_PORT: $CLINIC_PORT
+      COMMON_PATH: /dev/
+      SERVICE_PATH: /clinic/
     depends_on:
       - database
     restart: always
@@ -41,6 +43,8 @@ services:
       - dbconn.env
     environment:
       APP_PORT: $AUTH_PORT
+      COMMON_PATH: /dev/
+      SERVICE_PATH: /auth/
     depends_on:
       - database
     restart: always
@@ -64,6 +68,8 @@ services:
       - local.env
     environment:
       APP_PORT: $PROFILE_PORT
+      COMMON_PATH: /dev/
+      SERVICE_PATH: /profile/
     depends_on:
       - database
     restart: always

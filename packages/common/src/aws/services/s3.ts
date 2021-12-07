@@ -1,5 +1,4 @@
 import { S3 } from 'aws-sdk';
-import { createReadStream } from 'fs';
 
 export class S3Service {
   readonly service: S3;
@@ -8,17 +7,16 @@ export class S3Service {
     this.service = s3;
   }
 
-  async putBase64AndGetURL(
+  async putAndGetURL(
     file: Express.Multer.File,
     profileId: number,
   ): Promise<string> {
-    const fileStream = createReadStream(file.path);
-
-    const fileName = profileId + '.jpg';
+    const fileName = profileId + '.png';
 
     const options: S3.PutObjectRequest = {
       Key: fileName,
-      Body: fileStream,
+      Body: file.buffer,
+      ContentType: 'image/png',
       Bucket: 'clinic-profile-pictures',
     };
 

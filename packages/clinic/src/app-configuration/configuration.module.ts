@@ -8,7 +8,7 @@ import { CloudWatchLogger, CustomConfigModule } from '@repos/common';
 @Module({
   imports: [
     CustomConfigModule.forRoot({
-      awsParamStorePaths: ['/dev/', '/clinic/'],
+      awsParamStorePaths: [process.env.COMMON_PATH, process.env.SERVICE_PATH],
       load: config,
       validationSchema: envSchema,
     }),

@@ -16,8 +16,3 @@ export interface ServiceOptions {
 export interface FetchResult {
   Parameters: ParameterList;
 }
-
-export enum Source {
-  SSM = 'ssm',
-  ENV = 'env',
-}

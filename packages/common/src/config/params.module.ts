@@ -29,7 +29,7 @@ export class CustomConfigModule {
 
           if (
             Array.isArray(moduleOptions.awsParamStorePaths) &&
-            moduleOptions.awsParamStorePaths.length > 0
+            moduleOptions.awsParamStorePaths.length
           ) {
             moduleOptions.awsParamStorePaths.forEach((path: string) => {
               requestsArray.push(

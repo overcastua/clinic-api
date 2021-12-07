@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ServiceOptions, Source } from './interfaces';
+import { ServiceOptions } from './interfaces';
 import { AWS_PARAM_STORE_PROVIDER } from './constants';
 import Joi from 'joi';
 
@@ -7,16 +7,14 @@ import Joi from 'joi';
 export class CustomConfigService {
   private readonly _paramStoreParameters: Record<string, any>;
   private readonly schema: Record<string, any>;
-  private envParams: Record<string, any>;
-  private ssmParams: Record<string, any>;
+  private usedParams: Record<string, any>;
 
   constructor(
     @Inject(AWS_PARAM_STORE_PROVIDER)
     data: ServiceOptions,
   ) {
     this._paramStoreParameters = {};
-    this.envParams = {};
-    this.ssmParams = {};
+    this.usedParams = {};
 
     if (data.params.length > 0) {
       data.params.forEach((parameter) => {
@@ -40,32 +38,19 @@ export class CustomConfigService {
       if (typeof loadedSchema[key] === 'object') {
         this.substitute(loadedSchema[key] as Record<string, any>);
       } else if (typeof loadedSchema[key] === 'string') {
-        const [source, value] = (loadedSchema[key] as string).split('->') as [
-          Source,
-          string,
-        ];
+        const value: string = loadedSchema[key];
 
-        if (source === Source.SSM) {
-          if (!this._paramStoreParameters[value]) {
-            throw new Error(
-              `Error: No ${source} parameter '${value}' was found, unable to assign`,
-            );
-          } else {
-            this.ssmParams[value] = this._paramStoreParameters[value];
-            loadedSchema[key] = this._paramStoreParameters[value];
-          }
-        } else if (source === Source.ENV) {
-          if (!process.env[value]) {
-            throw new Error(
-              `Error: No ${source} parameter '${value}' was found, unable to assign`,
-            );
-          } else {
-            this.envParams[value] = process.env[value];
-            loadedSchema[key] = process.env[value];
-          }
+        if (this._paramStoreParameters[value]) {
+          loadedSchema[key] = this._paramStoreParameters[value];
+
+          this.usedParams[value] = this._paramStoreParameters[value];
+        } else if (process.env[value]) {
+          loadedSchema[key] = process.env[value];
+
+          this.usedParams[value] = process.env[value];
         } else {
           throw new Error(
-            `Error: Unknown configuration source '${source}' specified, the parameter was omitted`,
+            `Error: No parameter '${value}' was found, unable to assign`,
           );
         }
       }
@@ -75,15 +60,12 @@ export class CustomConfigService {
   }
 
   private validate(schema: Joi.ObjectSchema<any>): void {
-    const loadedData = merge(this.envParams, this.ssmParams);
-
-    const { error } = schema.validate(loadedData);
+    const { error } = schema.validate(this.usedParams);
 
     if (error) {
       throw new Error(`Config schema validation error: ${error.message}`);
     } else {
-      delete this.envParams;
-      delete this.ssmParams;
+      delete this.usedParams;
     }
   }
 
@@ -101,11 +83,4 @@ export class CustomConfigService {
 
     return isNaN(value) ? value : +value;
   }
-}
-
-function merge(
-  obj1: Record<string, any>,
-  obj2: Record<string, any>,
-): Record<string, any> {
-  return { ...obj1, ...obj2 };
 }
