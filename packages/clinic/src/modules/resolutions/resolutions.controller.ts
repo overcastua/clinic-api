@@ -7,7 +7,6 @@ import {
   Patch,
   Post,
   Query,
-  Req,
   Param,
   UseGuards,
 } from '@nestjs/common';
@@ -23,7 +22,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { JwtAuthGuard, Role, Roles, RolesGuard } from '@repos/common';
+import { GetUid, JwtAuthGuard, Role, Roles, RolesGuard } from '@repos/common';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
 import { UpdateResolutionDto } from './dto/update-resolution.dto';
 import { ResolutionsEntity } from './resolutions.entity';
@@ -53,9 +52,9 @@ export class ResolutionsController {
   })
   async createResolution(
     @Body() dto: CreateResolutionDto,
-    @Req() req,
+    @GetUid() userId: number,
   ): Promise<void> {
-    return this.service.createResolution(dto, req.user.userId);
+    return this.service.createResolution(dto, userId);
   }
 
   @Patch(':id')
@@ -77,9 +76,9 @@ export class ResolutionsController {
   async updateResolution(
     @Body() dto: UpdateResolutionDto,
     @Param('id', ParseIntPipe) resolutionId: number,
-    @Req() req,
+    @GetUid() userId: number,
   ): Promise<void> {
-    return this.service.updateResolution(resolutionId, dto, req.user.userId);
+    return this.service.updateResolution(resolutionId, dto, userId);
   }
 
   @Get('me')
@@ -101,8 +100,8 @@ export class ResolutionsController {
   @ApiForbiddenResponse({
     description: 'You dont have permission to access the route',
   })
-  async getResolutions(@Req() req): Promise<ResolutionsEntity[]> {
-    return this.service.patientGetOwn(req.user.userId);
+  async getResolutions(@GetUid() userId: number): Promise<ResolutionsEntity[]> {
+    return this.service.patientGetOwn(userId);
   }
 
   @Get()
@@ -138,8 +137,8 @@ export class ResolutionsController {
   })
   async deleteResolution(
     @Param('id', ParseIntPipe) resId: number,
-    @Req() req,
+    @GetUid() userId: number,
   ): Promise<void> {
-    return this.service.deleteResolution(resId, req.user.userId);
+    return this.service.deleteResolution(resId, userId);
   }
 }

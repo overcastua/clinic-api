@@ -9,7 +9,6 @@ import {
   AWSClient,
   CustomConfigService,
 } from '@repos/common';
-import { json, urlencoded } from 'express';
 
 async function bootstrap() {
   AWSClient.instantiate();
@@ -25,8 +24,6 @@ async function bootstrap() {
   await logger.init('dev', 'profile');
 
   app.setGlobalPrefix(configuration.get<string>('prefix'));
-  app.use(json({ limit: '50mb' }));
-  app.use(urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }));
   app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()

@@ -5,6 +5,7 @@ export * from './src/utils/logger';
 export * from './src/dto/createProfile';
 export * from './src/dto/updateProfile';
 export { Roles } from './src/decorators/users.roles.decorator';
+export * from './src/decorators/getUserId';
 export * from './src/guards/jwt.auth.guard';
 export * from './src/guards/users.roles.guard';
 export * from './src/guards/grpc.guard';

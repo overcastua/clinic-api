@@ -15,20 +15,23 @@ export class ProfileService {
     await this.profileRepository.add(dto);
   }
 
+  async editOwnProfilePicture(
+    image: Express.Multer.File,
+    userId: number,
+  ): Promise<void> {
+    const bucket = AWSClient.getS3Instance();
+
+    const { id } = await this.getProfileByUserId(userId);
+    const link = await bucket.putBase64AndGetURL(image, id);
+
+    await this.profileRepository.updateProfilePic(link, userId);
+  }
+
   async editOwnProfile(
     dto: UpdateProfileDto,
     userId: number,
   ): Promise<ProfileEntity> {
-    if (dto.image) {
-      const bucket = AWSClient.getS3Instance();
-
-      const { id } = await this.getProfileByUserId(userId);
-      const link = await bucket.putBase64AndGetURL(dto.image, id);
-
-      await this.profileRepository.updateProfile(dto, userId, link);
-    } else {
-      await this.profileRepository.updateProfile(dto, userId);
-    }
+    await this.profileRepository.updateProfile(dto, userId);
 
     return this.getProfileByUserId(userId);
   }
