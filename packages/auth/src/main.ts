@@ -1,19 +1,26 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './modules/app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { NestApplicationOptions, ValidationPipe } from '@nestjs/common';
 import { MicroserviceOptions } from '@nestjs/microservices';
-import { configureGRPC } from '@repos/common';
+import {
+  AWSClient,
+  CloudWatchLogger,
+  configureGRPC,
+  CustomConfigService,
+} from '@repos/common';
 
 async function bootstrap() {
-  const options = { cors: true };
-  const app = await NestFactory.create(AppModule, options);
-  const configuration = app.get(ConfigService);
-  const port = configuration.get('port');
+  const options: NestApplicationOptions = { cors: true, bufferLogs: true };
 
-  app.setGlobalPrefix(configuration.get('prefix'));
-  app.useGlobalPipes(new ValidationPipe());
+  const app = await NestFactory.create(AppModule, options);
+  app.useLogger(app.get(CloudWatchLogger));
+
+  const configuration = app.get(CustomConfigService);
+  const port = configuration.get<number>('self.port');
+
+  app.setGlobalPrefix(configuration.get<string>('self.prefix'));
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   const config = new DocumentBuilder()
     .setTitle('The Medical Service AUTH API')
@@ -27,7 +34,10 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('documentation', app, document);
 
-  const grpcConfig = configureGRPC(configuration.get('GRPC.auth'), 'auth');
+  const grpcConfig = configureGRPC(
+    configuration.get('GRPC.auth'),
+    configuration.get<string>('self.name'),
+  );
 
   app.connectMicroservice<MicroserviceOptions>(grpcConfig);
   await app.startAllMicroservices();
@@ -37,4 +47,5 @@ async function bootstrap() {
   });
 }
 
+AWSClient.instantiate();
 bootstrap();

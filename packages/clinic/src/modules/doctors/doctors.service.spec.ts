@@ -29,27 +29,16 @@ describe('DoctorsService', () => {
     repository = module.get(DoctorsRepository);
   });
 
-  describe('testing getAllDoctorsOfCertainSpecialization()', () => {
+  describe('testing getAllSpecializations()', () => {
     it('should return all the doctors for the given specialization', async () => {
       expect.assertions(1);
       const arr = [new DoctorEntity()];
 
       repository.getAllBySpecializationId.mockResolvedValue(arr);
 
-      const res = await service.getAllDoctorsOfCertainSpecialization(1);
+      const res = await service.getAllSpecializations(1);
 
       expect(res).toBe(arr);
-    });
-
-    it('should throw a 404 error if no resolutions found', async () => {
-      expect.assertions(1);
-      const arr = [];
-
-      repository.getAllBySpecializationId.mockResolvedValue(arr);
-
-      expect(service.getAllDoctorsOfCertainSpecialization(1)).rejects.toThrow(
-        NotFoundException,
-      );
     });
   });
 });

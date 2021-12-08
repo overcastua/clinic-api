@@ -7,12 +7,12 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "compose:up": "docker-compose up",
+    "compose:up": "docker-compose --profile full up",
     "compose:det": "docker-compose up -d",
     "compose:down": "docker-compose down -v",
     "compose:rebuild": "docker-compose down -v && docker-compose up --build",
-    "docker:clear": "docker volume prune -f && docker image prune -f && docker container prune -f",
-    "test": "cd packages/auth && yarn test && cd../clinic && yarn test"
+    "docker:clear": "docker system prune -af --volumes",
+    "test": "cd packages/auth && yarn test && cd ../clinic && yarn test"
   },
   "workspaces": {
     "packages": [

@@ -1,7 +1,6 @@
-import { Metadata } from '@grpc/grpc-js';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateProfileDto, UpdateProfileDto } from '@repos/common';
+import { CreateProfileDto, AWSClient, UpdateProfileDto } from '@repos/common';
 import { ProfileEntity } from './profile.entity';
 import { ProfileRepository } from './profile.repository';
 
@@ -16,21 +15,28 @@ export class ProfileService {
     await this.profileRepository.add(dto);
   }
 
+  async editOwnProfilePicture(
+    image: Express.Multer.File,
+    userId: number,
+  ): Promise<void> {
+    const bucket = AWSClient.getS3Instance();
+
+    const { id } = await this.getProfileByUserId(userId);
+    const link = await bucket.putAndGetURL(image, id);
+
+    await this.profileRepository.updateProfilePic(link, userId);
+  }
+
   async editOwnProfile(
     dto: UpdateProfileDto,
     userId: number,
   ): Promise<ProfileEntity> {
-    const res = await this.profileRepository.updateProfile(dto, userId);
-
-    if (res.affected === 0) {
-      throw new NotFoundException('Profile was not found');
-    }
+    await this.profileRepository.updateProfile(dto, userId);
 
     return this.getProfileByUserId(userId);
   }
 
   async getProfileByUserId(userId: number): Promise<ProfileEntity> {
-    Metadata;
     return this.profileRepository.findProfile(userId);
   }
 

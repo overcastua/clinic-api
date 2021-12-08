@@ -1,18 +1,26 @@
 export default () => ({
-  port: parseInt(process.env.APP_PORT),
-  prefix: process.env.API_PREFIX,
+  self: {
+    name: 'SERVICE_NAME',
+    port: 'APP_PORT',
+    prefix: 'API_PREFIX',
+  },
   GRPC: {
-    profile: process.env.PROFILE_GRPC_URL,
-    clinic: process.env.CLINIC_GRPC_URL,
+    profile: 'PROFILE_GRPC_URL',
+    clinic: 'CLINIC_GRPC_URL',
+    names: {
+      profile: 'PROF_SERVICE_NAME',
+    },
   },
   database: {
-    hostname: process.env.DB_HOSTNAME,
-    user: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
-    database: process.env.POSTGRES_DB,
-    port: parseInt(process.env.DB_PORT),
+    hostname: 'DB_HOSTNAME',
+    user: 'POSTGRES_USER',
+    password: 'POSTGRES_PASSWORD',
+    database: 'POSTGRES_DB',
+    port: 'DB_PORT',
+    run_migrations: 'RUN_MIGRATIONS',
   },
   jwt: {
-    secret: process.env.JWT_SECRET,
+    secret: 'JWT_SECRET',
   },
+  env: 'NODE_ENV',
 });

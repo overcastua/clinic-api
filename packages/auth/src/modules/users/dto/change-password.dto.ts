@@ -21,4 +21,11 @@ export class ChangePasswordDto {
     message: 'The password is too short',
   })
   readonly new: string;
+
+  constructor(readonly dto?: { current: string; new: string }) {
+    if (dto) {
+      this.current = dto.current;
+      this.new = dto.new;
+    }
+  }
 }

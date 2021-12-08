@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -8,7 +8,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { JwtAuthGuard } from '@repos/common';
+import { GetUid, JwtAuthGuard } from '@repos/common';
 import { UsersService } from './users.service';
 import { ChangePasswordDto } from './dto/change-password.dto';
 
@@ -37,8 +37,8 @@ export class UsersController {
   })
   async changePassword(
     @Body() dto: ChangePasswordDto,
-    @Req() req,
+    @GetUid() userId: number,
   ): Promise<void> {
-    return this.userService.changePassword(dto, req.user.userId);
+    return this.userService.changePassword(dto, userId);
   }
 }

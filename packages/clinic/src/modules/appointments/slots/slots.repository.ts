@@ -41,6 +41,7 @@ export class TimeSlotsRepository extends Repository<TimeSlotsEntity> {
       .innerJoinAndSelect('ts.patient', 'p')
       .orderBy('wd.date', 'ASC')
       .addOrderBy('ts.time', 'ASC')
+      .limit(10000)
       .getMany();
   }
 

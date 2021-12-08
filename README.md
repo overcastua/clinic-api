@@ -9,15 +9,11 @@
 
 ```bash
 # start
-$ docker-compose up -d
+$ docker-compose --profile full up -d
 
 # stop
 $ docker-compose down
 ```
-
-## Workspaces
-
-New worktrees should be created in the <b>packages</b> directory.
 
 ## Test
 
@@ -30,33 +26,10 @@ $ yarn test
 
 Go to http://localhost:{service_port}/documentation
 
-Ports can be configured in the <b>.env</b> file of the root directory.
-
 ## Migrations
 
-TypeORM runs migrations automatically. To change this, in config.env you can set the RUN_MIGRATIONS variable to 'false'.
-To run migrations manualy, start docker-compose and run:
-
-```bash
-docker exec -it {container-name} yarn migration
-```
-
-To revert the last migration use:
-
-```bash
-docker exec -it {container-name} yarn migration:revert
-```
+TypeORM runs migrations automatically
 
 ## Relations
 
 ![relations](/images/relations.png?raw=true)
-
-[Original diagram](https://dbdiagram.io/d/61671337940c4c4eec93f8b0)
-
-## Routes
-
-![auth](/images/auth.jpg?raw=true)
-
-![profile](/images/profile.jpg?raw=true)
-
-![clinic](/images/clinic.jpg?raw=true)

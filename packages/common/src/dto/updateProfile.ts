@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, Matches, MinLength } from 'class-validator';
+import { IsDateString, IsEnum, Matches, MinLength } from 'class-validator';
 import { Gender } from '../constants';
 
 export class UpdateProfileDto {
@@ -19,6 +19,7 @@ export class UpdateProfileDto {
   @IsEnum(Gender)
   readonly gender: Gender;
 
+  @IsDateString()
   @ApiProperty({
     example: 'Sun Feb 01 1998 00:00:00 GMT+0000 (GMT)',
     description: "Person's birth date",

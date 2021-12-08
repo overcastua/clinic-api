@@ -1,18 +1,34 @@
-import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { envSchema } from './env.validation.schema';
-import * as connectionOptions from './ormconfig';
+import * as TypeormAsyncConfiguration from './ormconfig';
+import {
+  CloudWatchLogger,
+  CustomConfigModule,
+  CustomConfigService,
+} from '@repos/common';
 import config from './config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      load: [config],
-      isGlobal: true,
+    CustomConfigModule.forRoot({
+      awsParamStorePaths: [process.env.COMMON_PATH, process.env.SERVICE_PATH],
+      load: config,
       validationSchema: envSchema,
     }),
-    TypeOrmModule.forRoot(connectionOptions),
+    TypeOrmModule.forRootAsync(TypeormAsyncConfiguration),
   ],
+  providers: [
+    {
+      provide: CloudWatchLogger,
+      inject: [CustomConfigService],
+      useFactory: (config: CustomConfigService) =>
+        new CloudWatchLogger(
+          config.get<string>('env'),
+          config.get<string>('self.name'),
+        ),
+    },
+  ],
+  exports: [CloudWatchLogger],
 })
 export class ConfigurationModule {}

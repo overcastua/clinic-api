@@ -26,6 +26,7 @@ export class AppointmentsSeeding1635163035322 implements MigrationInterface {
       ('12:00', 1),
       ('13:00', 1),
       ('11:00', 2),
+      ('12:00', 2),
       ('13:00', 2),
       ('14:00', 3),
       ('11:00', 3),

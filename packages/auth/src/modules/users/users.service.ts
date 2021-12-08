@@ -2,15 +2,13 @@ import {
   ConflictException,
   ForbiddenException,
   Injectable,
-  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RegisterDto } from './dto/register-user.dto';
 import { UsersRepository } from './users.repository';
 import * as bcrypt from 'bcrypt';
-import { CreateProfileDto } from '@repos/common';
+import { CreateProfileDto, CustomConfigService } from '@repos/common';
 import { UsersEntity } from './users.entity';
-import { ConfigService } from '@nestjs/config';
 import { ClinicService } from '../clinic/clinic.service';
 import { ProfileService } from '../profile/profile.service';
 import { ChangePasswordDto } from './dto/change-password.dto';
@@ -20,7 +18,7 @@ export class UsersService {
   constructor(
     @InjectRepository(UsersRepository)
     private readonly usersRepos: UsersRepository,
-    private config: ConfigService,
+    private config: CustomConfigService,
     private clinic: ClinicService,
     private profile: ProfileService,
   ) {}
@@ -30,7 +28,7 @@ export class UsersService {
       throw new ConflictException('The email address is already in use');
     }
 
-    const saltRounds: number = this.config.get('salt');
+    const saltRounds = this.config.get<number>('salt');
     const hash: string = await bcrypt.hash(dto.password, saltRounds);
 
     const dtoWithHashed = { ...dto };
@@ -54,9 +52,9 @@ export class UsersService {
   async changePassword(dto: ChangePasswordDto, userId: number): Promise<void> {
     const user: UsersEntity = await this.usersRepos.findUserById(userId);
 
-    if (!user) {
-      throw new NotFoundException('User with the given id not found');
-    }
+    // if (!user) {
+    //   throw new NotFoundException('User with the given id not found');
+    // }
 
     if (dto.current === dto.new) {
       throw new ForbiddenException(
@@ -68,7 +66,7 @@ export class UsersService {
       throw new ForbiddenException('Current password is incorrect');
     }
 
-    const saltRounds: number = this.config.get('salt');
+    const saltRounds: number = this.config.get<number>('salt');
     const newHashedPassword: string = await bcrypt.hash(dto.new, saltRounds);
 
     user.password = newHashedPassword;

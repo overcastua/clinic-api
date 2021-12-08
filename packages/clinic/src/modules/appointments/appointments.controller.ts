@@ -6,7 +6,6 @@ import {
   ParseIntPipe,
   Post,
   Query,
-  Req,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -26,6 +25,7 @@ import {
   Role,
   Roles,
   RolesGuard,
+  GetUid,
 } from '@repos/common';
 import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
@@ -51,8 +51,10 @@ export class AppointmentsController {
   @ApiForbiddenResponse({
     description: 'You dont have permission to access the route',
   })
-  async getAllAppointments(@Req() req): Promise<TimeSlotsEntity[]> {
-    return this.service.patientGetAllAppointments(req.user.userId);
+  async getAllAppointments(
+    @GetUid() userId: number,
+  ): Promise<TimeSlotsEntity[]> {
+    return this.service.patientGetAllAppointments(userId);
   }
 
   @Get('doctors/me/current')
@@ -69,8 +71,8 @@ export class AppointmentsController {
   @ApiForbiddenResponse({
     description: 'You dont have permission to access the route',
   })
-  async getClosestAppointment(@Req() req) {
-    return this.service.doctorGetClosest(req.user.userId);
+  async getClosestAppointment(@GetUid() userId: number) {
+    return this.service.doctorGetClosest(userId);
   }
 
   @Post('doctors/me/next')
@@ -89,8 +91,8 @@ export class AppointmentsController {
   @ApiForbiddenResponse({
     description: 'You dont have permission to access the route',
   })
-  async getNextAppointment(@Req() req) {
-    return this.service.doctorGetNext(req.user.userId);
+  async getNextAppointment(@GetUid() userId: number) {
+    return this.service.doctorGetNext(userId);
   }
 
   @Get('doctors/me')
@@ -106,8 +108,8 @@ export class AppointmentsController {
   @ApiForbiddenResponse({
     description: 'You dont have permission to access the route',
   })
-  async getAllFutureAppointments(@Req() req) {
-    return this.service.doctorGetAllFutureAppointments(req.user.userId);
+  async getAllFutureAppointments(@GetUid() userId: number) {
+    return this.service.doctorGetAllFutureAppointments(userId);
   }
 
   @Get('doctors/:doctorId/all')
@@ -175,9 +177,9 @@ export class AppointmentsController {
   })
   async setUpAppointment(
     @Body() dto: CreateAppointmentDto,
-    @Req() req,
+    @GetUid() userId: number,
     @Param('doctorId', ParseIntPipe) doctorId: number,
   ): Promise<void> {
-    return this.service.createAppointment(dto, doctorId, req.user.userId);
+    return this.service.createAppointment(dto, doctorId, userId);
   }
 }

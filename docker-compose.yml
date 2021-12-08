@@ -3,6 +3,7 @@ version: '3.8'
 services:
   clinic:
     container_name: clinic
+    profiles: ['clinic', 'full']
     build:
       context: .
       dockerfile: ./packages/clinic/Dockerfile
@@ -11,20 +12,24 @@ services:
       - /app/packages/clinic/node_modules
       - /app/packages/clinic/dist/
     ports:
-      - $CLINIC_PORT:$CLINIC_PORT
+      - $SERVICE_1_PORT:$SERVICE_1_PORT
     env_file:
       - config.env
       - dbconn.env
+      - local.env
     environment:
-      APP_PORT: $CLINIC_PORT
-      PROFILE_GRPC_URL: $PROFILE_GRPC_URL
-      CLINIC_GRPC_URL: $CLINIC_GRPC_URL
+      APP_PORT: $SERVICE_1_PORT
+      SERVICE_NAME: $SERVICE_1_NAME
+      PROF_SERVICE_NAME: $SERVICE_3_NAME
+      COMMON_PATH: $COMMON_PATH
+      SERVICE_PATH: $SERVICE_1_SSM_PATH
     depends_on:
       - database
     restart: always
 
   auth:
     container_name: auth
+    profiles: ['auth', 'full']
     build:
       context: .
       dockerfile: ./packages/auth/Dockerfile
@@ -33,21 +38,25 @@ services:
       - /app/packages/auth/node_modules
       - /app/packages/auth/dist
     ports:
-      - $AUTH_PORT:$AUTH_PORT
+      - $SERVICE_2_PORT:$SERVICE_2_PORT
     env_file:
       - config.env
+      - local.env
       - dbconn.env
     environment:
-      APP_PORT: $AUTH_PORT
-      PROFILE_GRPC_URL: $PROFILE_GRPC_URL
-      AUTH_GRPC_URL: $AUTH_GRPC_URL
-      CLINIC_GRPC_URL: $CLINIC_GRPC_URL
+      APP_PORT: $SERVICE_2_PORT
+      SERVICE_NAME: $SERVICE_2_NAME
+      PROF_SERVICE_NAME: $SERVICE_3_NAME
+      CL_SERVICE_NAME: $SERVICE_1_NAME
+      COMMON_PATH: $COMMON_PATH
+      SERVICE_PATH: $SERVICE_2_SSM_PATH
     depends_on:
       - database
     restart: always
 
   profile:
     container_name: profile
+    profiles: ['profile', 'full']
     build:
       context: .
       dockerfile: ./packages/profile/Dockerfile
@@ -56,19 +65,23 @@ services:
       - /app/packages/profile/node_modules
       - /app/packages/profile/dist
     ports:
-      - $PROFILE_PORT:$PROFILE_PORT
+      - $SERVICE_3_PORT:$SERVICE_3_PORT
     env_file:
       - config.env
       - dbconn.env
+      - local.env
     environment:
-      APP_PORT: $PROFILE_PORT
-      PROFILE_GRPC_URL: $PROFILE_GRPC_URL
+      APP_PORT: $SERVICE_3_PORT
+      SERVICE_NAME: $SERVICE_3_NAME
+      COMMON_PATH: $COMMON_PATH
+      SERVICE_PATH: $SERVICE_3_SSM_PATH
     depends_on:
       - database
     restart: always
 
   database:
     container_name: db
+    profiles: ['auth', 'profile', 'clinic', 'full']
     image: postgres:11.2-alpine
     restart: always
     env_file:
@@ -76,14 +89,14 @@ services:
     ports:
       - 5432:5432
 
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin
-    depends_on:
-      - database
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-      PGADMIN_LISTEN_PORT: 5050
-    ports:
-      - 5050:5050
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   container_name: pgadmin
+  #   depends_on:
+  #     - database
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: admin@admin.com
+  #     PGADMIN_DEFAULT_PASSWORD: admin
+  #     PGADMIN_LISTEN_PORT: 5050
+  #   ports:
+  #     - 5050:5050

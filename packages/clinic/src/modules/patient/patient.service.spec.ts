@@ -74,39 +74,39 @@ describe('PatientService', () => {
     });
   });
 
-  describe('testing createResolution()', () => {
-    it('should call the resolutions service', async () => {
-      jest.spyOn(resolutionsService, 'createResolution');
-      patientRepository.findPatientByUserId.mockResolvedValue(data);
+  // describe('testing createResolution()', () => {
+  //   it('should call the resolutions service', async () => {
+  //     jest.spyOn(resolutionsService, 'createResolution');
+  //     patientRepository.findPatientByUserId.mockResolvedValue(data);
 
-      await service.createResolution(new CreateResolutionDto(), 1);
+  //     await service.createResolution(new CreateResolutionDto(), 1);
 
-      expect(resolutionsService.createResolution).toBeCalledTimes(1);
-    });
+  //     expect(resolutionsService.createResolution).toBeCalledTimes(1);
+  //   });
 
-    it('should throw a 404 error if patient with the given id does not exist', async () => {
-      expect.assertions(1);
+  //   it('should throw a 404 error if patient with the given id does not exist', async () => {
+  //     expect.assertions(1);
 
-      patientRepository.findPatientByUserId.mockResolvedValue(undefined);
+  //     patientRepository.findPatientByUserId.mockResolvedValue(undefined);
 
-      expect(
-        service.createResolution(new CreateResolutionDto(), 11),
-      ).rejects.toThrow(NotFoundException);
-    });
-  });
+  //     expect(
+  //       service.createResolution(new CreateResolutionDto(), 11),
+  //     ).rejects.toThrow(NotFoundException);
+  //   });
+  // });
 
-  describe('testing getAllResolutionsById()', () => {
-    it('should return an array of resolutions for the given patient', async () => {
-      expect.assertions(1);
-      patientRepository.findPatientByUserId.mockResolvedValue(data);
+  // describe('testing getAllResolutionsById()', () => {
+  //   it('should return an array of resolutions for the given patient', async () => {
+  //     expect.assertions(1);
+  //     patientRepository.findPatientByUserId.mockResolvedValue(data);
 
-      (resolutionsService.getAllById as jest.Mock).mockResolvedValue([
-        new ResolutionsEntity(),
-      ]);
+  //     (resolutionsService.getAllById as jest.Mock).mockResolvedValue([
+  //       new ResolutionsEntity(),
+  //     ]);
 
-      const [response] = await service.getAllResolutionsById(1);
+  //     const [response] = await service.getAllResolutionsById(1);
 
-      expect(response.constructor).toBe(ResolutionsEntity);
-    });
-  });
+  //     expect(response.constructor).toBe(ResolutionsEntity);
+  //   });
+  // });
 });

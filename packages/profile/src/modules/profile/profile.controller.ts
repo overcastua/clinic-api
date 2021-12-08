@@ -1,13 +1,23 @@
-import { Body, Controller, Get, Put, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Put,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
+  ApiCreatedResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { JwtAuthGuard, UpdateProfileDto } from '@repos/common';
+import { GetUid, JwtAuthGuard, UpdateProfileDto } from '@repos/common';
 import { ProfileEntity } from './profile.entity';
 import { ProfileService } from './profile.service';
 
@@ -26,15 +36,30 @@ export class ProfileController {
   @ApiBadRequestResponse({
     description: 'Received data violates the predefined schema',
   })
-  async getOwnProfile(@Req() req) {
-    return this.profileService.getProfileByUserId(req.user.userId);
+  async getOwnProfile(@GetUid() userId: number): Promise<ProfileEntity> {
+    return this.profileService.getProfileByUserId(userId);
+  }
+
+  @Put('me/image')
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('image'))
+  @ApiOperation({ summary: 'Update profile picture' })
+  @ApiBearerAuth('JWT')
+  @ApiOkResponse({
+    description: 'Profile picture was updated',
+  })
+  async updateProfilePicture(
+    @GetUid() userId: number,
+    @UploadedFile() image: Express.Multer.File,
+  ): Promise<void> {
+    return this.profileService.editOwnProfilePicture(image, userId);
   }
 
   @Put('me')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Edit own profile' })
   @ApiBearerAuth('JWT')
-  @ApiOkResponse({
+  @ApiCreatedResponse({
     description: 'Profile was edited',
   })
   @ApiBadRequestResponse({
@@ -42,9 +67,9 @@ export class ProfileController {
   })
   @ApiNotFoundResponse({ description: 'Profile was not found' })
   async editOwnProfile(
+    @GetUid() userId: number,
     @Body() dto: UpdateProfileDto,
-    @Req() req,
   ): Promise<ProfileEntity> {
-    return this.profileService.editOwnProfile(dto, req.user.userId);
+    return this.profileService.editOwnProfile(dto, userId);
   }
 }

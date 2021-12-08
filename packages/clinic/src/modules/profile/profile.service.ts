@@ -1,9 +1,8 @@
 import { Metadata } from '@grpc/grpc-js';
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { Client, ClientGrpc } from '@nestjs/microservices';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { ClientGrpc } from '@nestjs/microservices';
 import {
-  configureGRPC,
+  CustomConfigService,
   formMetadata,
   IProfileEntity,
   IProfileServiceForClinic,
@@ -12,10 +11,10 @@ import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class ProfileService implements OnModuleInit {
-  constructor(private readonly configService: ConfigService) {}
-
-  @Client(configureGRPC(process.env.PROFILE_GRPC_URL, 'profile'))
-  private readonly client: ClientGrpc;
+  constructor(
+    private readonly configService: CustomConfigService,
+    @Inject('PROFILE_PACKAGE') private readonly client: ClientGrpc,
+  ) {}
 
   private profile: IProfileServiceForClinic;
 
@@ -25,7 +24,9 @@ export class ProfileService implements OnModuleInit {
   }
 
   async getProfile(userId: number): Promise<IProfileEntity> {
-    const meta: Metadata = formMetadata(this.configService.get('jwt.secret'));
+    const meta: Metadata = formMetadata(
+      this.configService.get<string>('jwt.secret'),
+    );
 
     const profile = await lastValueFrom(
       this.profile.getProfileByUserId({ userId }, meta),
@@ -35,7 +36,9 @@ export class ProfileService implements OnModuleInit {
   }
 
   async getManyProfiles(users: number[]): Promise<IProfileEntity[]> {
-    const meta: Metadata = formMetadata(this.configService.get('jwt.secret'));
+    const meta: Metadata = formMetadata(
+      this.configService.get<string>('jwt.secret'),
+    );
 
     const { profiles } = await lastValueFrom(
       this.profile.getProfileBatch({ users }, meta),
