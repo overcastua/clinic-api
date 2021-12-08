@@ -11,7 +11,6 @@ export class CloudWatchLogger extends ConsoleLogger {
 
   constructor(mode: string, service: string) {
     super();
-    AWSClient.instantiate();
 
     this.mode = mode;
     this.service = service;

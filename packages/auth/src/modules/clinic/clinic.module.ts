@@ -10,7 +10,10 @@ import { ClinicService } from './clinic.service';
       provide: 'CLINIC_PACKAGE',
       useFactory: (configService: CustomConfigService) => {
         return ClientProxyFactory.create(
-          configureGRPC(configService.get<string>('GRPC.clinic'), 'clinic'),
+          configureGRPC(
+            configService.get<string>('GRPC.clinic'),
+            configService.get<string>('GRPC.names.clinic'),
+          ),
         );
       },
       inject: [CustomConfigService],

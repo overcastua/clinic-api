@@ -4,6 +4,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NestApplicationOptions, ValidationPipe } from '@nestjs/common';
 import { MicroserviceOptions } from '@nestjs/microservices';
 import {
+  AWSClient,
   CloudWatchLogger,
   configureGRPC,
   CustomConfigService,
@@ -16,9 +17,9 @@ async function bootstrap() {
   app.useLogger(app.get(CloudWatchLogger));
 
   const configuration = app.get(CustomConfigService);
-  const port = configuration.get<number>('port');
+  const port = configuration.get<number>('self.port');
 
-  app.setGlobalPrefix(configuration.get<string>('prefix'));
+  app.setGlobalPrefix(configuration.get<string>('self.prefix'));
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
   const config = new DocumentBuilder()
@@ -33,7 +34,10 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('documentation', app, document);
 
-  const grpcConfig = configureGRPC(configuration.get('GRPC.auth'), 'auth');
+  const grpcConfig = configureGRPC(
+    configuration.get('GRPC.auth'),
+    configuration.get<string>('self.name'),
+  );
 
   app.connectMicroservice<MicroserviceOptions>(grpcConfig);
   await app.startAllMicroservices();
@@ -43,4 +47,5 @@ async function bootstrap() {
   });
 }
 
+AWSClient.instantiate();
 bootstrap();

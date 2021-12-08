@@ -37,7 +37,6 @@ export class ProfileController {
     description: 'Received data violates the predefined schema',
   })
   async getOwnProfile(@GetUid() userId: number): Promise<ProfileEntity> {
-    console.log(userId);
     return this.profileService.getProfileByUserId(userId);
   }
 

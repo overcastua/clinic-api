@@ -2,7 +2,11 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { envSchema } from './env.validation.schema';
 import * as TypeormAsyncConfiguration from './ormconfig';
-import { CloudWatchLogger, CustomConfigModule } from '@repos/common';
+import {
+  CloudWatchLogger,
+  CustomConfigModule,
+  CustomConfigService,
+} from '@repos/common';
 import config from './config';
 
 @Module({
@@ -17,7 +21,12 @@ import config from './config';
   providers: [
     {
       provide: CloudWatchLogger,
-      useValue: new CloudWatchLogger('dev', 'profile'),
+      inject: [CustomConfigService],
+      useFactory: (config: CustomConfigService) =>
+        new CloudWatchLogger(
+          config.get<string>('env'),
+          config.get<string>('self.name'),
+        ),
     },
   ],
   exports: [CloudWatchLogger],

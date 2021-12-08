@@ -5,8 +5,10 @@ import Joi from 'joi';
 
 @Injectable()
 export class CustomConfigService {
-  private readonly _paramStoreParameters: Record<string, any>;
-  private readonly schema: Record<string, any>;
+  private readonly internalConfig: Record<string, any>;
+  private readonly env: string;
+
+  private _paramStoreParameters: Record<string, any>;
   private usedParams: Record<string, any>;
 
   constructor(
@@ -24,11 +26,14 @@ export class CustomConfigService {
         ] = parameter.Value;
       });
     }
-    this.schema = this.substitute(data.load());
+    this.internalConfig = this.substitute(data.load());
+    delete this._paramStoreParameters;
 
     if (data.validationSchema) {
       this.validate(data.validationSchema);
     }
+
+    this.env = process.env.NODE_ENV;
   }
 
   private substitute(schema: Record<string, any>): Record<string, any> {
@@ -74,7 +79,7 @@ export class CustomConfigService {
       .split('.')
       .reduce(
         (object: Record<string, any>, i: string) => object[i],
-        this.schema,
+        this.internalConfig,
       );
 
     if (!value) {
@@ -82,5 +87,9 @@ export class CustomConfigService {
     }
 
     return isNaN(value) ? value : +value;
+  }
+
+  isProd(): boolean {
+    return this.env === 'production';
   }
 }

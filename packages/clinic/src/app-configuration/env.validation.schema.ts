@@ -12,4 +12,7 @@ export const envSchema = Joi.object({
   RUN_MIGRATIONS: Joi.string().required(),
   JWT_SECRET: Joi.string().required(),
   DB_PORT: Joi.number().required(),
+  NODE_ENV: Joi.string().required(),
+  SERVICE_NAME: Joi.string().required(),
+  PROF_SERVICE_NAME: Joi.string().required(),
 });

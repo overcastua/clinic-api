@@ -1,5 +1,5 @@
 import { DynamicModule, Global, Module, Provider } from '@nestjs/common';
-import { GetParametersByPathResult, ParameterList } from 'aws-sdk/clients/ssm';
+import { ParameterList } from 'aws-sdk/clients/ssm';
 import { AWSClient } from 'index';
 import { AWS_PARAM_STORE_PROVIDER } from './constants';
 import { FetchResult, ModuleOptions, ServiceOptions } from './interfaces';
@@ -21,8 +21,8 @@ export class CustomConfigModule {
       {
         provide: AWS_PARAM_STORE_PROVIDER,
         useFactory: async () => {
-          const ssmClient = AWSClient.getSSMInstance().service;
-          const requestsArray: Promise<GetParametersByPathResult>[] = [];
+          const ssmClient = AWSClient.getSSMInstance();
+          const requestsArray: Promise<ParameterList>[] = [];
           const result: FetchResult = {
             Parameters: [],
           };
@@ -32,28 +32,16 @@ export class CustomConfigModule {
             moduleOptions.awsParamStorePaths.length
           ) {
             moduleOptions.awsParamStorePaths.forEach((path: string) => {
-              requestsArray.push(
-                ssmClient
-                  .getParametersByPath({
-                    Path: path,
-                    Recursive: true,
-                    WithDecryption: false,
-                  })
-                  .promise(),
-              );
+              requestsArray.push(ssmClient.fetchParamsByPath(path));
             });
 
             const fetchedParameters = await Promise.all(requestsArray);
 
-            result.Parameters = fetchedParameters
-              .map((resp): ParameterList => {
-                return resp.Parameters;
-              })
-              .flat();
+            result.Parameters = fetchedParameters.flat();
 
             if (result.Parameters.length === 0) {
               throw new Error(
-                'Error: No parameters were fetched from AWS SSM. Was the given path correct?',
+                'Error: No parameters were fetched from AWS SSM. Were the given paths correct?',
               );
             }
           }
