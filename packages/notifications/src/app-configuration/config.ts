@@ -4,13 +4,6 @@ export default () => ({
     port: 'APP_PORT',
     prefix: 'API_PREFIX',
   },
-  GRPC: {
-    profile: 'PROFILE_GRPC_URL',
-    clinic: 'CLINIC_GRPC_URL',
-    names: {
-      profile: 'PROF_SERVICE_NAME',
-    },
-  },
   database: {
     hostname: 'DB_HOSTNAME',
     user: 'POSTGRES_USER',

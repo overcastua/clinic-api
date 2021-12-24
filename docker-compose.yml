@@ -100,6 +100,7 @@ services:
     environment:
       APP_PORT: $SERVICE_4_PORT
       SERVICE_NAME: $SERVICE_4_NAME
+      COMMON_PATH: $COMMON_PATH
       BROKER_ADDR: localhost:$BROKER_PORT
     depends_on:
       - database

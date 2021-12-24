@@ -12,7 +12,7 @@ import {
 @Module({
   imports: [
     CustomConfigModule.forRoot({
-      awsParamStorePaths: [process.env.COMMON_PATH, process.env.SERVICE_PATH],
+      awsParamStorePaths: [process.env.COMMON_PATH],
       load: config,
       validationSchema: envSchema,
     }),
