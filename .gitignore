@@ -15,6 +15,9 @@ lerna-debug.log*
 # OS
 .DS_Store
 
+#IDE
+.idea/
+
 # Sensitive information
 local.env
 
