@@ -96,6 +96,8 @@ export class TimeSlotsRepository extends Repository<TimeSlotsEntity> {
       .update()
       .set({ patient, isFree: false })
       .where('id = :id', { id })
+      .returning(['workday', 'time', 'patient'])
+      .updateEntity(true)
       .execute();
   }
 

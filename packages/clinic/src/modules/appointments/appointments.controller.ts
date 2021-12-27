@@ -197,11 +197,12 @@ export class AppointmentsController implements OnModuleInit, OnModuleDestroy {
     @GetUid() userId: number,
     @Param('doctorId', ParseIntPipe) doctorId: number,
   ): Promise<void> {
-    await this.service.createAppointment(dto, doctorId, userId);
+    const eventPayload = await this.service.createAppointment(
+      dto,
+      doctorId,
+      userId,
+    );
 
-    this.kafka.emit('notify.patient.create.appointment', {
-      name: 'Dima',
-      text: '14',
-    });
+    this.kafka.emit('notify.patient.create.appointment', { ...eventPayload });
   }
 }

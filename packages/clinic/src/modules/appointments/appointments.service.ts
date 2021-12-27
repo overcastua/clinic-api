@@ -7,6 +7,8 @@ import { TimeSlotsEntity } from './slots/slots.entity';
 import { TimeSlotsService } from './slots/slots.service';
 import { WorkdaysEntity } from './workdays.entity';
 import { WorkdaysRepository } from './workdays.repository';
+import { AppointmentCreatedEvent } from '@repos/common';
+import { UpdateResult } from 'typeorm';
 
 @Injectable()
 export class AppointmentsService {
@@ -73,8 +75,27 @@ export class AppointmentsService {
     dto: CreateAppointmentDto,
     doctorId: number,
     userId: number,
-  ): Promise<void> {
-    return this.timeslotsService.add(dto, userId, doctorId);
+  ): Promise<AppointmentCreatedEvent> {
+    const timeData: UpdateResult = await this.timeslotsService.add(
+      dto,
+      userId,
+      doctorId,
+    );
+    const { workdayId, time, patientId } = timeData.raw[0];
+    const { date } = await this.repository.findById(workdayId);
+    const { userId: doctorUserId } = await this.doctorsService.getById(
+      doctorId,
+    );
+
+    const mergedDateTime = new Date(
+      date.toISOString().slice(0, 11) + time,
+    ).toISOString();
+
+    return new AppointmentCreatedEvent({
+      patientId,
+      doctorUserId,
+      date: mergedDateTime,
+    });
   }
 
   async doctorGetNext(userId: number): Promise<TimeSlotsEntity> {

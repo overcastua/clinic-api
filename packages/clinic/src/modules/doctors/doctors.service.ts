@@ -24,6 +24,10 @@ export class DoctorsService {
     return doctor;
   }
 
+  async getById(doctorId: number): Promise<DoctorEntity> {
+    return this.repository.findOne({ id: doctorId });
+  }
+
   async getAllSpecializations(): Promise<SpecializationEntity[]> {
     return this.specService.getAll();
   }

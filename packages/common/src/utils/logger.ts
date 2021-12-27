@@ -9,21 +9,6 @@ export class CloudWatchLogger extends ConsoleLogger {
   private readonly mode: string;
   private cwl: CloudWatchLogsService;
 
-  /*
-     Weird kafkajs error messages, intercept them and use warning instead
-   */
-
-  private ignoreList = [
-    'The group is rebalancing, so a rejoin is needed',
-    'ERROR ServerKafka',
-  ];
-
-  /*
-   Completely useless kafkajs error message which for some reason fires after other error messages
- */
-
-  private supressList = ['ERROR undefined'];
-
   constructor(mode: string, service: string) {
     super();
 
@@ -42,14 +27,6 @@ export class CloudWatchLogger extends ConsoleLogger {
   }
 
   async error(message: any, stack?: string, context?: string) {
-    if (this.ignoreList.some((ignoreText) => message.includes(ignoreText))) {
-      return this.warn(message, context);
-    }
-
-    if (this.supressList.some((ignoreText) => message.includes(ignoreText))) {
-      return;
-    }
-
     const event: CloudWatchLogs.InputLogEvent = {
       message: message.toString(),
       timestamp: new Date().getTime(),
