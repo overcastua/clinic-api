@@ -23,7 +23,7 @@ services:
       PROF_SERVICE_NAME: $SERVICE_3_NAME
       COMMON_PATH: $COMMON_PATH
       SERVICE_PATH: $SERVICE_1_SSM_PATH
-      BROKER_ADDR: localhost:$BROKER_PORT
+      BROKER_ADDR: kafka:9092
     depends_on:
       - database
       - kafka
@@ -83,7 +83,7 @@ services:
 
   notifications:
     container_name: notifications
-    profiles: ['auth', 'profile', 'clinic', 'full']
+    profiles: ['clinic', 'full']
     build:
       context: .
       dockerfile: ./packages/notifications/Dockerfile
@@ -101,7 +101,8 @@ services:
       APP_PORT: $SERVICE_4_PORT
       SERVICE_NAME: $SERVICE_4_NAME
       COMMON_PATH: $COMMON_PATH
-      BROKER_ADDR: localhost:$BROKER_PORT
+      API_PREFIX: api/notifications
+      BROKER_ADDR: kafka:9092
     depends_on:
       - database
       - kafka
@@ -115,26 +116,29 @@ services:
     env_file:
       - dbconn.env
     ports:
-      - 5432:5432
+      - "5432:5432"
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
+    profiles: ['clinic', 'full']
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
     ports:
-      - 22181:2181
+      - "22181:2181"
 
   kafka:
     image: confluentinc/cp-kafka:latest
+    profiles: ['clinic', 'full']
     depends_on:
       - zookeeper
     ports:
-      - $BROKER_PORT:$BROKER_PORT
+      - "29092:29092"
+      - "9092:9092"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:$BROKER_PORT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1

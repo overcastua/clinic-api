@@ -12,4 +12,5 @@ export const envSchema = Joi.object({
   DB_PORT: Joi.number().required(),
   NODE_ENV: Joi.string().required(),
   SERVICE_NAME: Joi.string().required(),
+  BROKER_ADDR: Joi.string().required(),
 });

@@ -2,6 +2,9 @@ import {
   Body,
   Controller,
   Get,
+  Inject,
+  OnModuleDestroy,
+  OnModuleInit,
   Param,
   ParseIntPipe,
   Post,
@@ -30,13 +33,27 @@ import {
 import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { TimeSlotsEntity } from './slots/slots.entity';
+import { ClientKafka } from '@nestjs/microservices';
 
 @ApiTags('appointments')
 @Controller('appointments')
 @ApiBearerAuth('JWT')
 @UseGuards(JwtAuthGuard, RolesGuard)
-export class AppointmentsController {
-  constructor(private readonly service: AppointmentsService) {}
+export class AppointmentsController implements OnModuleInit, OnModuleDestroy {
+  constructor(
+    @Inject('KAFKA_SERVICE') private readonly kafka: ClientKafka,
+    private readonly service: AppointmentsService,
+  ) {}
+
+  async onModuleInit() {
+    ['patient.create.appointment'].forEach((key) =>
+      this.kafka.subscribeToResponseOf(`notify.${key}`),
+    );
+  }
+
+  async onModuleDestroy() {
+    await this.kafka.close();
+  }
 
   @Get('patients/me')
   @Roles(Role.PATIENT)
@@ -180,6 +197,11 @@ export class AppointmentsController {
     @GetUid() userId: number,
     @Param('doctorId', ParseIntPipe) doctorId: number,
   ): Promise<void> {
-    return this.service.createAppointment(dto, doctorId, userId);
+    await this.service.createAppointment(dto, doctorId, userId);
+
+    this.kafka.emit('notify.patient.create.appointment', {
+      name: 'Dima',
+      text: '14',
+    });
   }
 }

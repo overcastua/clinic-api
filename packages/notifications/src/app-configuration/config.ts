@@ -15,5 +15,8 @@ export default () => ({
   jwt: {
     secret: 'JWT_SECRET',
   },
+  broker: {
+    uri: 'BROKER_ADDR',
+  },
   env: 'NODE_ENV',
 });

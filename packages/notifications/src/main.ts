@@ -7,6 +7,8 @@ import {
   CloudWatchLogger,
   CustomConfigService,
 } from '@repos/common';
+import { MicroserviceOptions } from '@nestjs/microservices';
+import { Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
   const options: NestApplicationOptions = { cors: true, bufferLogs: true };
@@ -31,6 +33,18 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('documentation', app, document);
+
+  const kafkaOptions: MicroserviceOptions = {
+    transport: Transport.KAFKA,
+    options: {
+      client: {
+        brokers: [configuration.get<string>('broker.uri')],
+      },
+    },
+  };
+
+  app.connectMicroservice<MicroserviceOptions>(kafkaOptions);
+  await app.startAllMicroservices();
 
   await app.listen(port, () => {
     console.log('Notifications service is listening on port ' + port);

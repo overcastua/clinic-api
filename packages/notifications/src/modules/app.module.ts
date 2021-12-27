@@ -3,6 +3,7 @@ import { Connection } from 'typeorm';
 import { ConfigurationModule } from '../app-configuration/configuration.module';
 import { CustomConfigService, JwtStrategy } from '@repos/common';
 import { JwtModule } from '@nestjs/jwt';
+import { KafkaEventsHandleModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { JwtModule } from '@nestjs/jwt';
       },
       inject: [CustomConfigService],
     }),
+    KafkaEventsHandleModule,
   ],
   providers: [JwtStrategy],
 })
