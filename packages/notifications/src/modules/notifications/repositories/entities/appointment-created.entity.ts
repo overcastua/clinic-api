@@ -13,4 +13,8 @@ export class AppointmentCreatedEntity {
 
   @Column()
   date: Date;
+
+  constructor(data) {
+    Object.assign(this, data);
+  }
 }

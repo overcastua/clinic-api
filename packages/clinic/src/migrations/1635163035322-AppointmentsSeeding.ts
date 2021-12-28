@@ -23,8 +23,15 @@ export class AppointmentsSeeding1635163035322 implements MigrationInterface {
     INSERT INTO 
       "appointments"."slot"("time","workdayId")
     VALUES
+      ('10:00', 1),
+      ('10:00', 1),
       ('12:00', 1),
       ('13:00', 1),
+      ('14:00', 1),
+      ('15:00', 1),
+      ('16:00', 1),
+      ('17:00', 1),
+      ('18:00', 1),
       ('11:00', 2),
       ('12:00', 2),
       ('13:00', 2),

@@ -143,14 +143,15 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
-  # pgadmin:
-  #   image: dpage/pgadmin4
-  #   container_name: pgadmin
-  #   depends_on:
-  #     - database
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: admin@admin.com
-  #     PGADMIN_DEFAULT_PASSWORD: admin
-  #     PGADMIN_LISTEN_PORT: 5050
-  #   ports:
-  #     - 5050:5050
+#  pgadmin:
+#    image: dpage/pgadmin4
+#    profiles: ['full']
+#    container_name: pgadmin
+#    depends_on:
+#      - database
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+#      PGADMIN_DEFAULT_PASSWORD: admin
+#      PGADMIN_LISTEN_PORT: 5050
+#    ports:
+#      - "5050:5050"
