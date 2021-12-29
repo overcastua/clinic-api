@@ -8,6 +8,7 @@ import { AppointmentsController } from './appointments.controller';
 import { DoctorsModule } from '../doctors/doctors.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { CustomConfigModule, CustomConfigService } from '@repos/common';
+import { KAFKA_TOKEN } from './constants';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { CustomConfigModule, CustomConfigService } from '@repos/common';
     DoctorsModule,
     ClientsModule.registerAsync([
       {
-        name: 'KAFKA_SERVICE',
+        name: KAFKA_TOKEN,
         imports: [CustomConfigModule],
         useFactory: async (configService: CustomConfigService) => ({
           transport: Transport.KAFKA,

@@ -39,21 +39,8 @@ import { ClientKafka } from '@nestjs/microservices';
 @Controller('appointments')
 @ApiBearerAuth('JWT')
 @UseGuards(JwtAuthGuard, RolesGuard)
-export class AppointmentsController implements OnModuleInit, OnModuleDestroy {
-  constructor(
-    @Inject('KAFKA_SERVICE') private readonly kafka: ClientKafka,
-    private readonly service: AppointmentsService,
-  ) {}
-
-  async onModuleInit() {
-    ['patient.create.appointment'].forEach((key) =>
-      this.kafka.subscribeToResponseOf(`notify.${key}`),
-    );
-  }
-
-  async onModuleDestroy() {
-    await this.kafka.close();
-  }
+export class AppointmentsController {
+  constructor(private readonly service: AppointmentsService) {}
 
   @Get('patients/me')
   @Roles(Role.PATIENT)
@@ -197,12 +184,6 @@ export class AppointmentsController implements OnModuleInit, OnModuleDestroy {
     @GetUid() userId: number,
     @Param('doctorId', ParseIntPipe) doctorId: number,
   ): Promise<void> {
-    const eventPayload = await this.service.createAppointment(
-      dto,
-      doctorId,
-      userId,
-    );
-
-    this.kafka.emit('notify.patient.create.appointment', { ...eventPayload });
+    return this.service.createAppointment(dto, doctorId, userId);
   }
 }

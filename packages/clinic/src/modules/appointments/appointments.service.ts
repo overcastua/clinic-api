@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  OnModuleDestroy,
+  OnModuleInit,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DoctorsService } from '../doctors/doctors.service';
 import { ProfileService } from '../profile/profile.service';
@@ -9,16 +14,29 @@ import { WorkdaysEntity } from './workdays.entity';
 import { WorkdaysRepository } from './workdays.repository';
 import { AppointmentCreatedEvent } from '@repos/common';
 import { UpdateResult } from 'typeorm';
+import { ClientKafka } from '@nestjs/microservices';
+import { KAFKA_TOKEN } from './constants';
 
 @Injectable()
-export class AppointmentsService {
+export class AppointmentsService implements OnModuleInit, OnModuleDestroy {
   constructor(
     @InjectRepository(WorkdaysRepository)
     private readonly repository: WorkdaysRepository,
+    @Inject(KAFKA_TOKEN) private readonly kafka: ClientKafka,
     private readonly timeslotsService: TimeSlotsService,
     private readonly profileService: ProfileService,
     private readonly doctorsService: DoctorsService,
   ) {}
+
+  async onModuleInit() {
+    ['patient.create.appointment'].forEach((key) =>
+      this.kafka.subscribeToResponseOf(`notify.${key}`),
+    );
+  }
+
+  async onModuleDestroy() {
+    await this.kafka.close();
+  }
 
   async patientGetAllAppointments(userId: number): Promise<TimeSlotsEntity[]> {
     return this.timeslotsService.patientGetAllAppointments(userId);
@@ -75,7 +93,7 @@ export class AppointmentsService {
     dto: CreateAppointmentDto,
     doctorId: number,
     userId: number,
-  ): Promise<AppointmentCreatedEvent> {
+  ): Promise<void> {
     const timeData: UpdateResult = await this.timeslotsService.add(
       dto,
       userId,
@@ -91,11 +109,13 @@ export class AppointmentsService {
       date.toISOString().slice(0, 11) + time,
     ).toISOString();
 
-    return new AppointmentCreatedEvent({
+    const eventPayload = {
       patientId,
       doctorUserId,
       date: mergedDateTime,
-    });
+    };
+
+    this.kafka.emit('notify.patient.create.appointment', eventPayload);
   }
 
   async doctorGetNext(userId: number): Promise<TimeSlotsEntity> {
