@@ -4,7 +4,7 @@ export * from './src/utils/timeHelper';
 export * from './src/utils/logger';
 export * from './src/dto/createProfile';
 export * from './src/dto/updateProfile';
-export * from './src/dto/createAppointmentEvent';
+export * from './src/dto/notification';
 export { Roles } from './src/decorators/users.roles.decorator';
 export * from './src/decorators/getUserId';
 export * from './src/guards/jwt.auth.guard';

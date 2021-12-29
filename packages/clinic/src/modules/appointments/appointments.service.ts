@@ -12,10 +12,10 @@ import { TimeSlotsEntity } from './slots/slots.entity';
 import { TimeSlotsService } from './slots/slots.service';
 import { WorkdaysEntity } from './workdays.entity';
 import { WorkdaysRepository } from './workdays.repository';
-import { AppointmentCreatedEvent } from '@repos/common';
+import { impl_Notification } from '@repos/common';
 import { UpdateResult } from 'typeorm';
 import { ClientKafka } from '@nestjs/microservices';
-import { KAFKA_TOKEN } from './constants';
+import { KAFKA_TOKEN } from '../constants';
 
 @Injectable()
 export class AppointmentsService implements OnModuleInit, OnModuleDestroy {
@@ -109,10 +109,12 @@ export class AppointmentsService implements OnModuleInit, OnModuleDestroy {
       date.toISOString().slice(0, 11) + time,
     ).toISOString();
 
-    const eventPayload = {
-      patientId,
-      doctorUserId,
-      date: mergedDateTime,
+    const eventPayload: impl_Notification = {
+      userId: doctorUserId,
+      payload: {
+        patientId,
+        date: mergedDateTime,
+      },
     };
 
     this.kafka.emit('notify.patient.create.appointment', eventPayload);

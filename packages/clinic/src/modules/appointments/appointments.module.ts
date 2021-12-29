@@ -7,15 +7,12 @@ import { SlotsModule } from './slots/slots.module';
 import { AppointmentsController } from './appointments.controller';
 import { DoctorsModule } from '../doctors/doctors.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { KAFKA_TOKEN } from '../constants';
 import { CustomConfigModule, CustomConfigService } from '@repos/common';
-import { KAFKA_TOKEN } from './constants';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([WorkdaysRepository]),
-    SlotsModule,
-    ProfileModule,
-    DoctorsModule,
     ClientsModule.registerAsync([
       {
         name: KAFKA_TOKEN,
@@ -35,6 +32,9 @@ import { KAFKA_TOKEN } from './constants';
         inject: [CustomConfigService],
       },
     ]),
+    SlotsModule,
+    ProfileModule,
+    DoctorsModule,
   ],
   providers: [AppointmentsService],
   controllers: [AppointmentsController],

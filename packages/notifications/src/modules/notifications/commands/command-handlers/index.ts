@@ -1,3 +1,3 @@
-import { AppointmentCreatedCommandHandler } from './appointment-created.commandhandler';
+import { CreateNotificationCommandHandler } from './create-notification-command.handler';
 
-export const CommandHandlers = [AppointmentCreatedCommandHandler];
+export const CommandHandlers = [CreateNotificationCommandHandler];
