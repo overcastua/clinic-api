@@ -14,36 +14,20 @@
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "prepare": "yarn build && yarn workspace @repos/common build",
-    "offline": "sls offline"
+    "sls:offline": "sls offline",
+    "sls:deploy": "sls deploy",
+    "sls:remove": "sls remove"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
-    "@nestjs/config": "^1.0.2",
     "@nestjs/core": "^8.0.0",
     "@nestjs/cqrs": "^8.0.1",
-    "@nestjs/jwt": "^8.0.0",
-    "@nestjs/passport": "^8.0.1",
     "@nestjs/platform-express": "^8.0.0",
-    "@nestjs/swagger": "^5.1.0",
-    "@nestjs/typeorm": "^8.0.2",
     "@repos/common": "*",
     "aws-lambda": "^1.0.7",
     "aws-sdk": "^2.1040.0",
     "aws-serverless-express": "^3.4.0",
-    "class-transformer": "<=0.4.0",
-    "class-validator": "^0.13.1",
-    "joi": "^17.4.2",
-    "kafkajs": "^1.15.0",
-    "mysql2": "^2.3.0",
-    "passport": "^0.4.1",
-    "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0",
-    "pg": "^8.7.1",
-    "reflect-metadata": "^0.1.13",
-    "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0",
-    "swagger-ui-express": "^4.1.6",
-    "typeorm": "^0.2.38"
+    "rimraf": "^3.0.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
@@ -61,7 +45,6 @@
     "eslint": "^7.30.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "jest": "^27.0.6",
     "prettier": "^2.3.2",
     "serverless-dotenv-plugin": "^3.12.2",
     "serverless-offline": "^8.3.1",
@@ -71,26 +54,5 @@
     "ts-node": "^10.0.0",
     "tsconfig-paths": "^3.10.1",
     "typescript": "^4.3.5"
-  },
-  "jest": {
-    "moduleDirectories": [
-      "node_modules",
-      "src"
-    ],
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
   }
 }

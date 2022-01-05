@@ -17,6 +17,10 @@
   "workspaces": {
     "packages": [
       "packages/*"
+    ],
+    "nohoist": [
+      "@repos/lambda/@repos/common",
+      "@repos/lambda/**"
     ]
   }
 }

@@ -9,9 +9,7 @@ plugins:
   - serverless-offline
 
 package:
-  exclude:
-    - .git/**
-    - src/**
+  individually: false
 
 functions:
   index:
