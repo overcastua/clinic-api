@@ -1,0 +1,22 @@
+service: lambda-notifier
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: eu-central-1
+
+plugins:
+  - serverless-offline
+
+package:
+  exclude:
+    - .git/**
+    - src/**
+
+functions:
+  index:
+    handler: dist/index.handler
+    events:
+      - schedule:
+          rate: rate(1 day)
+          enabled: true
