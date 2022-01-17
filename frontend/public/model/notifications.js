@@ -1,5 +1,5 @@
 export default class NotificationsModel {
-  newNotification() {
+  async newNotification() {
     const max = 1,
       min = 0;
 

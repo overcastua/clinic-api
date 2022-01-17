@@ -24,12 +24,6 @@ package:
     - e2e/**
     - nodemon.json
     - README.md
-    - dist/*.ts
-    - node_modules/.bin/**
-
-custom:
-  webpack:
-    packager: 'yarn'
 
 functions:
   index:

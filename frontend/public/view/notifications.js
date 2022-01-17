@@ -17,6 +17,10 @@ export default class NotificationsView {
   }
 
   increaseNewNotificationsCountByOne() {
+    if (this.#newNotificationsCount.classList.contains('no-notifications')) {
+      this.#newNotificationsCount.classList.remove('no-notifications');
+    }
+
     const count = parseInt(this.#newNotificationsCount.textContent);
     const newCount = Number.isNaN(count) ? 1 : count + 1;
     this.#newNotificationsCount.textContent =
@@ -29,6 +33,7 @@ export default class NotificationsView {
   resetNewNotificationsCount() {
     this.#newNotificationsCount.textContent =
       this.#defaultNewNotificationsCount;
+    this.#newNotificationsCount.classList.add('no-notifications');
     return this;
   }
 

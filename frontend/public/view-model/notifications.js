@@ -8,6 +8,7 @@ export default class NotificationsViewModel {
   constructor() {
     this.#view = new NotificationsView();
     this.#model = new NotificationsModel();
+    this.#view.increaseNewNotificationsCountByOne();
 
     this.#view.btnMarkAllSeen.addEventListener(
       'click',
@@ -23,7 +24,7 @@ export default class NotificationsViewModel {
   }
 
   async newNotificationReceived() {
-    const [shouldUpdate, textPreview] = this.#model.newNotification();
+    const [shouldUpdate, textPreview] = await this.#model.newNotification();
 
     if (shouldUpdate) {
       this.#view.increaseNewNotificationsCountByOne();

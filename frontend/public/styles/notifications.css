@@ -10,10 +10,6 @@
     border-color: darkred;
 }
 
-.updates-notifier:hover {
-    background-color: #ffb700;
-}
-
 .updates-notifier__item {
     padding: 10px;
     display: flex;
@@ -45,13 +41,19 @@
 
 .updates-notifier__counter {
     position: absolute;
-    top: 0;
-    right: 3px;
+    top: -10px;
+    right: -10px;
+    width: 25px;
+    height: 25px;
     font-size:20px;
-    -webkit-animation: blink 2s linear infinite;
-    animation: blink 2s linear infinite;
+    display: flex;
+    justify-content: center;
+    border-radius: 8px;
+    align-items: center;
     font-weight: bold;
     user-select: none;
+    color: white;
+    background-color:red;
 }
 
 .updates-notifier__preview {
@@ -65,14 +67,6 @@
     cursor: default;
 }
 
-@-webkit-keyframes blink {
-    0% { color: #F00; }
-    50% { color: #FBB; }
-    100% { color: #F00; }
-}
-
-@keyframes blink {
-    0% { color: #F00; }
-    50% { color: #FBB; }
-    100% { color: #F00; }
+.no-notifications {
+    display: none;
 }
