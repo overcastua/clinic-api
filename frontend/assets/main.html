@@ -1,0 +1,41 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Notifications</title>
+  <link
+    rel="stylesheet"
+    href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+    integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
+    crossorigin="anonymous"
+  />
+  <link rel="stylesheet" href="styles/common.css">
+  <link rel="stylesheet" href="styles/notifications.css">
+
+</head>
+<body>
+  <div class="content">
+    <button type="button" class="updates-notifier__button" id="mark-as-seen-btn" title="Mark all as seen">
+    <div class="updates-notifier">
+      <span class="updates-notifier__item">
+          <i class="updates-notifier__icon fa fa-bell" aria-hidden="true" ></i>
+      </span>
+      <span class="updates-notifier__counter" id="notifications-count"></span>
+      <span class="updates-notifier__preview" id="notifications-preview" title="Latest notification preview"></span>
+    </div>
+    </button>
+  </div>
+
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+    integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+  <script type="module" src="/scripts/notifications.js"></script>
+  <script src="/reload/reload.js"></script>
+</body>
+</html>
