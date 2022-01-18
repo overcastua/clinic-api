@@ -8,27 +8,25 @@ export default class NotificationsViewModel {
   constructor() {
     this.#view = new NotificationsView();
     this.#model = new NotificationsModel();
-    this.#view.increaseNewNotificationsCountByOne();
 
     this.#view.btnMarkAllSeen.addEventListener(
       'click',
-      this.handleResetCount.bind(this),
+      this.#handleResetCount.bind(this),
     );
 
-    setInterval(this.newNotificationReceived.bind(this), 5000);
+    this.#model.listenEvent(
+      'new_notification',
+      this.#handleNewNotificationReceived.bind(this),
+    );
   }
 
-  handleResetCount() {
+  #handleResetCount() {
     this.#view.resetNewNotificationsCount();
     this.#view.resetPreviewLatestNotificationText();
   }
 
-  async newNotificationReceived() {
-    const [shouldUpdate, textPreview] = await this.#model.newNotification();
-
-    if (shouldUpdate) {
-      this.#view.increaseNewNotificationsCountByOne();
-      this.#view.setPreviewLatestNotificationText(textPreview);
-    }
+  #handleNewNotificationReceived(payload) {
+    this.#view.increaseNewNotificationsCountByOne();
+    this.#view.setPreviewLatestNotificationText(JSON.stringify(payload));
   }
 }

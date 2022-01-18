@@ -5,10 +5,24 @@ import { CommandHandlers } from './commands/command-handlers';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NotificationsRepository } from './repositories/NotificationsRepository';
 import { QueryHandlers } from './queries/query-handlers';
+import { NotificationsGateway } from './notifications.gateway';
+import { JwtModule } from '@nestjs/jwt';
+import { CustomConfigService } from '@repos/common';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([NotificationsRepository]), CqrsModule],
+  imports: [
+    TypeOrmModule.forFeature([NotificationsRepository]),
+    CqrsModule,
+    JwtModule.registerAsync({
+      useFactory: (config: CustomConfigService) => {
+        return {
+          secret: config.get<string>('jwt.secret'),
+        };
+      },
+      inject: [CustomConfigService],
+    }),
+  ],
   controllers: [NotificationsController],
-  providers: [...CommandHandlers, ...QueryHandlers],
+  providers: [NotificationsGateway, ...CommandHandlers, ...QueryHandlers],
 })
 export class NotificationsCQRSModule {}
