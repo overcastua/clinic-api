@@ -5,7 +5,7 @@ export default new (class App {
     try {
       this.app = new NotificationsViewModel();
     } catch (e) {
-      console.log(e.message);
+      console.error(e.message);
     }
   }
 })();

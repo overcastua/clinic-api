@@ -44,6 +44,6 @@ export class NotificationsGateway implements OnGatewayConnection {
   handleNewNotification(notification: NotificationEntity): void {
     this.server
       .in(notification.userId.toString())
-      .emit('new_notification', notification);
+      .emit('new_notification', notification.payload);
   }
 }

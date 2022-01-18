@@ -2,8 +2,6 @@ import config from '../config.js';
 
 export default class NotificationsModel {
   constructor() {
-    this.room = null;
-
     try {
       this.socket = io(config.backend.notificationsService, {
         extraHeaders: {
@@ -15,7 +13,7 @@ export default class NotificationsModel {
       this.socket.on('disconnect', this.#handleSocketDisconnect.bind(this));
       this.socket.on('exception', (data) => console.log('event', data));
     } catch (e) {
-      console.log(e);
+      console.error(e.message);
     }
   }
 
