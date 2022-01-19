@@ -6,6 +6,7 @@ import { Injectable } from '@nestjs/common';
 import { MessageBody, SubscribeMessage } from '@nestjs/websockets';
 import { CommandBus } from '@nestjs/cqrs';
 import { MarkNotificationsAsSeen } from './commands/Impl/mark-as-seen.command';
+import { EVENT_TYPES } from './constants';
 
 @Injectable()
 export class NotificationsService extends VerificationGateway {
@@ -21,9 +22,8 @@ export class NotificationsService extends VerificationGateway {
     this.newNotificationEvent.emit(notification);
   }
 
-  @SubscribeMessage('notifications_seen')
+  @SubscribeMessage(EVENT_TYPES.NOTIFICATIONS_SEEN)
   handleEvent(@MessageBody() data: Record<string, any>): void {
-    console.log(data);
     this.commandBus.execute(new MarkNotificationsAsSeen(data.seen));
   }
 }
