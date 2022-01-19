@@ -5,9 +5,10 @@ import { CommandHandlers } from './commands/command-handlers';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { NotificationsRepository } from './repositories/NotificationsRepository';
 import { QueryHandlers } from './queries/query-handlers';
-import { NotificationsGateway } from './notifications.gateway';
+import { NotificationsService } from './notifications.service';
+import { CustomConfigService, VerificationGateway } from '@repos/common';
 import { JwtModule } from '@nestjs/jwt';
-import { CustomConfigService } from '@repos/common';
+import { NewNotificationEvent } from './websocket/events/new-notification';
 
 @Module({
   imports: [
@@ -23,6 +24,11 @@ import { CustomConfigService } from '@repos/common';
     }),
   ],
   controllers: [NotificationsController],
-  providers: [NotificationsGateway, ...CommandHandlers, ...QueryHandlers],
+  providers: [
+    NotificationsService,
+    NewNotificationEvent,
+    ...CommandHandlers,
+    ...QueryHandlers,
+  ],
 })
 export class NotificationsCQRSModule {}

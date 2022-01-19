@@ -22,4 +22,7 @@ export * from './src/grpc/form-meta';
 export * from './src/aws/aws';
 export * from './src/config/params.service';
 export * from './src/config/params.module';
+export * from './src/services/websocket';
+export * from './src/abstractions/wsevent';
+export * from './src/types';
 export { AWS_PARAM_STORE_PROVIDER } from './src/config/constants';

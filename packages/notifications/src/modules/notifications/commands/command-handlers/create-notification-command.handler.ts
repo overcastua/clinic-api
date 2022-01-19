@@ -2,7 +2,7 @@ import { CreateNotificationCommand } from '../Impl/create-notification.command';
 import { ICommandHandler, CommandHandler, EventPublisher } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotificationsRepository } from '../../repositories/NotificationsRepository';
-import { NotificationsGateway } from '../../notifications.gateway';
+import { NotificationsService } from '../../notifications.service';
 
 @CommandHandler(CreateNotificationCommand)
 export class CreateNotificationCommandHandler
@@ -12,11 +12,11 @@ export class CreateNotificationCommandHandler
     @InjectRepository(NotificationsRepository)
     private readonly repository: NotificationsRepository,
     private readonly publisher: EventPublisher,
-    private readonly notificationsGateway: NotificationsGateway,
+    private readonly notificationsService: NotificationsService,
   ) {}
 
   async execute(command: CreateNotificationCommand) {
     const notification = await this.repository.write({ ...command });
-    this.notificationsGateway.handleNewNotification(notification);
+    this.notificationsService.handleNewNotification(notification);
   }
 }

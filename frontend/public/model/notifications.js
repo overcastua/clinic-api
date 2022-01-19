@@ -1,31 +1,19 @@
-import config from '../config.js';
-
 export default class NotificationsModel {
+  #notificationsIds;
+
   constructor() {
-    try {
-      this.socket = io(config.backend.notificationsService, {
-        extraHeaders: {
-          Authorization: `Bearer ${config.default_token}`,
-        },
-      });
-
-      this.socket.on('connect', this.#handleSocketConnect.bind(this));
-      this.socket.on('disconnect', this.#handleSocketDisconnect.bind(this));
-      this.socket.on('exception', (data) => console.log('event', data));
-    } catch (e) {
-      console.error(e.message);
-    }
+    this.#notificationsIds = [];
   }
 
-  #handleSocketDisconnect() {
-    console.log('Websocket disconnected');
+  add(id) {
+    this.#notificationsIds = this.#notificationsIds.concat(id);
   }
 
-  #handleSocketConnect() {
-    console.log('Websocket connected');
+  clear() {
+    this.#notificationsIds = [];
   }
 
-  listenEvent(event, callback) {
-    this.socket.on(event, (payload) => callback(payload));
+  getAll() {
+    return this.#notificationsIds;
   }
 }

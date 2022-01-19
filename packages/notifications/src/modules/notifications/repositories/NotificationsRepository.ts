@@ -12,8 +12,8 @@ export class NotificationsRepository extends Repository<NotificationEntity> {
   async readAll(userId: number, topic: string): Promise<NotificationEntity[]> {
     return this.createQueryBuilder('n')
       .where('n.userId = :userId', { userId })
-      .andWhere('n.isOutdated = false')
-      .andWhere('n.name = :topic', { topic })
+      .andWhere('n.isSeen = false')
+      .andWhere('n.type = :topic', { topic })
       .select(['n.payload'])
       .getMany();
   }

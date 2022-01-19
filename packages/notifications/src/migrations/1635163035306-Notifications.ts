@@ -9,8 +9,8 @@ export class Notifications1635163035306 implements MigrationInterface {
         (
           "id" SERIAL NOT NULL,
           "userId" integer NOT NULL,
-          "isOutdated" boolean NOT NULL DEFAULT false,
-          "name" character varying NOT NULL, 
+          "isSeen" boolean NOT NULL DEFAULT false,
+          "type" character varying NOT NULL, 
           "payload" jsonb NOT NULL,
           CONSTRAINT "PK_notification" PRIMARY KEY ("id")
         )

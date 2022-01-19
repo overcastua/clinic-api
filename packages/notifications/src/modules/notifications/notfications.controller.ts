@@ -18,7 +18,7 @@ export class NotificationsController {
   @MessagePattern('notify.patient.create.appointment')
   createNotificationAppointmentCreated(@Payload() message: Message): void {
     const notification = message.value as Record<string, any>;
-    notification.name = APPOINTMENT_CREATED;
+    notification.type = APPOINTMENT_CREATED;
 
     this.commandBus.execute(new CreateNotificationCommand(notification));
   }
@@ -26,7 +26,7 @@ export class NotificationsController {
   @MessagePattern('notify.doctor.create.resolution')
   createNotificationResolutionCreated(@Payload() message: Message): void {
     const notification = message.value as Record<string, any>;
-    notification.name = RESOLUTION_CREATED;
+    notification.type = RESOLUTION_CREATED;
 
     this.commandBus.execute(new CreateNotificationCommand(notification));
   }

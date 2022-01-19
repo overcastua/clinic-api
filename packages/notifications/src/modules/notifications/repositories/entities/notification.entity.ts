@@ -9,10 +9,10 @@ export class NotificationEntity {
   public readonly userId: number;
 
   @Column()
-  public readonly name: string;
+  public readonly type: string;
 
   @Column()
-  public readonly isOutdated: boolean;
+  public readonly isSeen: boolean;
 
   @Column({
     type: 'jsonb',

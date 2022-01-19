@@ -1,26 +1,24 @@
 import {
   OnGatewayConnection,
   WebSocketGateway,
-  WebSocketServer,
   WsException,
 } from '@nestjs/websockets';
 import { JwtService } from '@nestjs/jwt';
-import { Server, Socket } from 'socket.io';
-import { NotificationEntity } from './repositories/entities/notification.entity';
+import { Socket } from 'socket.io';
 
 @WebSocketGateway({ cors: true })
-export class NotificationsGateway implements OnGatewayConnection {
-  @WebSocketServer()
-  server: Server;
+export class VerificationGateway implements OnGatewayConnection {
+  private readonly jwtService;
 
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(_jwtService: JwtService) {
+    this.jwtService = _jwtService;
+  }
 
   verifyUserAndGetId(client: Socket): string {
     let user;
 
     try {
-      const bearerToken: string =
-        client.handshake.headers.authorization.split(' ')[1];
+      const bearerToken = client.handshake.headers.authorization.split(' ')[1];
 
       user = this.jwtService.verify(bearerToken);
     } catch (error) {
@@ -39,11 +37,5 @@ export class NotificationsGateway implements OnGatewayConnection {
     const userId = this.verifyUserAndGetId(client);
 
     await client.join(userId);
-  }
-
-  handleNewNotification(notification: NotificationEntity): void {
-    this.server
-      .in(notification.userId.toString())
-      .emit('new_notification', notification.payload);
   }
 }
