@@ -5,5 +5,5 @@ export class CreateNotificationCommand
   extends impl_Notification
   implements ICommand
 {
-  public readonly name: string;
+  public readonly type: string;
 }

@@ -1,5 +1,5 @@
 import { CreateNotificationCommand } from '../Impl/create-notification.command';
-import { ICommandHandler, CommandHandler, EventPublisher } from '@nestjs/cqrs';
+import { ICommandHandler, CommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotificationsRepository } from '../../repositories/NotificationsRepository';
 import { NotificationsService } from '../../notifications.service';
@@ -11,7 +11,6 @@ export class CreateNotificationCommandHandler
   constructor(
     @InjectRepository(NotificationsRepository)
     private readonly repository: NotificationsRepository,
-    private readonly publisher: EventPublisher,
     private readonly notificationsService: NotificationsService,
   ) {}
 

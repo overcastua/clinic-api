@@ -6,7 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { NotificationsRepository } from './repositories/NotificationsRepository';
 import { QueryHandlers } from './queries/query-handlers';
 import { NotificationsService } from './notifications.service';
-import { CustomConfigService, VerificationGateway } from '@repos/common';
+import { CustomConfigService } from '@repos/common';
 import { JwtModule } from '@nestjs/jwt';
 import { NewNotificationEvent } from './websocket/events/new-notification';
 

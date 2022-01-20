@@ -7,6 +7,7 @@ import { MessageBody, SubscribeMessage } from '@nestjs/websockets';
 import { CommandBus } from '@nestjs/cqrs';
 import { MarkNotificationsAsSeen } from './commands/Impl/mark-as-seen.command';
 import { EVENT_TYPES } from './constants';
+import { NotificationsIds } from './websocket/interfaces/notifications-seen';
 
 @Injectable()
 export class NotificationsService extends VerificationGateway {
@@ -23,7 +24,7 @@ export class NotificationsService extends VerificationGateway {
   }
 
   @SubscribeMessage(EVENT_TYPES.NOTIFICATIONS_SEEN)
-  handleEvent(@MessageBody() data: Record<string, any>): void {
+  handleNotificationsSeen(@MessageBody() data: NotificationsIds): void {
     this.commandBus.execute(new MarkNotificationsAsSeen(data.seen));
   }
 }
