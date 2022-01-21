@@ -1,20 +1,30 @@
-import { ForbiddenException, GoneException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  GoneException,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateResolutionDto } from './dto/create-resolution.dto';
-import { TimeHelper } from '@repos/common';
+import { impl_Notification, TimeHelper } from '@repos/common';
 import { ResolutionsEntity } from './resolutions.entity';
 import { ResolutionsRepository } from './resolutions.repository';
 import { UpdateResolutionDto } from './dto/update-resolution.dto';
 import { DoctorsService } from '../doctors/doctors.service';
 import { PatientService } from '../patient/patient.service';
+import { KAFKA_TOKEN } from '../constants';
+import { ClientKafka } from '@nestjs/microservices';
+import { ProfileService } from '../profile/profile.service';
 
 @Injectable()
 export class ResolutionsService {
   constructor(
     @InjectRepository(ResolutionsRepository)
     private readonly resolutionsRepository: ResolutionsRepository,
+    @Inject(KAFKA_TOKEN) private readonly kafka: ClientKafka,
     private readonly doctorsService: DoctorsService,
     private readonly patientsService: PatientService,
+    private readonly profileService: ProfileService,
   ) {}
 
   async getAllById(id: number): Promise<ResolutionsEntity[]> {
@@ -42,7 +52,22 @@ export class ResolutionsService {
       TimeHelper.now() + TimeHelper.minToMs(dto.expiresIn),
     ).toISOString() as unknown as Date;
 
-    return this.resolutionsRepository.createResolution(dto, ttl, doctor);
+    const resolution = await this.resolutionsRepository.createResolution(
+      dto,
+      ttl,
+      doctor,
+    );
+    const eventUserId = await this.patientsService.findUserIdByPatientId(
+      resolution.patientId,
+    );
+    const { id } = await this.doctorsService.getById(resolution.doctorId);
+    const profileDoctor = await this.profileService.getProfile(id);
+
+    const eventPayload: impl_Notification = {
+      userId: eventUserId,
+      payload: { resolutionId: resolution.id, profileDoctor },
+    };
+    this.kafka.emit('notify.doctor.create.resolution', eventPayload);
   }
 
   async updateResolution(

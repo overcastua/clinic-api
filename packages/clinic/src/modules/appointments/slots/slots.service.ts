@@ -5,6 +5,7 @@ import { PatientService } from '../../patient/patient.service';
 import { CreateAppointmentDto } from '../dto/create-appointment.dto';
 import { TimeSlotsEntity } from './slots.entity';
 import { TimeSlotsRepository } from './slots.repository';
+import { UpdateResult } from 'typeorm';
 
 @Injectable()
 export class TimeSlotsService {
@@ -63,7 +64,7 @@ export class TimeSlotsService {
     dto: CreateAppointmentDto,
     userId: number,
     doctorId: number,
-  ): Promise<void> {
+  ): Promise<UpdateResult> {
     const patient: PatientEntity =
       await this.patientService.findPatientByUserId(userId);
 
@@ -74,5 +75,6 @@ export class TimeSlotsService {
         'Appointment slot with the given params does not exist or is already occupied',
       );
     }
+    return result;
   }
 }

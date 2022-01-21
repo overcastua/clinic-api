@@ -25,4 +25,16 @@ export class PatientService {
 
     return patient;
   }
+
+  async findUserIdByPatientId(patientId: number): Promise<number> {
+    const patient: PatientEntity = await this.patientRepository.findOne({
+      where: { id: patientId },
+    });
+
+    if (!patient) {
+      throw new NotFoundException('Patient does not exist');
+    }
+
+    return patient.userId;
+  }
 }

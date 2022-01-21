@@ -8,7 +8,7 @@ import {
   configureGRPC,
   CustomConfigService,
 } from '@repos/common';
-import { MicroserviceOptions } from '@nestjs/microservices';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
   const options: NestApplicationOptions = { cors: true, bufferLogs: true };
@@ -40,6 +40,7 @@ async function bootstrap() {
   );
 
   app.connectMicroservice<MicroserviceOptions>(grpcConfig);
+
   await app.startAllMicroservices();
 
   await app.listen(port, () => {

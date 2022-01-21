@@ -13,7 +13,7 @@ The service consists of three independent microservices and a common library. Mi
 
 ## Technologies & tools
 
-TypeScript, Nest.js, Docker, PostgreSQL, gRPC, Jest, JWT, eslint, AWS S3, CloudWatch, Parameter Store.
+TypeScript, Nest.js, Docker, PostgreSQL, gRPC, Jest, JWT, eslint, AWS S3, CloudWatch, Parameter Store, Apache Kafka, Socket.io.
 
 ## Docker
 

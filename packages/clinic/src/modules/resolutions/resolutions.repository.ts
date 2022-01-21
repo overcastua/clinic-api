@@ -25,10 +25,10 @@ export class ResolutionsRepository extends Repository<ResolutionsEntity> {
     dto: CreateResolutionDto,
     ttl: Date,
     doctor: DoctorEntity,
-  ): Promise<void> {
+  ): Promise<ResolutionsEntity> {
     const resolution = new ResolutionsEntity(dto, ttl, doctor);
 
-    await this.save(resolution);
+    return await this.save(resolution);
   }
 
   async updateResolution(

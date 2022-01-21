@@ -1,0 +1,9 @@
+{
+  "presets": [
+    "@babel/env"
+  ],
+  "corejs": 3,
+  "targets": {
+    "browsers": ["chrome 74"]
+  }
+}

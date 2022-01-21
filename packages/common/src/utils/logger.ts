@@ -5,8 +5,8 @@ import { AWSClient } from '../aws/aws';
 
 export class CloudWatchLogger extends ConsoleLogger {
   private nextSequenceToken: string;
-  private service: string;
-  private mode: string;
+  private readonly service: string;
+  private readonly mode: string;
   private cwl: CloudWatchLogsService;
 
   constructor(mode: string, service: string) {
@@ -16,7 +16,7 @@ export class CloudWatchLogger extends ConsoleLogger {
     this.service = service;
 
     this.nextSequenceToken = null;
-    this.init();
+    // this.init();
   }
 
   async init() {
@@ -27,19 +27,19 @@ export class CloudWatchLogger extends ConsoleLogger {
   }
 
   async error(message: any, stack?: string, context?: string) {
-    const event: CloudWatchLogs.InputLogEvent = {
-      message: message.toString(),
-      timestamp: new Date().getTime(),
-    };
-
-    const res = await this.cwl.cloudWatchPutLogEvents(
-      [event],
-      this.service,
-      this.mode,
-      this.nextSequenceToken,
-    );
-
-    this.nextSequenceToken = res.nextSequenceToken;
+    // const event: CloudWatchLogs.InputLogEvent = {
+    //   message: message.toString(),
+    //   timestamp: new Date().getTime(),
+    // };
+    //
+    // const res = await this.cwl.cloudWatchPutLogEvents(
+    //   [event],
+    //   this.service,
+    //   this.mode,
+    //   this.nextSequenceToken,
+    // );
+    //
+    // this.nextSequenceToken = res.nextSequenceToken;
 
     super.error(message, stack, context);
   }

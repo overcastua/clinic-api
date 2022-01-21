@@ -2,6 +2,9 @@ import {
   Body,
   Controller,
   Get,
+  Inject,
+  OnModuleDestroy,
+  OnModuleInit,
   Param,
   ParseIntPipe,
   Post,
@@ -30,6 +33,7 @@ import {
 import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { TimeSlotsEntity } from './slots/slots.entity';
+import { ClientKafka } from '@nestjs/microservices';
 
 @ApiTags('appointments')
 @Controller('appointments')
