@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { NotificationsRepository } from '../../repositories/NotificationsRepository';
-import { NotificationsService } from '../../notifications.service';
+import { NotificationsGateway } from '../../notifications.gateway';
 import { NotificationEntity } from '../../repositories/entities/notification.entity';
 import { CreateNotificationCommand } from '../Impl/create-notification.command';
 import { CreateNotificationCommandHandler } from './create-notification-command.handler';
@@ -11,7 +11,7 @@ const reposMock = () => ({
 
 describe('CreateNotificationCommandHandler', () => {
   let repository: any;
-  let service: NotificationsService;
+  let service: NotificationsGateway;
   let handler: CreateNotificationCommandHandler;
 
   beforeEach(async () => {
@@ -23,7 +23,7 @@ describe('CreateNotificationCommandHandler', () => {
           useFactory: reposMock,
         },
         {
-          provide: NotificationsService,
+          provide: NotificationsGateway,
           useValue: {
             handleNewNotification: jest.fn(),
           },
@@ -32,7 +32,7 @@ describe('CreateNotificationCommandHandler', () => {
     }).compile();
 
     repository = modRef.get(NotificationsRepository);
-    service = modRef.get(NotificationsService);
+    service = modRef.get(NotificationsGateway);
     handler = modRef.get(CreateNotificationCommandHandler);
   });
 

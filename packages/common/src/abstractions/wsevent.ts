@@ -2,17 +2,15 @@ import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server } from 'socket.io';
 
 @WebSocketGateway({ cors: true })
-export class WSEvent {
+export abstract class WSEvent<T extends string> {
+  protected constructor(protected readonly type: T) {}
+
   @WebSocketServer()
   server: Server;
 
-  protected emitEvent(
-    event: string,
-    payload: Record<string, any>,
-    room?: string,
-  ) {
+  protected emitEvent(payload: Record<string, any>, room?: string) {
     room
-      ? this.server.in(room).emit(event, payload)
-      : this.server.emit(event, payload);
+      ? this.server.in(room).emit(this.type, payload)
+      : this.server.emit(this.type, payload);
   }
 }

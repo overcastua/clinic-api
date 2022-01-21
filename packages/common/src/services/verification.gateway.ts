@@ -8,11 +8,7 @@ import { Socket } from 'socket.io';
 
 @WebSocketGateway({ cors: true })
 export class VerificationGateway implements OnGatewayConnection {
-  private readonly jwtService;
-
-  constructor(_jwtService: JwtService) {
-    this.jwtService = _jwtService;
-  }
+  constructor(private readonly jwtService: JwtService) {}
 
   verifyUserAndGetId(client: Socket): string {
     let user;

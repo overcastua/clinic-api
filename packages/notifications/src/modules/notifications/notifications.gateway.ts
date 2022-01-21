@@ -10,7 +10,7 @@ import { EVENT_TYPES } from './constants';
 import { NotificationsIds } from './websocket/interfaces/notifications-seen';
 
 @Injectable()
-export class NotificationsService extends VerificationGateway {
+export class NotificationsGateway extends VerificationGateway {
   constructor(
     private readonly newNotificationEvent: NewNotificationEvent,
     private readonly _jwtService: JwtService,
@@ -24,7 +24,9 @@ export class NotificationsService extends VerificationGateway {
   }
 
   @SubscribeMessage(EVENT_TYPES.NOTIFICATIONS_SEEN)
-  handleNotificationsSeen(@MessageBody() data: NotificationsIds): void {
-    this.commandBus.execute(new MarkNotificationsAsSeen(data.seen));
+  async handleNotificationsSeen(
+    @MessageBody() data: NotificationsIds,
+  ): Promise<void> {
+    await this.commandBus.execute(new MarkNotificationsAsSeen(data.seen));
   }
 }
